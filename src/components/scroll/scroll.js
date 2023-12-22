@@ -1,17 +1,17 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Scroll = ({ showBelow }) => {
   const [show, setShow] = useState(showBelow ? false : true);
 
-  const handleScroll = () => {
-    if (window.pageYOffset > showBelow) {
-      if (!show) setShow(true);
-    } else {
-      if (show) setShow(false);
+  const handleScroll = useCallback(() => {
+    if (window.scrollY > showBelow && !show) {
+      setShow(true);
+    } else if (window.scrollY <= showBelow && show) {
+      setShow(false);
     }
-  };
+  }, [show, showBelow]);
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -22,7 +22,7 @@ const Scroll = ({ showBelow }) => {
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  });
+  }, [handleScroll, showBelow]);
 
   return (
     <div>
@@ -32,7 +32,7 @@ const Scroll = ({ showBelow }) => {
           onClick={handleClick}
           aria-label="to top"
         >
-         
+          {/* Your content here */}
         </div>
       )}
     </div>
@@ -40,4 +40,3 @@ const Scroll = ({ showBelow }) => {
 };
 
 export default Scroll;
-
