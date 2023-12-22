@@ -3,6 +3,9 @@ import { withContentlayer } from "next-contentlayer";
 
 /** @type {import('next').NextConfig} */
 
+const isProd = process.env.NODE_ENV === 'production'
+
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -10,8 +13,8 @@ const nextConfig = {
   images: {
     unoptimized: true, // Optimize images only if using a cloud solution
   },
-  basePath: '/wallisconsultancy',
-  assetPrefix: '/wallisconsultancy/',
+  basePath: isProd ? '/artiyoga-new-arch' : undefined,
+  assetPrefix: isProd ? '/artiyoga-new-arch/' : undefined,
 };
 
 export default withContentlayer(nextConfig);
