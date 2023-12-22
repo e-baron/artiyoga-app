@@ -1,0 +1,22 @@
+{
+  "title": "Session Q3",
+  "date": "2020-06-13T00:00:00.000Z",
+  "autoMargin": true,
+  "navbarExtraStyles": "navbar--transparent-background",
+  "headerImage": "/images/footer.jpg",
+  "featuredImage": "/images/kati.jpg",
+  "body": {
+    "raw": "\nNew sessions in Q3 : )",
+    "code": "var Component=(()=>{var p=Object.create;var r=Object.defineProperty;var u=Object.getOwnPropertyDescriptor;var d=Object.getOwnPropertyNames;var x=Object.getPrototypeOf,f=Object.prototype.hasOwnProperty;var j=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),b=(e,t)=>{for(var n in t)r(e,n,{get:t[n],enumerable:!0})},i=(e,t,n,s)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let a of d(t))!f.call(e,a)&&a!==n&&r(e,a,{get:()=>t[a],enumerable:!(s=u(t,a))||s.enumerable});return e};var l=(e,t,n)=>(n=e!=null?p(x(e)):{},i(t||!e||!e.__esModule?r(n,\"default\",{value:e,enumerable:!0}):n,e)),_=e=>i(r({},\"__esModule\",{value:!0}),e);var m=j((v,c)=>{c.exports=_jsx_runtime});var M={};b(M,{default:()=>D,frontmatter:()=>h});var o=l(m()),h={title:\"Session Q3\",date:new Date(15920064e5),featuredImage:\"/images/kati.jpg\",navbarExtraStyles:\"navbar--transparent-background\",headerImage:\"/images/footer.jpg\"};function g(e){let t=Object.assign({p:\"p\"},e.components);return(0,o.jsx)(t.p,{children:\"New sessions in Q3 : )\"})}function w(e={}){let{wrapper:t}=e.components||{};return t?(0,o.jsx)(t,Object.assign({},e,{children:(0,o.jsx)(g,e)})):g(e)}var D=w;return _(M);})();\n;return Component;"
+  },
+  "_id": "news/session-q3.mdx",
+  "_raw": {
+    "sourceFilePath": "news/session-q3.mdx",
+    "sourceFileName": "session-q3.mdx",
+    "sourceFileDir": "news",
+    "contentType": "mdx",
+    "flattenedPath": "news/session-q3"
+  },
+  "type": "MDXPage",
+  "url": "/news/session-q3"
+}

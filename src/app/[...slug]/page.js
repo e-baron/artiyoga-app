@@ -6,10 +6,10 @@ import Section from "src/components/section";
 import Footer from "src/components/footer";
 import SectionHeader from "src/components/section-header";
 import "src/scss/main.scss";
-// import Scroll from "src/components/scroll/scroll";
+import Scroll from "src/components/scroll/scroll";
 import Header from "src/components/header/header";
-import Carousel from 'src/components/carousel/carousel.js';
-import NewsIndex from 'src/components/news/news-index.js';
+import Carousel from "src/components/carousel/carousel.js";
+import NewsIndex from "src/components/news/news-index.js";
 import { format, parseISO } from "date-fns";
 import { allMDXPages } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
@@ -21,11 +21,10 @@ import SectionFooter from "src/components/section-footer.js";
 import PageHeader from "src/components/page-header.js";
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
-import '@fortawesome/fontawesome-svg-core/styles.css';
+import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
-import { config } from '@fortawesome/fontawesome-svg-core';
+import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
-
 
 const siteURL = "https://e-baron.github.io/artiyoga"; // No trailing slash allowed!
 const siteTitle = "artiYoga";
@@ -90,7 +89,6 @@ const siteMetadata = {
     },
   ],
 };
-
 
 /* import { withFrontmatter } from './src/components/hoc/hoc.js';
 // import CodeBlock from './src/components/codeblock/codeblock.js';
@@ -229,13 +227,10 @@ export default function MDXPage({ params }) {
         frontmatter={page}
         //  langs={langsMenu}
       ></Footer>
-      {/* <Scroll showBelow={250} /> */}
+      <Scroll showBelow={250} />
     </div>
   );
-};
-
-
-
+}
 
 /*
 import {

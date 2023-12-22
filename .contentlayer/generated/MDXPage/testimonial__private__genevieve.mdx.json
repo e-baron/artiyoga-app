@@ -1,0 +1,20 @@
+{
+  "title": "",
+  "date": "2020-04-13T00:00:00.000Z",
+  "author": "Geneviève",
+  "autoMargin": true,
+  "body": {
+    "raw": "..voor mij is het ook een groot plezier van jou yogales te krijgen en je stralende enthousiasme iedere keer opnieuw te mogen ontvangen. \nJe geeft me iedere keer veel energie en een zalig vredegevoel in gans mijn lichaam. \nWat een luxe !! Je bent een topyogi !! Proficiat voor al uw inzet in deze harde wereld ! ",
+    "code": "var Component=(()=>{var m=Object.create;var r=Object.defineProperty;var u=Object.getOwnPropertyDescriptor;var d=Object.getOwnPropertyNames;var j=Object.getPrototypeOf,p=Object.prototype.hasOwnProperty;var v=(e,n)=>()=>(n||e((n={exports:{}}).exports,n),n.exports),x=(e,n)=>{for(var t in n)r(e,t,{get:n[t],enumerable:!0})},s=(e,n,t,a)=>{if(n&&typeof n==\"object\"||typeof n==\"function\")for(let o of d(n))!p.call(e,o)&&o!==t&&r(e,o,{get:()=>n[o],enumerable:!(a=u(n,o))||a.enumerable});return e};var f=(e,n,t)=>(t=e!=null?m(j(e)):{},s(n||!e||!e.__esModule?r(t,\"default\",{value:e,enumerable:!0}):t,e)),h=e=>s(r({},\"__esModule\",{value:!0}),e);var g=v((y,c)=>{c.exports=_jsx_runtime});var z={};x(z,{default:()=>k,frontmatter:()=>w});var i=f(g()),w={date:new Date(1586736e6),author:\"Genevi\\xE8ve\"};function l(e){let n=Object.assign({p:\"p\"},e.components);return(0,i.jsx)(n.p,{children:`..voor mij is het ook een groot plezier van jou yogales te krijgen en je stralende enthousiasme iedere keer opnieuw te mogen ontvangen.\nJe geeft me iedere keer veel energie en een zalig vredegevoel in gans mijn lichaam.\nWat een luxe !! Je bent een topyogi !! Proficiat voor al uw inzet in deze harde wereld !`})}function _(e={}){let{wrapper:n}=e.components||{};return n?(0,i.jsx)(n,Object.assign({},e,{children:(0,i.jsx)(l,e)})):l(e)}var k=_;return h(z);})();\n;return Component;"
+  },
+  "_id": "testimonial/private/genevieve.mdx",
+  "_raw": {
+    "sourceFilePath": "testimonial/private/genevieve.mdx",
+    "sourceFileName": "genevieve.mdx",
+    "sourceFileDir": "testimonial/private",
+    "contentType": "mdx",
+    "flattenedPath": "testimonial/private/genevieve"
+  },
+  "type": "MDXPage",
+  "url": "/testimonial/private/genevieve"
+}
