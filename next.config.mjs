@@ -3,7 +3,7 @@ import { withContentlayer } from "next-contentlayer";
 
 /** @type {import('next').NextConfig} */
 
-const isProd = process.env.NODE_ENV === 'production'
+// const isProd = process.env.NODE_ENV === 'production'
 
 
 const nextConfig = {
@@ -13,8 +13,8 @@ const nextConfig = {
   images: {
     unoptimized: true, // Optimize images only if using a cloud solution
   },
-  basePath: isProd ? '/artiyoga-new-arch' : undefined,
-  assetPrefix: isProd ? '/artiyoga-new-arch/' : undefined,
+  basePath: process.env.BASE_PATH,
+  // assetPrefix: isProd ? '/artiyoga-new-arch/' : undefined,
 };
 
 export default withContentlayer(nextConfig);

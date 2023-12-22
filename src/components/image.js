@@ -99,7 +99,11 @@ const Image = ({
       }}
     >
       <NextImage
-        src={src ?? `/images/icon.png`}
+        src={
+          src
+            ? process.env.BASE_PATH + src
+            : `{process.env.BASE_PATH}/images/icon.png`
+        }
         sizes="200px"
         fill
         style={{
