@@ -1,0 +1,22 @@
+{
+  "title": "Yogastijlen",
+  "date": "2023-05-11T00:00:00.000Z",
+  "description": "Yogastijlen aangeboden door Kati op 1500 Halle",
+  "autoMargin": false,
+  "navbarExtraStyles": "navbar--transparent-background",
+  "headerImage": "footer.jpg",
+  "body": {
+    "raw": "\n<Section className=\"section--auto-margin pt-3 pb-3\">  \n  <Content className=\"vh-30 pl-0 pr-0\">\n      <Image name=\"nature-chill.JPG\"/>\n    </Content>\n  <Content>\n     <h3>HathaYoga</h3>\n    Amazing dynamic...\n  </Content>  \n  \n    <Content>\n     <h3>Other things on HathaYoga...</h3>\n      zacht is smooth...\n      TBD : Prepare component to show image from Youtube...\n    </Content>\n    <Content className=\"vh-30 pl-0 pr-0\">\n      <Image name=\"nature-chill.JPG\"/>\n    </Content>\n    \n    <Content className=\"vh-30 pl-0 pr-0\">\n      <Image name=\"nature-chill.JPG\"/>\n    </Content>\n    <Content>\n     <h3>Zacht Yoga</h3>\n      a lot to say about sweet...\n    </Content>\n    \n    <Content>\n     <h3>Yoga voor vrouwen</h3>\n      You have to be a lady to read this... ; )      \n    </Content>\n    <Content className=\"vh-30 pl-0 pr-0\">\n      <Image name=\"nature-chill.JPG\"/>\n    </Content>\n    \n    <Content className=\"vh-30 pl-0 pr-0\">\n      <Image name=\"nature-chill.JPG\"/>\n    </Content>\n    <Content>\n     <h3>Yoga Nidra</h3>\n      You love lying mindefully ? ...\n    </Content>\n</Section>",
+    "html": "<pre><code>&#x3C;Content>\n &#x3C;h3>Other things on HathaYoga...&#x3C;/h3>\n  zacht is smooth...\n  TBD : Prepare component to show image from Youtube...\n&#x3C;/Content>\n&#x3C;Content className=\"vh-30 pl-0 pr-0\">\n  &#x3C;Image name=\"nature-chill.JPG\"/>\n&#x3C;/Content>\n\n&#x3C;Content className=\"vh-30 pl-0 pr-0\">\n  &#x3C;Image name=\"nature-chill.JPG\"/>\n&#x3C;/Content>\n&#x3C;Content>\n &#x3C;h3>Zacht Yoga&#x3C;/h3>\n  a lot to say about sweet...\n&#x3C;/Content>\n\n&#x3C;Content>\n &#x3C;h3>Yoga voor vrouwen&#x3C;/h3>\n  You have to be a lady to read this... ; )      \n&#x3C;/Content>\n&#x3C;Content className=\"vh-30 pl-0 pr-0\">\n  &#x3C;Image name=\"nature-chill.JPG\"/>\n&#x3C;/Content>\n\n&#x3C;Content className=\"vh-30 pl-0 pr-0\">\n  &#x3C;Image name=\"nature-chill.JPG\"/>\n&#x3C;/Content>\n&#x3C;Content>\n &#x3C;h3>Yoga Nidra&#x3C;/h3>\n  You love lying mindefully ? ...\n&#x3C;/Content>\n</code></pre>"
+  },
+  "_id": "about/yogastyles/page.mdx",
+  "_raw": {
+    "sourceFilePath": "about/yogastyles/page.mdx",
+    "sourceFileName": "page.mdx",
+    "sourceFileDir": "about/yogastyles",
+    "contentType": "mdx",
+    "flattenedPath": "about/yogastyles/page"
+  },
+  "type": "Post",
+  "url": "/posts/about/yogastyles/page"
+}

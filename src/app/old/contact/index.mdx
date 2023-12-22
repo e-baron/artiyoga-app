@@ -1,0 +1,41 @@
+---
+navbarExtraStyles: navbar--transparent-background navbar--top-of-page
+title: Contact
+autoMargin: false
+footerImage: footer.jpg
+---
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faPhone, faCreditCard} from "@fortawesome/free-solid-svg-icons";
+
+<Section className="section--auto-margin">
+  <ContentWithBackground imageName="meditation.jpg" className="vh-50 w-100">
+    <SectionFooter className="text--light text--emphasized">
+      Contact me
+    </SectionFooter>
+  </ContentWithBackground>
+  <Content className="w-100">
+    <h3> Contact details </h3>
+    <table className="table">
+    <tbody>
+    <tr>
+    <th><FontAwesomeIcon icon={faEnvelope} fixedWidth size="1x"/></th>
+    <td><a href="mailto:baroni.kati@gmail.com" target="_blank">baroni.kati@gmail.com</a></td>
+        </tr> 
+        <tr>
+          <th><FontAwesomeIcon icon={faPhone} fixedWidth size="1x"/></th>
+          <td>0483 123 994</td>
+        </tr>
+        <tr>
+          <th><FontAwesomeIcon icon={faCreditCard} fixedWidth size="1x"/></th>
+          <td>BE05 0689 1011 7075</td>
+        </tr>       
+        <tr>
+          <th>BTW</th>
+          <td>BE 0697 794 442</td>
+        </tr>        
+      </tbody>
+    </table>
+
+  </Content>
+</Section>
