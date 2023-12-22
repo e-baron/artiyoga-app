@@ -93,8 +93,8 @@ const Image = ({
         width: width ?? "100%",
         height: height ?? "100%",
         display: display ?? "block",
-        position: "absolute",
-        overflow: "hidden",
+        position: "relative", // absolute and almost no issues...
+        // overflow: "hidden",
         zIndex: 0,
       }}
     >
