@@ -93,9 +93,13 @@ const Image = ({
         width: width ?? "100%",
         height: height ?? "100%",
         display: display ?? "block",
-        position: "relative", // absolute and almost no issues...
+        position: "absolute", // absolute and almost no issues...
         // overflow: "hidden",
         zIndex: 0,
+        paddingLeft: "inherit",
+        paddingRight: "inherit",
+        left: 0,
+        right: 0,
       }}
     >
       <NextImage
@@ -108,6 +112,7 @@ const Image = ({
         fill
         style={{
           objectFit: "cover",
+          padding:"inherit"
         }}
         alt="Picture of the author"
       />
