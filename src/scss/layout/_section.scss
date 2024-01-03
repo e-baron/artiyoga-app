@@ -125,6 +125,18 @@
     // padding-bottom: 1rem;
   }
 
+  // align a section text vertically in the center
+  &__middle-title {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;    
+  }
+
   /* Deal with background elements within a section or within a : note that this is normally not necessary
   to use it if .background is used instead of .section_background */
 

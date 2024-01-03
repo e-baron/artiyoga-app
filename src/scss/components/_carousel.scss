@@ -14,14 +14,14 @@
 .carousel__wrapper {
   width: 100%;
   height: auto;
-  background-color: $primary-color;
-  background-image: linear-gradient(
+  background-color: lightblue;// $primary-color;
+  /* background-image: linear-gradient(
     180deg,
     $fourth-color 25%,
     lighten($fourth-color, 20%) 100%
-  );
+  ); */
 
-  //background-image: url("../images/footer.jpg");
+  // background-image: url("/images/footer.jpg");
 
   //display:block;
   box-sizing: border-box;

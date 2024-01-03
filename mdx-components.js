@@ -3,6 +3,7 @@ import Image from "src/components/image";
 import Section from "src/components/section";
 import Footer from "src/components/footer";
 import SectionHeader from "src/components/section-header";
+import SectionMiddleTitle from "src/components/section-middle-title";
 import "src/scss/main.scss";
 import Scroll from "src/components/scroll/scroll";
 import Header from "src/components/header/header";
@@ -56,11 +57,10 @@ const siteMetadata = {
       name: "Lessen",
       link: "",
       subMenu: [
-        { name: "Groeplessen", link: "/lessons/groups" },
-        { name: "Bedrijfslessen", link: "/lessons/companies" },
+        { name: "Groepslessen", link: "/lessons/groups" },
+        { name: "VrouwenYoga Cirkel", link: "/lessons/women" },
         { name: "Privé Yoga", link: "/lessons/personal" },
-        { name: "Online Yoga", link: "/lessons/online" },
-        { name: "Video Yogaopnames", link: "/lessons/video" },
+        { name: "Online Yoga", link: "/lessons/video" },
       ],
     },
     {
@@ -78,8 +78,12 @@ const siteMetadata = {
       ],
     },
     {
-      name: `News`,
+      name: `Blog`,
       link: `/news`,
+    },
+    {
+      name: `Coaching`,
+      link: `/coaching`,
     },
     {
       name: `Contact`,
@@ -120,6 +124,7 @@ const shortcodes = {
   Background,
   SectionHeader,
   SectionFooter,
+  SectionMiddleTitle,
   PageHeader,
   NewsIndex,
   /* CodeBlock,
