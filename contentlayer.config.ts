@@ -1,10 +1,11 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import remarkGfm from "remark-gfm";
 
 export const MDXPage = defineDocumentType(() => ({
   name: 'MDXPage',
   filePathPattern: `**/*.mdx`,
   contentType: 'mdx',
-  fields: {    
+  fields: {
     title: { type: 'string', default: "" },
     date: { type: 'date', required: false },
     author: { type: 'string', required: false },
@@ -20,7 +21,13 @@ export const MDXPage = defineDocumentType(() => ({
   },
 }))
 
-export default makeSource({ contentDirPath: 'mdx-pages', documentTypes: [MDXPage] })
+export default makeSource({
+  contentDirPath: 'mdx-pages', documentTypes: [MDXPage],
+  mdx: {
+    remarkPlugins: [[remarkGfm]],
+    rehypePlugins: [],
+  },
+})
 
 /*
 const typeDefs = `

@@ -66,12 +66,19 @@
   table {
     border-collapse: collapse;
     margin-top: 0.5rem;
+    width: 100%;
+    // border-top: 3px solid currentColor;
+
+    th:empty {
+      display: none;
+      border: none;
+    }
 
     th,
     td {
       border: thin solid grey;
       padding: 0.2rem;
-      text-align: left;
+      // text-align: left;
       vertical-align: top;
       min-width: 3rem;
     }
@@ -90,5 +97,14 @@
   caption {
     font-style: italic;
     opacity: 0.7;
+  }
+
+  strong {
+    font-family: $font-title;
+    size: x-large;
+    font-weight: 900;
+    line-height: 1.2;
+
+    // lineHeight: 1.5rem;
   }
 }

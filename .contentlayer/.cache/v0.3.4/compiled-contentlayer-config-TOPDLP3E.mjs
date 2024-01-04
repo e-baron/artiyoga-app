@@ -1,5 +1,6 @@
 // contentlayer.config.ts
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import remarkGfm from "remark-gfm";
 var MDXPage = defineDocumentType(() => ({
   name: "MDXPage",
   filePathPattern: `**/*.mdx`,
@@ -20,9 +21,15 @@ var MDXPage = defineDocumentType(() => ({
     // don't start with /posts/
   }
 }));
-var contentlayer_config_default = makeSource({ contentDirPath: "mdx-pages", documentTypes: [MDXPage] });
+var contentlayer_config_default = makeSource({
+  contentDirPath: "mdx-pages",
+  documentTypes: [MDXPage],
+  mdx: {
+    remarkPlugins: [remarkGfm]
+  }
+});
 export {
   MDXPage,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-SN467UK5.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-TOPDLP3E.mjs.map

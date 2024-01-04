@@ -12,6 +12,10 @@ const NewsIndex = () => {
   const news = allMDXPages.filter(
     (mdxPage) => mdxPage._raw?.sourceFilePath.includes("news/")
   );
+  // sort news by date
+  news.sort((a, b) => {
+    return parseISO(b.date) - parseISO(a.date);
+  });
 
   if(!news || news.length === 0 ) return null;
 

@@ -1,4 +1,16 @@
 // app/[slug]/page.tsx
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMoneyBill1Wave,
+  faMapLocation,
+  faCalendarCheck,
+  faEnvelope,
+  faPhone,
+  faCreditCard,
+  faList,
+  faBell,
+  faToolbox,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Content from "src/components/content";
 import Image from "src/components/image";
@@ -116,6 +128,42 @@ import {
 } from './src/components/path-viewer/path-viewer.js';
  */
 
+const MoneyIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faMoneyBill1Wave} fixedWidth size={size} />
+);
+
+const LocationIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faMapLocation} fixedWidth size={size} />
+);
+
+const CalendarIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faCalendarCheck} fixedWidth size={size} />
+);
+
+const EmailIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faEnvelope} fixedWidth size={size} />
+);
+
+const PhoneIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faPhone} fixedWidth size={size} />
+);
+
+const CreditCardIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faCreditCard} fixedWidth size={size} />
+);
+
+const ListIcon = ({ size = "2x" }) => ( 
+  <FontAwesomeIcon icon={faList} fixedWidth size={size} />
+);
+
+const BellIcon = ({ size = "2x" }) => ( 
+  <FontAwesomeIcon icon={faBell} fixedWidth size={size} />
+);
+
+const ToolIcon = ({ size = "2x" }) => (
+  <FontAwesomeIcon icon={faToolbox} fixedWidth size={size} />
+);
+
 const shortcodes = {
   Link,
   Image,
@@ -129,6 +177,15 @@ const shortcodes = {
   SectionMiddleTitle,
   PageHeader,
   NewsIndex,
+  MoneyIcon,
+  LocationIcon,
+  CalendarIcon,
+  EmailIcon,
+  PhoneIcon,
+  CreditCardIcon,
+  ThemeIcon : ListIcon,
+  BellIcon,
+  ToolIcon,
   /* CodeBlock,
   LinkFile,
   ScrollableImage,
@@ -214,11 +271,13 @@ export default function MDXPage({ params }) {
                   !page.autoMargin ? "pt-3" : "section--auto-margin pt-3"
                 }
               >
-                <SectionHeader className="section__header--left">
-                  {page.title}
-                </SectionHeader>
-                <Content className="vh-50">
-                  <Image src={page.featuredImage} />{" "}
+             
+                <Content className="vh-50 pl-0 pr-0 pt-0 pb-3">
+                  <Image src={page.featuredImage} />
+                </Content>
+
+                <Content className="vw-100 pl-0 pr-0">
+                  <h3>{page.title}</h3>
                 </Content>
               </Section>
             </div>

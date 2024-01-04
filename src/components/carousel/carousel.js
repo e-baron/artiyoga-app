@@ -6,18 +6,21 @@ import Background from "../background.js";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 /**
- * 
- * @param {*} param0 
- * @returns 
+ *
+ * @param {*} param0
+ * @returns
  */
 
-const Carousel = ({ children, backgroundImageName }) => {
-  const testimonials = allMDXPages.filter(
-    (mdxPage) => mdxPage._raw?.sourceFilePath.includes("testimonial")
+const Carousel = ({
+  children,
+  backgroundImageName,
+  folderNameWithMdxFiles = "testimonial",
+}) => {
+  const testimonials = allMDXPages.filter((mdxPage) =>
+    mdxPage._raw?.sourceFilePath.includes(folderNameWithMdxFiles)
   );
 
-  if(!testimonials || testimonials.length === 0 ) return null;
-  
+  if (!testimonials || testimonials.length === 0) return null;
 
   const carousel = (
     <ReactCarousel
@@ -34,7 +37,7 @@ const Carousel = ({ children, backgroundImageName }) => {
             <h3>
               <span>{testimonial.body.raw}</span>
             </h3>
-            <h4>{testimonial.author}</h4>
+            {testimonial.author && <h4>{testimonial.author}</h4>}
           </div>
         </div>
       ))}
@@ -44,12 +47,16 @@ const Carousel = ({ children, backgroundImageName }) => {
   if (backgroundImageName) {
     return (
       <div className="carousel__wrapper">
-        <Background src={backgroundImageName} className="carousel__wrapper__background">{carousel}</Background>
+        <Background
+          src={backgroundImageName}
+          className="carousel__wrapper__background"
+        >
+          {carousel}
+        </Background>
       </div>
     );
   }
   return <div className="carousel__wrapper">{carousel}</div>;
-
 };
 
 export default Carousel;

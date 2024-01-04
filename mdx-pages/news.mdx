@@ -1,38 +1,19 @@
 ---
-navbarExtraStyles: navbar--transparent-background
-headerImage: /images/footer.jpg
+navbarExtraStyles: navbar--transparent-background navbar--top-of-page
+autoMargin: false
 title: News
 footerImage: /images/footer.jpg
 ---
 
-## Nieuws
+<Section className="section--auto-margin">
+<ContentWithBackground src="/images/blog/blog.jpg" className="vh-50 w-100">
+    <SectionFooter className="text--light text--emphasized">
+      Blog
+    </SectionFooter>
+  </ContentWithBackground>
+  <Content className="w-100 pb-3">
+    <NewsIndex />
 
-These are some news...
-
-What's up ?
-
-<Section><Content>
-
-### News
-Points: 
-- One
-- Two
-- Three
-  - 3.1
-  - 3.2
-  - [artiYoga](https://www.artiyoga.com)
-
-</Content></Section>
-
-<Section>
-  <Content>
-    <h1>News</h1>
-    <ul>
-      <li>One</li>
-      <li>Two</li>
-      <li>Three</li>
-    </ul>
   </Content>
 </Section>
 
-<NewsIndex />

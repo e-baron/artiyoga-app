@@ -1,4 +1,5 @@
 import createMDX from "@next/mdx";
+
 import { withContentlayer } from "next-contentlayer";
 
 /** @type {import('next').NextConfig} */
