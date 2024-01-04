@@ -60,7 +60,7 @@
     padding-bottom: 0.3125rem;
     //padding-left: 0.3125rem;
     margin-right: 1rem;
-    font-size: 1.7rem ; //1.25rem;
+    font-size: 1.7rem; //1.25rem;
     text-decoration: none;
     white-space: nowrap;
     color: $secondary-color;
@@ -71,7 +71,6 @@
     flex-basis: 100%;
     flex-grow: 1;
     align-items: center;
-   
 
     /*font-family: $font-title;
     font-weight: 300; 
@@ -116,9 +115,9 @@
           cursor: pointer;
 
           &:hover,
-              &:focus {
-                color: darken($secondary-color, 20%);                 
-              }
+          &:focus {
+            color: darken($secondary-color, 20%);
+          }
 
           &--dropdown-toggle {
             //add a triangle
@@ -173,9 +172,9 @@
             padding-right: 0.5rem;
 
             &:hover,
-              &:focus {                       
-                background-color: lighten($tertiary-color, 70%);   
-              }
+            &:focus {
+              background-color: lighten($tertiary-color, 70%);
+            }
 
             &__link {
               display: block;
@@ -188,9 +187,8 @@
 
               &:hover,
               &:focus {
-                color: lighten($tertiary-color, 20%);                 
+                color: lighten($tertiary-color, 20%);
               }
-
             }
           }
 
@@ -217,6 +215,28 @@
   &--top-of-page {
     position: absolute;
     top: 0;
-    left: 0;    
+    left: 0;
+  }
+}
+
+// deal with all the descendants of the .navbar--dark class
+.navbar--dark .navbar__brand {
+  color: $tertiary-color;
+}
+
+.navbar--dark .navbar__toggler {
+  color: $tertiary-color;
+  border-color: $tertiary-color;
+}
+
+.navbar--dark .navbar__toggler__icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='#{hsl-str($tertiary-color)}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.navbar--dark .navbar__menu__list__item__link {
+  color: $tertiary-color;
+  &:hover,
+  &:focus {
+    color: lighten($tertiary-color, 20%);
   }
 }
