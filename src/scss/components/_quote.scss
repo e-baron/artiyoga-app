@@ -18,6 +18,10 @@
     padding-top : 0;
     padding-bottom: 1rem;
   }
+
+  color: $secondary-color;
+
+
 /*
   &--close-to-others:last-child{
     padding-top : 0;
@@ -27,7 +31,7 @@
   &__content {
 
     position: relative;
-    color: $secondary-color;
+    // color: $secondary-color;
     // padding top & bottom
     padding: 30px 0;
 
@@ -45,13 +49,13 @@
     /* Blockquote header */
     h3 {
       position: relative;
-      color: $secondary-color;
+      // color: $secondary-color;
     }
 
     /* Blockquote subheader */
     h4 {
       position: relative;
-      color: $tertiary-color;
+      // color: $tertiary-color;
       margin: 0;
       padding-top: 20px;
       //z-index: 1;
@@ -65,11 +69,25 @@
     &:after {
       position: absolute;
       content: "”";
-      color: $secondary-color;
+      // color: $secondary-color;
       font-size: 10rem;
       line-height: 0;
       bottom: -43px;
       right: 30px;
     }
   }
+
+  // dark modifier
+  &--dark {
+    color: $tertiary-color; 
+  }
+
+  &--dark-with-background {
+    color: $tertiary-color;
+    h3{
+      background-color: white;
+    }   
+  }
+
+
 }

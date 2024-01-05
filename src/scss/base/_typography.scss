@@ -75,6 +75,10 @@ h3 {
     color: $secondary-color !important;
   }
 
+  &--dark {
+    color: $tertiary-color !important;
+  }
+
   &--italic {
     font-style: italic !important;
   }
