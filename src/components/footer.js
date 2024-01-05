@@ -11,15 +11,21 @@ import {
 
 import Background from "./background.js";
 
-const Footer = ({ siteMetaData, frontmatter,footerExtraStyles, ...otherProps}) => {
-  
+const Footer = ({
+  siteMetaData,
+  frontmatter,
+  footerExtraStyles,
+  ...otherProps
+}) => {
   const { className } = otherProps;
-  const classValue = `footer ${className ? className : ""}`;  
+  const classValue = `footer ${className ? className : ""}`;
 
   return (
-    <footer className={`${classValue}${footerExtraStyles ? footerExtraStyles : ''}`}>
+    <footer
+      className={`${classValue}${footerExtraStyles ? footerExtraStyles : ""}`}
+    >
       <Background
-        {...(frontmatter?.footerImage ? { src: frontmatter?.footerImage  } : {})}
+        {...(frontmatter?.footerImage ? { src: frontmatter?.footerImage } : {})}
         className="footer__background"
       >
         <div className="footer__logo">
@@ -27,9 +33,11 @@ const Footer = ({ siteMetaData, frontmatter,footerExtraStyles, ...otherProps}) =
           <div className="footer__logo__image"></div>
           <div className="footer__logo__image2"></div>
         </div>
-        <div className="footer__version text--hand-written">
-          v{siteMetaData.version}
-        </div>
+        {siteMetaData.version && (
+          <div className="footer__version text--hand-written">
+            v{siteMetaData.version}
+          </div>
+        )}
         <div className="footer__icons">
           <ul className="footer__icons__wrapper">
             {siteMetaData.authorEmail !== undefined &&
@@ -40,7 +48,7 @@ const Footer = ({ siteMetaData, frontmatter,footerExtraStyles, ...otherProps}) =
                   data-email={siteMetaData.authorEmail}
                   target="_blank"
                 >
-                  <FontAwesomeIcon icon={faEnvelope} fixedWidth size="1x"/>
+                  <FontAwesomeIcon icon={faEnvelope} fixedWidth size="1x" />
                 </a>
               </li>
             ) : (
@@ -51,7 +59,7 @@ const Footer = ({ siteMetaData, frontmatter,footerExtraStyles, ...otherProps}) =
             siteMetaData.facebookUrl.length ? (
               <li>
                 <a href={siteMetaData.facebookUrl} target="_blank">
-                  <FontAwesomeIcon icon={faFacebook} fixedWidth size="1x"/>
+                  <FontAwesomeIcon icon={faFacebook} fixedWidth size="1x" />
                 </a>
               </li>
             ) : (

@@ -50,7 +50,7 @@ const defaultAssociatedProjectGroupName = ""; // 'Web2 2023';
 const projectDocument = ""; //'WEB2-2022-PROJET-GROUP-XY.docx';
 
 const siteMetadata = {
-  version: "2.0.0",
+  version: "", // "2.0.0",
   title: siteTitle,
   description: "artiYoga : Yoga in 1500 Halle with Kati Baroni",
   url: siteURL,
