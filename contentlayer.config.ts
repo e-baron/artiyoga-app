@@ -12,6 +12,7 @@ export const MDXPage = defineDocumentType(() => ({
     description: { type: 'string', required: false },
     autoMargin: { type: 'boolean', default: true },
     navbarExtraStyles: { type: 'string', required: false },
+    footerExtraStyles: { type: 'string', required: false },
     headerImage: { type: 'string', required: false },
     footerImage: { type: 'string', required: false },
     featuredImage: { type: 'string', required: false }

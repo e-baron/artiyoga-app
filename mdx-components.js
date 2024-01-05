@@ -29,7 +29,7 @@ const siteURL = "https://e-baron.github.io/artiyoga"; // No trailing slash allow
 const siteTitle = "artiYoga";
 const youtubeUrl = "https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw"; //"https://www.youtube.com/channel/UC_iU0pfrDaYFXd6X9mPlAJQ";
 const authorEmail = "baroni.kati@gmail.com";
-const facebookUrl = "https://www.facebook.com/artiyoga";
+const facebookUrl = "https://www.facebook.com/baroni.kati";
 const instagramUrl = "https://www.instagram.com/baroni.kati/";
 const defaultLanguage = "nl";
 const defaultAssociatedProjectGroupName = ""; // 'Web2 2023';
@@ -230,6 +230,9 @@ export const MDXPageLayout = ({ params }) => {
       <Footer
         siteMetaData={siteMetadata}
         frontmatter={page}
+        {...(page.footerExtraStyles
+          ? { footerExtraStyles: page.footerExtraStyles }
+          : {})}
         //  langs={langsMenu}
       ></Footer>
       <Scroll showBelow={250} />

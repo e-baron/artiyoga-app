@@ -7,12 +7,13 @@
 
   a {
     font-size: 1.3rem;
-    color: $secondary-color;
+    // color: $secondary-color;
 
+    /*
     &:hover {
       color: darken($secondary-color, 25%);
       transition: color 0.3s ease-in;
-    }
+    } */
   }
 
   li {

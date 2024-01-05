@@ -43,14 +43,14 @@ const siteURL = "https://e-baron.github.io/artiyoga"; // No trailing slash allow
 const siteTitle = "artiYoga";
 const youtubeUrl = "https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw"; //"https://www.youtube.com/channel/UC_iU0pfrDaYFXd6X9mPlAJQ";
 const authorEmail = "baroni.kati@gmail.com";
-const facebookUrl = "https://www.facebook.com/artiyoga";
+const facebookUrl = "https://www.facebook.com/baroni.kati";
 const instagramUrl = "https://www.instagram.com/baroni.kati/";
 const defaultLanguage = "nl";
 const defaultAssociatedProjectGroupName = ""; // 'Web2 2023';
 const projectDocument = ""; //'WEB2-2022-PROJET-GROUP-XY.docx';
 
 const siteMetadata = {
-  version: "1.0.0",
+  version: "2.0.0",
   title: siteTitle,
   description: "artiYoga : Yoga in 1500 Halle with Kati Baroni",
   url: siteURL,
@@ -289,6 +289,9 @@ export default function MDXPage({ params }) {
       <Footer
         siteMetaData={siteMetadata}
         frontmatter={page}
+        {...(page.footerExtraStyles
+          ? { footerExtraStyles: page.footerExtraStyles }
+          : {})}
         //  langs={langsMenu}
       ></Footer>
       <Scroll showBelow={250} />

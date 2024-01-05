@@ -16,6 +16,24 @@
     }
   }
 
+  // use a leafs as a bullet
+  ul {
+    list-style-type: "🌿";
+  }
+  li {
+    padding-left: 0.5rem;
+  }
+
+  a {
+    color: $tertiary-color;
+    
+  
+    &:hover,
+    &:focus {
+      color: lighten($tertiary-color, 20%);
+    } 
+  }
+
   @media only screen and (min-width: $lg) {
     width: auto;
     &:has(.page-menu) {

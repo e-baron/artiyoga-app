@@ -1,9 +1,12 @@
 .footer {
   background-color: $tertiary-color;
 
+ 
+  color: lighten($secondary-color, 40%) ;
+
   @include text(
     $family: $font-regular,
-    $color: lighten($secondary-color, 40%),
+    // $color: lighten($secondary-color, 40%),
     $size: large,
     $lineHeight: null,
     $weight: 400
@@ -15,6 +18,28 @@
     li:last-of-type {
       margin-right: 0;
     }
+    &__wrapper {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      align-items: center;
+      width: 100%;
+    
+      a {
+        font-size: 1.3rem;
+        color: $secondary-color;
+    
+        /*
+        &:hover {
+          color: darken($secondary-color, 25%);
+          transition: color 0.3s ease-in;
+        } */
+      }
+    
+      li {
+        margin-right: 1rem;
+      }
+    }
   }
 
   &__version {
@@ -22,6 +47,7 @@
     display: inline-block;
     margin-left: 1rem;
     margin-right: 1rem;
+    // color: lighten($secondary-color, 40%);
   }
 
   &__background {
@@ -45,7 +71,7 @@
       font-family: $font-navigation;
       font-weight: 300; // normal ; // or from 100 to 900
       font-size: 1.7rem;
-      color: lighten($secondary-color, 40%);
+      // color: lighten($secondary-color, 40%);
     }
 
     &__image{
@@ -73,4 +99,20 @@
       margin-left: 1rem;
     }
   }
+
+  // the modifiers shall be done at the end so that this footer--light.a 
+  // can override the a in the footer__icons__wrapper
+
+  &--light {
+    background-color: $primary-color;
+    color: $tertiary-color;
+  }
+
+  &--light a {
+  
+      color: $tertiary-color; 
+   
+  }
+
+
 }

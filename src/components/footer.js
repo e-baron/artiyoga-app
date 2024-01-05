@@ -11,13 +11,13 @@ import {
 
 import Background from "./background.js";
 
-const Footer = ({ siteMetaData, frontmatter, ...otherProps}) => {
+const Footer = ({ siteMetaData, frontmatter,footerExtraStyles, ...otherProps}) => {
   
   const { className } = otherProps;
   const classValue = `footer ${className ? className : ""}`;  
 
   return (
-    <footer className={classValue}>
+    <footer className={`${classValue}${footerExtraStyles ? footerExtraStyles : ''}`}>
       <Background
         {...(frontmatter?.footerImage ? { src: frontmatter?.footerImage  } : {})}
         className="footer__background"
@@ -31,7 +31,7 @@ const Footer = ({ siteMetaData, frontmatter, ...otherProps}) => {
           v{siteMetaData.version}
         </div>
         <div className="footer__icons">
-          <ul className="menu">
+          <ul className="footer__icons__wrapper">
             {siteMetaData.authorEmail !== undefined &&
             siteMetaData.authorEmail.length ? (
               <li>

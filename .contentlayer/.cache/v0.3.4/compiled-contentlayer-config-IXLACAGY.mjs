@@ -12,6 +12,7 @@ var MDXPage = defineDocumentType(() => ({
     description: { type: "string", required: false },
     autoMargin: { type: "boolean", default: true },
     navbarExtraStyles: { type: "string", required: false },
+    footerExtraStyles: { type: "string", required: false },
     headerImage: { type: "string", required: false },
     footerImage: { type: "string", required: false },
     featuredImage: { type: "string", required: false }
@@ -33,4 +34,4 @@ export {
   MDXPage,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-WG7Y5SYO.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-IXLACAGY.mjs.map

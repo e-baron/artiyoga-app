@@ -39,7 +39,7 @@ h1 {
     $family: $font-title,
     $size: 2rem,
     $weight: 300,
-    $color: $tertiary-color,
+    // $color: $tertiary-color,
     $lineHeight: 2rem
   );
 }
@@ -48,7 +48,7 @@ h2 {
     $family: $font-title,
     $size: 1.5rem,
     $weight: 300,
-    $color: $tertiary-color,
+    // $color: $tertiary-color,
     $lineHeight: 1.5rem
   );
 }
@@ -58,7 +58,7 @@ h3 {
     $family: $font-title,
     $size: 1.3rem,
     $weight: 300,
-    $color: $tertiary-color,
+    // $color: $tertiary-color,
     $lineHeight: 1.3rem,
     $fontStyle: italic
   );
@@ -91,37 +91,18 @@ h3 {
 }
 
 a {
-  color: $tertiary-color;
+  // color: $tertiary-color;
   cursor: pointer;
 
   /* Adds a hyphen where the word breaks, if supported (No Blink) */
   hyphens: auto;
 
-  &:hover,
+  /* &:hover,
   &:focus {
     color: lighten($tertiary-color, 20%);
-  }
+  } */
 }
 
 code {
   color: #d63384;
 }
-
-
-/*
- main {
-  @include text(
-    $family: $font-regular,
-    $size: large,
-    $weight: 400,
-  );
-} 
-
-body{
-  @include text(
-    $family: $font-starter,
-    $size: 1rem,
-    $weight: 400,
-  );
-  
-} */

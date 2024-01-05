@@ -19,6 +19,7 @@ export type MDXPage = {
   description?: string | undefined
   autoMargin: boolean
   navbarExtraStyles?: string | undefined
+  footerExtraStyles?: string | undefined
   headerImage?: string | undefined
   footerImage?: string | undefined
   featuredImage?: string | undefined
