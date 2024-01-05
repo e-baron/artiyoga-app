@@ -39,7 +39,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 
-const siteURL = "https://e-baron.github.io/artiyoga"; // No trailing slash allowed!
+const siteURL = "https://www.artiyoga.com"; // No trailing slash allowed!
 const siteTitle = "artiYoga";
 const youtubeUrl = "https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw"; //"https://www.youtube.com/channel/UC_iU0pfrDaYFXd6X9mPlAJQ";
 const authorEmail = "baroni.kati@gmail.com";
