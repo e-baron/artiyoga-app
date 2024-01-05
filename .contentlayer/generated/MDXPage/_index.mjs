@@ -5,6 +5,7 @@ import homeMdx from './home.mdx.json' assert { type: 'json' }
 import newsMdx from './news.mdx.json' assert { type: 'json' }
 import about__katiMdx from './about__kati.mdx.json' assert { type: 'json' }
 import about__yogastylesMdx from './about__yogastyles.mdx.json' assert { type: 'json' }
+import news__cirkel1Mdx from './news__cirkel1.mdx.json' assert { type: 'json' }
 import contact__indexMdx from './contact__index.mdx.json' assert { type: 'json' }
 import lessons__companiesMdx from './lessons__companies.mdx.json' assert { type: 'json' }
 import lessons__groupsMdx from './lessons__groups.mdx.json' assert { type: 'json' }
@@ -12,7 +13,6 @@ import lessons__onlineMdx from './lessons__online.mdx.json' assert { type: 'json
 import lessons__personalMdx from './lessons__personal.mdx.json' assert { type: 'json' }
 import lessons__videoMdx from './lessons__video.mdx.json' assert { type: 'json' }
 import lessons__womenMdx from './lessons__women.mdx.json' assert { type: 'json' }
-import news__cirkel1Mdx from './news__cirkel1.mdx.json' assert { type: 'json' }
 import testimonial__businessAndPrivateTestimonial__annieMdx from './testimonial__business-and-private-testimonial__annie.mdx.json' assert { type: 'json' }
 import testimonial__businessAndPrivateTestimonial__genevieveMdx from './testimonial__business-and-private-testimonial__genevieve.mdx.json' assert { type: 'json' }
 import testimonial__businessAndPrivateTestimonial__janiceMMdx from './testimonial__business-and-private-testimonial__janice-m.mdx.json' assert { type: 'json' }
@@ -28,4 +28,4 @@ import testimonial__yogacircleTestimonial__sixMdx from './testimonial__yogacircl
 import testimonial__yogacircleTestimonial__threeMdx from './testimonial__yogacircle-testimonial__three.mdx.json' assert { type: 'json' }
 import testimonial__yogacircleTestimonial__twoMdx from './testimonial__yogacircle-testimonial__two.mdx.json' assert { type: 'json' }
 
-export const allMDXPages = [coachingMdx, homeMdx, newsMdx, about__katiMdx, about__yogastylesMdx, contact__indexMdx, lessons__companiesMdx, lessons__groupsMdx, lessons__onlineMdx, lessons__personalMdx, lessons__videoMdx, lessons__womenMdx, news__cirkel1Mdx, testimonial__businessAndPrivateTestimonial__annieMdx, testimonial__businessAndPrivateTestimonial__genevieveMdx, testimonial__businessAndPrivateTestimonial__janiceMMdx, testimonial__businessAndPrivateTestimonial__kathleenMdx, testimonial__businessAndPrivateTestimonial__kristienLMdx, testimonial__businessAndPrivateTestimonial__sandraMdx, testimonial__coachingTestimonial__alizMdx, testimonial__coachingTestimonial__veerleMdx, testimonial__yogacircleTestimonial__fiveMdx, testimonial__yogacircleTestimonial__fourMdx, testimonial__yogacircleTestimonial__oneMdx, testimonial__yogacircleTestimonial__sixMdx, testimonial__yogacircleTestimonial__threeMdx, testimonial__yogacircleTestimonial__twoMdx]
+export const allMDXPages = [coachingMdx, homeMdx, newsMdx, about__katiMdx, about__yogastylesMdx, news__cirkel1Mdx, contact__indexMdx, lessons__companiesMdx, lessons__groupsMdx, lessons__onlineMdx, lessons__personalMdx, lessons__videoMdx, lessons__womenMdx, testimonial__businessAndPrivateTestimonial__annieMdx, testimonial__businessAndPrivateTestimonial__genevieveMdx, testimonial__businessAndPrivateTestimonial__janiceMMdx, testimonial__businessAndPrivateTestimonial__kathleenMdx, testimonial__businessAndPrivateTestimonial__kristienLMdx, testimonial__businessAndPrivateTestimonial__sandraMdx, testimonial__coachingTestimonial__alizMdx, testimonial__coachingTestimonial__veerleMdx, testimonial__yogacircleTestimonial__fiveMdx, testimonial__yogacircleTestimonial__fourMdx, testimonial__yogacircleTestimonial__oneMdx, testimonial__yogacircleTestimonial__sixMdx, testimonial__yogacircleTestimonial__threeMdx, testimonial__yogacircleTestimonial__twoMdx]
