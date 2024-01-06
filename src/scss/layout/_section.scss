@@ -1,6 +1,5 @@
 .section {
   @include regular-text();
-  
 
   display: flex;
   //flex-direction: row;
@@ -100,7 +99,7 @@
     align-self: flex-start;
     padding-left: 1rem;
     padding-right: 1rem;
-    position: absolute;    
+    position: absolute;
     padding: 0 auto;
     width: 100%;
     @include emphasized-text();
@@ -113,19 +112,31 @@
 
   &__footer {
     flex: 1 1 100%;
+    // display: block;
     // min-height: 5vh;
     text-align: center;
     align-self: flex-end;
     justify-content: center;
     padding-left: 1rem;
     padding-right: 1rem;
-    position: absolute;    
-    padding: 0 auto;
+    position: absolute;
+    // padding: 0 auto;
     width: 100%;
     // padding-bottom: 1rem;
     font-family: $font-navigation;
     font-size: 1.5rem;
-    font-weight: 900;
+    font-weight: 300;
+
+    // deal with style only if there is sibling .footer element (only OK if there is maximum 2 .footer elemen
+    &:nth-last-of-type(2) {
+      bottom: 2rem;
+    }
+
+    // deal with style for a sibling .footer element
+    & + & {
+      position: relative;
+      top: 1rem;
+    }
   }
 
   // align a section text vertically in the center
@@ -137,7 +148,7 @@
     align-content: center;
     height: 100%;
     width: 100%;
-    position: absolute;    
+    position: absolute;
   }
 
   /* Deal with background elements within a section or within a : note that this is normally not necessary
