@@ -129,13 +129,13 @@
 
     // deal with style only if there is sibling .footer element (only OK if there is maximum 2 .footer elemen
     &:nth-last-of-type(2) {
-      bottom: 2rem;
+      bottom: 2.5rem;
     }
 
     // deal with style for a sibling .footer element
     & + & {
       position: relative;
-      top: 1rem;
+      top: 0rem;
     }
   }
 
