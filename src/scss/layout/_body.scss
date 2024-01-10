@@ -19,9 +19,9 @@ body {
     min-height: 100vh;
     position: relative;
     flex-shrink: 0;
-    width:50%;
+    width:60%;
 
-    /* Hide columns on screens with aspect ratio less than 16:9 */
+    /* Hide columns on screens with aspect ratio less than 3/2 */
     @media screen and (max-aspect-ratio: 1.5) {
       width: 100%;
     }
