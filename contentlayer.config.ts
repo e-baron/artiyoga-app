@@ -15,7 +15,8 @@ export const MDXPage = defineDocumentType(() => ({
     footerExtraStyles: { type: 'string', required: false },
     headerImage: { type: 'string', required: false },
     footerImage: { type: 'string', required: false },
-    featuredImage: { type: 'string', required: false }
+    featuredImage: { type: 'string', required: false },
+    autoCropPage: { type: 'boolean', default: true },
   },
   computedFields: {
     url: { type: 'string', resolve: (page) => `/${page._raw.flattenedPath}` },// don't start with /posts/

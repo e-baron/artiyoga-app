@@ -1,4 +1,29 @@
-.body {
+body {
   //@include text($family: $font-regular, $size: large, $lineHeight: null, $weight: 400);
   @include regular-text();
+  // flex-direction: row;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+
+  .side-empty-column {
+    flex-grow: 1; // grow to fill empty space
+    // background-color: $primary-color;
+  }
+
+  .master {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    flex-shrink: 0;
+    width:50%;
+
+    /* Hide columns on screens with aspect ratio less than 16:9 */
+    @media screen and (max-aspect-ratio: 1.5) {
+      width: 100%;
+    }
+  }
 }

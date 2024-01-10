@@ -152,11 +152,11 @@ const CreditCardIcon = ({ size = "2x" }) => (
   <FontAwesomeIcon icon={faCreditCard} fixedWidth size={size} />
 );
 
-const ListIcon = ({ size = "2x" }) => ( 
+const ListIcon = ({ size = "2x" }) => (
   <FontAwesomeIcon icon={faList} fixedWidth size={size} />
 );
 
-const BellIcon = ({ size = "2x" }) => ( 
+const BellIcon = ({ size = "2x" }) => (
   <FontAwesomeIcon icon={faBell} fixedWidth size={size} />
 );
 
@@ -183,7 +183,7 @@ const shortcodes = {
   EmailIcon,
   PhoneIcon,
   CreditCardIcon,
-  ThemeIcon : ListIcon,
+  ThemeIcon: ListIcon,
   BellIcon,
   ToolIcon,
   /* CodeBlock,
@@ -247,55 +247,60 @@ export default function MDXPage({ params }) {
   const MDXContent = useMDXComponent(page.body.code);
 
   return (
-    <div className="master">
-      {/*  <SEO
+    <>
+      {page?.autoCropPage && <div className="side-empty-column"></div>}
+      <div className="master">
+        {/*  <SEO
          title={pageTitle}
          {...(frontmatter ? { description: frontmatter?.description } : {})}
          language="fr"
        /> */}
 
-      <Header
-        siteMetadata={siteMetadata}
-        {...(page.navbarExtraStyles
-          ? { navbarExtraStyles: page.navbarExtraStyles }
-          : {})}
-        {...(page.headerImage ? { headerImage: page.headerImage } : {})}
-      />
+        <Header
+          siteMetadata={siteMetadata}
+          {...(page.navbarExtraStyles
+            ? { navbarExtraStyles: page.navbarExtraStyles }
+            : {})}
+          {...(page.headerImage ? { headerImage: page.headerImage } : {})}
+        />
 
-      <main className="main">
-        <div className={page?.autoMargin ? "page page--auto-margin " : "page"}>
-          {page.featuredImage && (
-            <div>
-              <Section
-                className={
-                  !page.autoMargin ? "pt-3" : "section--auto-margin pt-3"
-                }
-              >
-             
-                <Content className="vh-50 pl-0 pr-0 pt-0 pb-3">
-                  <Image src={page.featuredImage} />
-                </Content>
+        <main className="main">
+          <div
+            className={page?.autoMargin ? "page page--auto-margin " : "page"}
+          >
+            {page.featuredImage && (
+              <div>
+                <Section
+                  className={
+                    !page.autoMargin ? "pt-3" : "section--auto-margin pt-3"
+                  }
+                >
+                  <Content className="vh-50 pl-0 pr-0 pt-0 pb-3">
+                    <Image src={page.featuredImage} />
+                  </Content>
 
-                <Content className="vw-100 pl-0 pr-0">
-                  <h3>{page.title}</h3>
-                </Content>
-              </Section>
-            </div>
-          )}
-          <MDXContent components={shortcodes} />
-        </div>
-      </main>
+                  <Content className="vw-100 pl-0 pr-0">
+                    <h3>{page.title}</h3>
+                  </Content>
+                </Section>
+              </div>
+            )}
+            <MDXContent components={shortcodes} />
+          </div>
+        </main>
 
-      <Footer
-        siteMetaData={siteMetadata}
-        frontmatter={page}
-        {...(page.footerExtraStyles
-          ? { footerExtraStyles: page.footerExtraStyles }
-          : {})}
-        //  langs={langsMenu}
-      ></Footer>
-      <Scroll showBelow={250} />
-    </div>
+        <Footer
+          siteMetaData={siteMetadata}
+          frontmatter={page}
+          {...(page.footerExtraStyles
+            ? { footerExtraStyles: page.footerExtraStyles }
+            : {})}
+          //  langs={langsMenu}
+        ></Footer>
+        <Scroll showBelow={250} />
+      </div>
+      {page?.autoCropPage && <div className="side-empty-column"></div>}
+    </>
   );
 }
 
