@@ -99,6 +99,7 @@
   @for $i from 1 through 20 {
     .vh-#{$i*5} {
       height: $i * 5 + vh;
+      height: $i * 5 + dvh;
     }
   }
 }
@@ -107,7 +108,9 @@
   @for $i from 1 through 20 {
     .vw-#{$i*5} {
       width: $i * 5 + vw;
+      width: $i * 5 + dvw;
       flex-basis: $i * 5 + vw;
+      flex-basis: $i * 5 + dvw;
     }
   }
 }
