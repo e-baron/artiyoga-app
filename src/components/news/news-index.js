@@ -20,9 +20,14 @@ const NewsIndex = ({ daysToConsiderNewsOutdated = -1 }) => {
   // filter news by date if daysToConsiderNewsOutdated is not set to -1
   if (daysToConsiderNewsOutdated !== -1) {
     const now = new Date();
-    news = news.filter((newsItem) => {      
+    // for news that are considered as events, filter them with always considering
+    // a daysToConsiderNewsOutdated of 1
+    news = news.filter((newsItem) => {
       const diffDays = daysBetween(parseISO(newsItem.date), now);
-      return diffDays <= daysToConsiderNewsOutdated;
+      return (
+        (newsItem.category === "events" && diffDays <= 0) ||
+        newsItem.category !== "events" && diffDays <= daysToConsiderNewsOutdated
+      );
     });
   }
 
@@ -58,7 +63,6 @@ function excerpt(text, length = 100) {
   if (text.length < length) return text;
   return text.substring(0, length) + "...";
 }
-
 
 function treatAsUTC(date) {
   var result = new Date(date);
