@@ -27,7 +27,6 @@ import { allMDXPages } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
 
 import Link from "next/link";
-// import MainLayout from '../components/main-layout.js';
 import Background from "src/components/background.js";
 import SectionFooter from "src/components/section-footer.js";
 import PageHeader from "src/components/page-header.js";
@@ -169,115 +168,6 @@ const shortcodes = {
 
 };
 
-/*import Content from "src/components/content";
-import Image from "src/components/image";
-import Section from "src/components/section";
-import Footer from "src/components/footer";
-import SectionHeader from "src/components/section-header";
-import SectionMiddleTitle from "src/components/section-middle-title";
-import "src/scss/main.scss";
-import Scroll from "src/components/scroll/scroll";
-import Header from "src/components/header/header";
-import Carousel from "src/components/carousel/carousel.js";
-import NewsIndex from "./src/components/news/news-index.js";
-import { format, parseISO } from "date-fns";
-import { allMDXPages } from "contentlayer/generated";
-import { useMDXComponent } from "next-contentlayer/hooks";
-
-import Link from "next/link";
-// import MainLayout from '../components/main-layout.js';
-import Background from "src/components/background.js";
-import SectionFooter from "src/components/section-footer.js";
-import PageHeader from "src/components/page-header.js";
-// The following import prevents a Font Awesome icon server-side rendering bug,
-// where the icons flash from a very large icon down to a properly sized one:
-import "@fortawesome/fontawesome-svg-core/styles.css";
-// Prevent fontawesome from adding its CSS since we did it manually above:
-import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false; 
-
-const siteURL = "https://www.artiyoga.com"; // No trailing slash allowed!
-const siteTitle = "artiYoga";
-const youtubeUrl = "https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw"; //"https://www.youtube.com/channel/UC_iU0pfrDaYFXd6X9mPlAJQ";
-const authorEmail = "baroni.kati@gmail.com";
-const facebookUrl = "https://www.facebook.com/baroni.kati";
-const instagramUrl = "https://www.instagram.com/baroni.kati/";
-const defaultLanguage = "nl";
-const defaultAssociatedProjectGroupName = ""; // 'Web2 2023';
-const projectDocument = ""; //'WEB2-2022-PROJET-GROUP-XY.docx';
-
-const siteMetadata = {
-  version: "", // "2,0,0",
-  title: siteTitle,
-  description: "artiYoga : Yoga in 1500 Halle with Kati Baroni",
-  url: siteURL,
-  siteUrl: siteURL, // config for gatsby-plugin-robots-txt
-  youtubeUrl: youtubeUrl,
-  authorEmail: authorEmail,
-  facebookUrl: facebookUrl,
-  instagramUrl: instagramUrl,
-  languages: { langs: ["nl"], defaultLangKey: defaultLanguage },
-  defaultAssociatedProjectGroupName: defaultAssociatedProjectGroupName,
-  isAuthentication: true,
-  menuLinks: [
-    {
-      name: `Home`,
-      link: `/`,
-    },
-    {
-      name: "Lessen",
-      link: "",
-      subMenu: [
-        { name: "Groepslessen", link: "/lessons/groups" },
-        { name: "VrouwenYoga Cirkel", link: "/lessons/women" },
-        { name: "Privé Yoga", link: "/lessons/personal" },
-        { name: "Online Yoga", link: "/lessons/video" },
-      ],
-    },
-    {
-      name: `About`,
-      link: ``,
-      subMenu: [
-        {
-          name: `Kati`,
-          link: `/about/kati`,
-        },
-        {
-          name: `Yogastijlen`,
-          link: `/about/yogastyles`,
-        },
-      ],
-    },
-    {
-      name: `Blog`,
-      link: `/news`,
-    },
-    {
-      name: `Coaching`,
-      link: `/coaching`,
-    },
-    {
-      name: `Contact`,
-      link: `/contact`,
-    },
-  ],
-};
-
-
-const shortcodes = {
-  Link,
-  Image,
-  Section,
-  Content,
-  Carousel,
-  ContentWithBackground: Background,
-  Background,
-  SectionHeader,
-  SectionFooter,
-  SectionMiddleTitle,
-  PageHeader,
-  NewsIndex,
-};*/
 
 /* The generateStaticParams function can be used in combination with dynamic route 
 segments to statically generate routes at build time instead of on-demand at 
@@ -319,12 +209,10 @@ export const generateMetadata = ({ params }) => {
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
-export const MDXPageLayout = ({ params }) => {
-  console.log("MDXPageLayout() params: ", params);
+export const MDXPageLayout= ({ params }) =>{
   const page = allMDXPages.find(
     (mdxPage) => mdxPage._raw.flattenedPath === params.slug.join("/")
   );
-  // console.log("post found:", page);
   if (!page) throw new Error(`Post not found for slug: ${params.slug}`);
 
   // Parse the MDX file via the useMDXComponent hook.
@@ -334,11 +222,7 @@ export const MDXPageLayout = ({ params }) => {
     <>
       {page?.autoCropPage && <div className="side-empty-column"></div>}
       <div className="master">
-        {/*  <SEO
-         title={pageTitle}
-         {...(frontmatter ? { description: frontmatter?.description } : {})}
-         language="fr"
-       /> */}
+        {}
 
         <Header
           siteMetadata={siteMetadata}
@@ -359,11 +243,12 @@ export const MDXPageLayout = ({ params }) => {
                     !page.autoMargin ? "pt-3" : "section--auto-margin pt-3"
                   }
                 >
-                  <SectionHeader className="section__header--left">
-                    {page.title}
-                  </SectionHeader>
-                  <Content className="vh-50">
-                    <Image src={page.featuredImage} />{" "}
+                  <Content className="vh-50 pl-0 pr-0 pt-0 pb-3">
+                    <Image src={page.featuredImage} />
+                  </Content>
+
+                  <Content className="vw-100 pl-0 pr-0">
+                    <h3>{page.title}</h3>
                   </Content>
                 </Section>
               </div>
@@ -384,8 +269,9 @@ export const MDXPageLayout = ({ params }) => {
       </div>
       {page?.autoCropPage && <div className="side-empty-column"></div>}
     </>
-  );
-};
+
+  )};
+
 
 // this function can be used for page.mdx in the app folder
 
