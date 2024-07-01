@@ -35,7 +35,7 @@ import PageHeader from "src/components/page-header.js";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false; 
+config.autoAddCss = false;
 
 const siteURL = "https://www.artiyoga.com"; // No trailing slash allowed!
 const siteTitle = "artiYoga";
@@ -85,6 +85,10 @@ const siteMetadata = {
       link: `/reiki`,
     },
     {
+      name: `Events`,
+      link: `/events`,
+    },
+    {
       name: `About`,
       link: ``,
       subMenu: [
@@ -98,18 +102,13 @@ const siteMetadata = {
         },
       ],
     },
-    {
-      name: `Blog`,
-      link: `/news`,
-    },
+
     {
       name: `Contact`,
       link: `/contact`,
     },
   ],
 };
-
-
 
 const MoneyIcon = ({ size = "2x" }) => (
   <FontAwesomeIcon icon={faMoneyBill1Wave} fixedWidth size={size} />
@@ -169,9 +168,7 @@ const shortcodes = {
   ThemeIcon: ListIcon,
   BellIcon,
   ToolIcon,
-
 };
-
 
 /* The generateStaticParams function can be used in combination with dynamic route 
 segments to statically generate routes at build time instead of on-demand at 
@@ -213,7 +210,7 @@ export const generateMetadata = ({ params }) => {
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
-export const MDXPageLayout= ({ params }) =>{
+export const MDXPageLayout = ({ params }) => {
   const page = allMDXPages.find(
     (mdxPage) => mdxPage._raw.flattenedPath === params.slug.join("/")
   );
@@ -273,9 +270,8 @@ export const MDXPageLayout= ({ params }) =>{
       </div>
       {page?.autoCropPage && <div className="side-empty-column"></div>}
     </>
-
-  )};
-
+  );
+};
 
 // this function can be used for page.mdx in the app folder
 
