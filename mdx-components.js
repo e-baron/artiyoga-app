@@ -70,7 +70,7 @@ const siteMetadata = {
       link: "",
       subMenu: [
         { name: "Groepslessen", link: "/lessons/groups" },
-        { name: "Yoga met de natuur", link: "/lessons/nature" },
+        //{ name: "Yoga met de natuur", link: "/lessons/nature" },
         { name: "VrouwenYoga Cirkel", link: "/lessons/women" },
         { name: "Privé Yoga", link: "/lessons/personal" },
         { name: "Online Yoga", link: "/lessons/video" },
