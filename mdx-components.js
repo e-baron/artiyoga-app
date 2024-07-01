@@ -66,7 +66,7 @@ const siteMetadata = {
       link: `/`,
     },
     {
-      name: "Lessen",
+      name: "Yoga",
       link: "",
       subMenu: [
         { name: "Groepslessen", link: "/lessons/groups" },
@@ -75,6 +75,14 @@ const siteMetadata = {
         { name: "Privé Yoga", link: "/lessons/personal" },
         { name: "Online Yoga", link: "/lessons/video" },
       ],
+    },
+    {
+      name: `Coaching`,
+      link: `/coaching`,
+    },
+    {
+      name: `Reiki`,
+      link: `/reiki`,
     },
     {
       name: `About`,
@@ -93,10 +101,6 @@ const siteMetadata = {
     {
       name: `Blog`,
       link: `/news`,
-    },
-    {
-      name: `Coaching`,
-      link: `/coaching`,
     },
     {
       name: `Contact`,
