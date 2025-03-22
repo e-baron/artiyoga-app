@@ -7,7 +7,7 @@ import Image from "./image";
 const Background = ({ children, src, className }) => {
   // const classValue = `${className ? className : "section__background"}`;
   const classValue = `background ${className ? className : ""}`;
-
+ 
   return (
     <div className={classValue} >
       {  src && <Image src={src}/> }

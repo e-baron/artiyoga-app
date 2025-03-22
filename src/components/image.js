@@ -11,6 +11,7 @@ const Image = ({
   path,
   className,
   objectFit="cover",
+  objectPosition="center",
 }) => {
 
   return (
@@ -39,7 +40,8 @@ const Image = ({
         fill
         style={{
           objectFit: objectFit,
-          padding:"inherit"
+          padding:"inherit",
+          objectPosition: objectPosition,
         }}
         alt="Picture of the author"
       />
