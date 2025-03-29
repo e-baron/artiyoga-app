@@ -88,6 +88,7 @@ const siteMetadata = {
         { name: "Reiki-cursus 1", link: "/reiki/level1" },
         { name: "Reiki-cursus 2", link: "/reiki/level2" },
         { name: "Reiki-cursus 3", link: "/reiki/level3" },
+        { name: "Reiki workshops", link: "/reiki/workshops" },
         { name: "Reiki 1 op 1", link: "/reiki/1to1" },
       ],
     },
