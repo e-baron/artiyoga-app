@@ -6,6 +6,8 @@ interface ContentProps {
   children: React.ReactNode;
   autoMargin?: boolean; 
   fullwidth?: boolean;
+  height?: string ;
+  style?: React.CSSProperties;
 }
 
 /**

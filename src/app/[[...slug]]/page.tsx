@@ -2,6 +2,9 @@ import { allPages } from "contentlayer/generated";
 import { Box, Grid } from "@mui/material";
 import MdxContent from "@/components/MdxContent/MdxContent";
 import siteMetaData from "@/config/siteConfig";
+import Content from "@/components/Content/Content";
+import Section from "@/components/Section/Section";
+import Image from "@/components/Image/Image";
 
 const generateStaticParams = async () => {
   const allParams = allPages.map((page) => ({
@@ -60,7 +63,7 @@ const generateMetadata = async ({ params }: generatedMetadataProps) => {
         `${siteMetaData.url}${
           page?.featuredImage ? page.featuredImage : siteMetaData.defaultImage
         }`,
-      ],      
+      ],
     },
     metadataBase: new URL(siteMetaData.url),
   };
@@ -132,6 +135,18 @@ const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
             width: "100%",
           }}
         >
+          {page?.autoFeatureImageAndText && (
+            <Section autoMargin={false}>
+              <Content height="50vh" fullwidth>
+                <Image src={page.featuredImage} noContainer/>
+              </Content>
+
+              <Content fullwidth>
+                <h3>{page?.title}</h3>
+              </Content>
+            </Section>
+          )}
+
           <MdxContent code={page!.body.code} />
         </Box>
       </Grid>

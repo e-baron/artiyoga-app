@@ -18,6 +18,7 @@ const Page = defineDocumentType(() => ({
     featuredImage: { type: 'string', required: false },
     autoCropPage: { type: 'boolean', default: true },
     category: { type: 'string', default: "none" },
+    autoFeatureImageAndText: { type: 'boolean', default: false },
   },
   contentType: "mdx",
 }));
