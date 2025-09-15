@@ -4,8 +4,8 @@ import { createTheme, useTheme } from "@mui/material/styles";
 import { CssBaseline, GlobalStyles } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-const color1 = "#18a429ff";
-const color2 =  "#3a76cfff";
+const color1 = "#228b22";
+const color2 =  "#0089fe";
 
 const theme = createTheme({
   colorSchemes: {
