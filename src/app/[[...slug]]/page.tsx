@@ -138,7 +138,11 @@ const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
           {page?.autoFeatureImageAndText && (
             <Section autoMargin={false}>
               <Content height="50vh" fullwidth>
-                <Image src={page.featuredImage} noContainer/>
+                <Image
+                  src={page?.featuredImage ?? siteMetaData?.defaultImage ?? ""}
+                  noContainer
+                  alt={page?.title ?? "Featured image"}
+                />
               </Content>
 
               <Content fullwidth>
