@@ -1,5 +1,4 @@
 import { allPages } from "contentlayer/generated";
-import ReactMarkdown from "react-markdown"; // Import react-markdown
 
 import Link from "next/link";
 import {

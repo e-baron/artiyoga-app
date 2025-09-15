@@ -2,7 +2,6 @@ import "./code-block.css";
 import "prism-themes/themes/prism-vsc-dark-plus.css"; // Import Prism CSS
 import { Box } from "@mui/material";
 import "@fontsource/roboto";
-import { SiteMetaData } from "@/types";
 import Header from "@/components/Header/Header";
 import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
