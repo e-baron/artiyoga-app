@@ -28,7 +28,7 @@ jobs:
 
   # Build job
   build:
-    env:
+    # env:
       # NEXT_PUBLIC_BASE_PATH: /artiyoga-new-arch
     runs-on: ubuntu-latest
     steps:
