@@ -50,6 +50,7 @@ const generateMetadata = async ({ params }: generatedMetadataProps) => {
           }`,
           width: 800,
           height: 600,
+          alt: page!.title ?? siteMetaData.title,
         },
       ],
       locale: "nl_BE",
