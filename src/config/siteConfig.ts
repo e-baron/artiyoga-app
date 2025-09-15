@@ -39,8 +39,8 @@ const siteMetaData: SiteMetaData = {
       link: `/coaching`,
     },
     {
-      name: `Blog`,
-      link: `/blog`,
+      name: `Events`,
+      link: `/events`,
     },
     {
       name: `About`,

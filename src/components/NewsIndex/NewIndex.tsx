@@ -46,49 +46,56 @@ const NewsIndex = ({ daysToConsiderNewsOutdated = -1 }: NewsIndexProps) => {
 
   return (
     <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
-      {news.map((newsItem, index) => (
-        <Grid
-          size={{ xs: 12, sm: 6, xl: 4 }}
-          key={index}
-          sx={{ display: "flex" }}
-        >
-          <Card
-            sx={{
-              borderRadius: "0.5rem",
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              flex: 1, // Ensures all cards stretch to the same height
-            }}
-          >
-            <CardMedia
-              component={Link}
-              href={newsItem._raw.flattenedPath}
-              sx={{ height: 200 }}
+      {news.map((newsItem, index) => {
+        if (newsItem.published)
+          return (
+            <Grid
+              size={{ xs: 12, sm: 6, xl: 4 }}
+              key={index}
+              sx={{ display: "flex" }}
             >
-              <Box
-                component="img"
-                src={newsItem.featuredImage}
-                alt={newsItem.title}
-                sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </CardMedia>
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography variant="h6" align="center" gutterBottom>
-                {newsItem.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" gutterBottom>
-                {excerpt(newsItem.body.raw, 100).replace(/\*\*/g, "") }
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {newsItem.date
-                  ? format(parseISO(newsItem.date), "dd/MM/yyyy")
-                  : ""}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
+              <Card
+                sx={{
+                  borderRadius: "0.5rem",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  flex: 1, // Ensures all cards stretch to the same height
+                }}
+              >
+                <CardMedia
+                  component={Link}
+                  href={newsItem._raw.flattenedPath}
+                  sx={{ height: 200 }}
+                >
+                  <Box
+                    component="img"
+                    src={newsItem.featuredImage}
+                    alt={newsItem.title}
+                    sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </CardMedia>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" align="center" gutterBottom>
+                    {newsItem.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {excerpt(newsItem.body.raw, 100).replace(/\*\*/g, "")}
+                  </Typography>
+                  <Typography variant="caption" color="textSecondary">
+                    {newsItem.date
+                      ? format(parseISO(newsItem.date), "dd/MM/yyyy")
+                      : ""}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+      })}
     </Grid>
   );
 };
