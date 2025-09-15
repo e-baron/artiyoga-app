@@ -1,15 +1,15 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import remarkGfm from "remark-gfm";
+import rehypePrism from 'rehype-prism-plus'
 
-export const MDXPage = defineDocumentType(() => ({
-  name: 'MDXPage',
+const Page = defineDocumentType(() => ({
+  name: "Page",
   filePathPattern: `**/*.mdx`,
-  contentType: 'mdx',
   fields: {
-    title: { type: 'string', default: "" },
-    date: { type: 'date', required: false },
+    title: { type: "string", required: false },
+    description: { type: "string", required: false },
+    date: { type: "string", required: false },
     author: { type: 'string', required: false },
-    description: { type: 'string', required: false },
     autoMargin: { type: 'boolean', default: true },
     navbarExtraStyles: { type: 'string', required: false },
     footerExtraStyles: { type: 'string', required: false },
@@ -19,50 +19,14 @@ export const MDXPage = defineDocumentType(() => ({
     autoCropPage: { type: 'boolean', default: true },
     category: { type: 'string', default: "none" },
   },
-  computedFields: {
-    url: { type: 'string', resolve: (page) => `/${page._raw.flattenedPath}` },// don't start with /posts/
-  },
-}))
+  contentType: "mdx",
+}));
 
 export default makeSource({
-  contentDirPath: 'mdx-pages', documentTypes: [MDXPage],
+  contentDirPath: "src/mdxPages",
+  documentTypes: [Page],
   mdx: {
-    remarkPlugins: [[remarkGfm]],
-    rehypePlugins: [],
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypePrism],
   },
-})
-
-/*
-const typeDefs = `
-  type Mdx implements Node {
-    frontmatter: MdxFrontmatter!
-  }
-    type MdxFrontmatter {      
-      autoMargin: Boolean @defaultTrue
-      title: String @defaultString   
-      description: String @defaultString 
-      headerImage: String @defaultString 
-      footerImage: String @defaultString 
-      featuredImage: String @defaultString 
-      navbarExtraStyles: String @defaultString
-      date: Date @dateformat(formatString: "DD/MM/YYYY")
-    }
-    type Site implements Node {
-      siteMetadata: SiteMetadata
-    }
-    type SiteMetadata {
-      menuLinks: [MenuLinks]!
-    }
-    type MenuLinks {
-      name: String!
-      link: String!
-      protected: Boolean @defaultFalse
-      subMenu: [SubMenu] @defaultArray
-    }
-    type SubMenu {
-      name: String
-      link: String
-      protected: Boolean @defaultFalse
-    }     
-  `;
-*/
+});
