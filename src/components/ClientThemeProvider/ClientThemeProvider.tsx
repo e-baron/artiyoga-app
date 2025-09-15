@@ -112,6 +112,22 @@ const DynamicGlobalStyles = () => {
         li: {
           paddingLeft: "0.5rem",
         },
+        a: {
+          color: theme.palette.primary.main,          
+          textDecoration: 'none',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            color: theme.palette.primary.dark,       
+            textDecoration: 'underline',
+          },
+          '&:active': {
+            color: theme.palette.primary.light,      
+          },
+          '&:focus': {
+            outline: `2px solid ${theme.palette.primary.light}`,
+            outlineOffset: '2px',
+          },
+        },
       }}
     />
   );

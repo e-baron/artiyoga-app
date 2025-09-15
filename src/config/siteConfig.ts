@@ -13,18 +13,14 @@ const siteMetaData: SiteMetaData = {
   defaultImage: "/images/lessons/priveyoga.jpg", // Path to your default image
   menuLinks: [
     {
-      name: "Yoga",
+      name: "Yoga & Qigong",
       link: "",
       subMenu: [
         { name: "Groepslessen", link: "/lessons/groups" },
         { name: "VrouwenYoga Cirkel", link: "/lessons/women" },
-        { name: "Privé Yoga", link: "/lessons/personal" },
-        { name: "Online Yoga", link: "/lessons/video" },
+        { name: "Privé Lessen", link: "/lessons/personal" },
+        { name: "Online Lessen", link: "/lessons/video" },
       ],
-    },
-    {
-      name: `Coaching`,
-      link: `/coaching`,
     },
     {
       name: `Reiki`,
@@ -37,6 +33,10 @@ const siteMetaData: SiteMetaData = {
         { name: "Reiki workshops", link: "/reiki/workshops" },
         { name: "Reiki 1 op 1", link: "/reiki/1to1" },
       ],
+    },
+    {
+      name: `Coaching`,
+      link: `/coaching`,
     },
     {
       name: `Events`,
