@@ -9,7 +9,7 @@ const siteMetaData: SiteMetaData = {
   facebookUrl: "https://www.facebook.com/baroni.kati",
   instagramUrl: "https://www.instagram.com/baroni.kati/",
   authorEmail: "baroni.kati@gmail.com",
-  extraBackgroundText: "Love & Peace",
+  extraBackgroundText: "Content by Kati | Web design by e-baron",
   defaultImage: "/images/lessons/priveyoga.jpg", // Path to your default image
   menuLinks: [
     {
