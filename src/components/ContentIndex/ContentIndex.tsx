@@ -15,6 +15,7 @@ interface ContextIndexProps {
   daysToConsiderNewsOutdated?: number;
   requestedCategoriesOnly?: string[];
   contentPagePath?: string;
+  suppressPotentialMarkdownCodeInExcerpt?: boolean;
 }
 
 /**
@@ -27,6 +28,7 @@ const ContextIndex = ({
   daysToConsiderNewsOutdated = -1,
   requestedCategoriesOnly = [],
   contentPagePath = "contents/",
+  suppressPotentialMarkdownCodeInExcerpt = true,
 }: ContextIndexProps) => {
   let contents = allPages.filter((mdxPage) =>
     mdxPage._raw?.sourceFilePath.includes(contentPagePath)
@@ -61,11 +63,11 @@ const ContextIndex = ({
 
   return (
     <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
-      {contents.map((newsItem, index) => {
+      {contents.map((contentItem, index) => {
         if (
-          newsItem.published &&
+          contentItem.published &&
           (requestedCategoriesOnly.length === 0 ||
-            requestedCategoriesOnly.includes(newsItem.category))
+            requestedCategoriesOnly.includes(contentItem.category))
         )
           return (
             <Grid
@@ -84,30 +86,34 @@ const ContextIndex = ({
               >
                 <CardMedia
                   component={Link}
-                  href={newsItem._raw.flattenedPath}
+                  href={contentItem._raw.flattenedPath}
                   sx={{ height: 200 }}
                 >
                   <Box
                     component="img"
-                    src={newsItem.featuredImage}
-                    alt={newsItem.title}
+                    src={contentItem.featuredImage}
+                    alt={contentItem.title}
                     sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </CardMedia>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" align="center" gutterBottom>
-                    {newsItem.title}
+                    {contentItem.title}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="textSecondary"
                     gutterBottom
                   >
-                    {excerpt(newsItem.body.raw, 100).replace(/\*\*/g, "")}
+                    {excerpt(
+                      contentItem.body.raw,
+                      100,
+                      suppressPotentialMarkdownCodeInExcerpt
+                    )}
                   </Typography>
                   <Typography variant="caption" color="textSecondary">
-                    {newsItem.date
-                      ? format(parseISO(newsItem.date), "dd/MM/yyyy")
+                    {contentItem.date
+                      ? format(parseISO(contentItem.date), "dd/MM/yyyy")
                       : ""}
                   </Typography>
                 </CardContent>
@@ -119,10 +125,31 @@ const ContextIndex = ({
   );
 };
 
-function excerpt(text: string, length = 100): string {
+function excerpt(text: string, length = 100, suppressMarkdown = false): string {
   if (!text) return "";
-  if (text.length < length) return text;
-  return text.substring(0, length) + "...";
+
+  // Remove markdown syntax if suppressMarkdown is true
+  if (suppressMarkdown) {
+    text = text
+      .replace(/\*\*(.*?)\*\*/g, "$1") // Remove bold (**text**)
+      .replace(/__(.*?)__/g, "$1") // Remove underline (__text__)
+      .replace(/\*(.*?)\*/g, "$1") // Remove italic (*text*)
+      .replace(/_(.*?)_/g, "$1") // Remove italic (_text_)
+      .replace(/`(.*?)`/g, "$1") // Remove inline code (`text`)
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1") // Remove links ([text](url))
+      .replace(/!\[(.*?)\]\(.*?\)/g, "") // Remove images (![alt](url))
+      .replace(/#+\s/g, "") // Remove headings (# Heading)
+      .replace(/>\s/g, "") // Remove blockquotes (> text)
+      .replace(/[-*]\s/g, "") // Remove list items (- text or * text)
+      .replace(/\r?\n|\r/g, " "); // Replace newlines with spaces
+  }
+
+  // Trim the text to the specified length
+  if (text.length > length) {
+    return text.substring(0, length) + "...";
+  }
+
+  return text;
 }
 
 function treatAsUTC(date: Date): Date {
