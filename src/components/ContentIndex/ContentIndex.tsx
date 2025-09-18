@@ -11,17 +11,29 @@ import {
 } from "@mui/material";
 import { format, parseISO } from "date-fns";
 
-interface NewsIndexProps {
+interface ContextIndexProps {
   daysToConsiderNewsOutdated?: number;
+  requestedCategoriesOnly?: string[];
+  contentPagePath?: string;
 }
 
-const NewsIndex = ({ daysToConsiderNewsOutdated = -1 }: NewsIndexProps) => {
-  let news = allPages.filter((mdxPage) =>
-    mdxPage._raw?.sourceFilePath.includes("news/")
+/**
+ * ContextIndex component displays a list of context-related articles.
+ * @param param0 - Props for the ContextIndex component.
+ * @returns The rendered ContextIndex component.
+ */
+
+const ContextIndex = ({
+  daysToConsiderNewsOutdated = -1,
+  requestedCategoriesOnly = [],
+  contentPagePath = "contents/",
+}: ContextIndexProps) => {
+  let contents = allPages.filter((mdxPage) =>
+    mdxPage._raw?.sourceFilePath.includes(contentPagePath)
   );
 
   // Sort news by date
-  news.sort((a, b) => {
+  contents.sort((a, b) => {
     if (!b.date) return -1;
     if (!a.date) return 1;
     return parseISO(b.date).getTime() - parseISO(a.date).getTime();
@@ -30,24 +42,31 @@ const NewsIndex = ({ daysToConsiderNewsOutdated = -1 }: NewsIndexProps) => {
   // Filter news by date if daysToConsiderNewsOutdated is not set to -1
   if (daysToConsiderNewsOutdated !== -1) {
     const now = new Date();
-    news = news.filter((newsItem) => {
+    contents = contents.filter((newsItem) => {
       const diffDays = newsItem.date
         ? daysBetween(parseISO(newsItem.date), now)
         : 0;
-      return (
-        (newsItem.category === "events" && diffDays <= 0) ||
-        (newsItem.category !== "events" &&
-          diffDays <= daysToConsiderNewsOutdated)
-      );
+      const isPublished = newsItem.published;
+      const isInCategory =
+        requestedCategoriesOnly.length === 0 ||
+        requestedCategoriesOnly.includes(newsItem.category);
+      const isWithinDateRange =
+        diffDays <= 0 || diffDays <= daysToConsiderNewsOutdated;
+
+      return isPublished && isInCategory && isWithinDateRange;
     });
   }
 
-  if (!news || news.length === 0) return null;
+  if (!contents || contents.length === 0) return null;
 
   return (
     <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
-      {news.map((newsItem, index) => {
-        if (newsItem.published)
+      {contents.map((newsItem, index) => {
+        if (
+          newsItem.published &&
+          (requestedCategoriesOnly.length === 0 ||
+            requestedCategoriesOnly.includes(newsItem.category))
+        )
           return (
             <Grid
               size={{ xs: 12, sm: 6, xl: 4 }}
@@ -120,4 +139,4 @@ function daysBetween(startDate: Date, endDate: Date): number {
   );
 }
 
-export default NewsIndex;
+export default ContextIndex;

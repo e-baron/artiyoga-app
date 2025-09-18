@@ -43,6 +43,10 @@ const siteMetaData: SiteMetaData = {
       link: `/events`,
     },
     {
+      name: `Blog`,
+      link: `/blog`,
+    },
+    {
       name: `About`,
       link: ``,
       subMenu: [
