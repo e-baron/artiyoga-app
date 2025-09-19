@@ -19,6 +19,8 @@ import { getFilePath, updateFile, readFile } from "@/utils/files";
 import { handleGitFileCommit } from "@/utils/git";
 import { redirect } from "next/navigation";
 
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+
 const siteConfigPath = getFilePath("src/config/site-config.json");
 
 // Helper function to read and write the site-config.json file
@@ -186,7 +188,10 @@ const UpdateNavbarPage = ({ searchParams }: UpdateNavbarPageProps) => {
   let success = false;
 
   // Handle actions synchronously
-  if (searchParams.action) {
+  
+
+  // the page cannot be build if we look for searchParams at build time
+  if (isLocal && searchParams.action) {
     const action = searchParams.action;
     const parentIndex = searchParams.parentIndex
       ? Number(searchParams.parentIndex)
@@ -241,14 +246,14 @@ const UpdateNavbarPage = ({ searchParams }: UpdateNavbarPageProps) => {
     }
   }
 
-  if (success) {
+  if (isLocal && success) {
     // Redirect with a success message passed as a query parameter
     const params = new URLSearchParams();
     params.append("successMessage", successMessage);
     redirect(`/navbar/items/update?${params.toString()}`);
   }
 
-  if (searchParams.successMessage) {
+  if (isLocal && searchParams.successMessage) {
     successMessage = searchParams.successMessage;
   }
 

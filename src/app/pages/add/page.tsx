@@ -3,6 +3,7 @@ import { handleGitFileCommit } from "@/utils/git";
 import { createFile } from "@/utils/files";
 
 const mdxPageDirectory = "mdxPages";
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
 interface AddPageProps {
   // searchParams: { pagename?: string; success?: string; error?: string };
@@ -17,9 +18,9 @@ const sanitizePagename = (pagename: string): string => {
 
 const AddPage = ({ searchParams }: AddPageProps) => {
   let successMessage = "";
-  let errorMessage = searchParams.error || "";
+  let errorMessage = isLocal && searchParams.error || "";
 
-  if (searchParams.pagename) {
+  if (isLocal && searchParams.pagename) {
     const pagename = searchParams.pagename.trim();
 
     // Sanitize the pagename
@@ -59,7 +60,7 @@ const AddPage = ({ searchParams }: AddPageProps) => {
           Create Page
         </Button>
       </form>
-      {successMessage && (
+      {isLocal &&successMessage && (
         <Typography
           variant="body1"
           color="success.main"
@@ -68,7 +69,7 @@ const AddPage = ({ searchParams }: AddPageProps) => {
           {successMessage}
         </Typography>
       )}
-      {errorMessage && (
+      {isLocal &&errorMessage && (
         <Typography variant="body1" color="error" sx={{ marginTop: "1rem" }}>
           {errorMessage}
         </Typography>
