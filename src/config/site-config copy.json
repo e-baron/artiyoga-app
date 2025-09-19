@@ -1,0 +1,113 @@
+{
+  "version": "",
+  "title": "artiYoga",
+  "description": "siteDescription",
+  "url": "https://www.artiyoga.com",
+  "youtubeUrl": "https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw",
+  "facebookUrl": "https://www.facebook.com/baroni.kati",
+  "instagramUrl": "https://www.instagram.com/baroni.kati/",
+  "authorEmail": "baroni.kati@gmail.com",
+  "extraBackgroundText": "Content by Kati | Web design by e-baron",
+  "defaultImage": "/images/lessons/priveyoga.jpg",
+  "menuLinks": [
+    {
+      "name": "Yoga & Qigong",
+      "link": "",
+      "subMenu": [
+        {
+          "name": "Groepslessen",
+          "link": "/lessons/groups"
+        },
+        {
+          "name": "VrouwenYoga Cirkel",
+          "link": "/lessons/women"
+        },
+        {
+          "name": "Privé Lessen",
+          "link": "/lessons/personal"
+        },
+        {
+          "name": "Online Lessen",
+          "link": "/lessons/video"
+        }
+      ]
+    },
+    {
+      "name": "Reiki",
+      "link": "",
+      "subMenu": [
+        {
+          "name": "Introductie",
+          "link": "/reiki/intro"
+        },
+        {
+          "name": "Reiki-cursus 1",
+          "link": "/reiki/level1"
+        },
+        {
+          "name": "Reiki-cursus 2",
+          "link": "/reiki/level2"
+        },
+        {
+          "name": "Reiki-cursus 3",
+          "link": "/reiki/level3"
+        },
+        {
+          "name": "Reiki workshops",
+          "link": "/reiki/workshops"
+        },
+        {
+          "name": "Reiki 1 op 1",
+          "link": "/reiki/1to1"
+        }
+      ]
+    },
+    {
+      "name": "Coaching",
+      "link": "/coaching"
+    },
+    {
+      "name": "Events",
+      "link": "/events"
+    },
+    {
+      "name": "Blog",
+      "link": "/blog"
+    },
+    {
+      "name": "About",
+      "link": "",
+      "subMenu": [
+        {
+          "name": "Kati",
+          "link": "/about/kati"
+        },
+        {
+          "name": "Yogastijlen",
+          "link": "/about/yogastyles"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "link": "/contact"
+    },
+    {
+      "name": "Admin",
+      "link": "",
+      "protected": true,
+      "subMenu": [
+        {
+          "name": "Add page",
+          "link": "/pages/add",
+          "protected": true
+        },
+        {
+          "name": "Update navbar",
+          "link": "/navbar/items/update",
+          "protected": true
+        }
+      ]
+    }
+  ]
+}

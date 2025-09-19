@@ -65,6 +65,23 @@ const siteMetaData: SiteMetaData = {
       name: `Contact`,
       link: `/contact`,
     },
+    {
+      name: `Admin`,
+      link: ``,
+      protected: true,
+      subMenu: [
+        {
+          name: `Add page`,
+          link: `/pages/add`,
+          protected: true,
+        },
+        {
+          name: `Update navbar`,
+          link: `/navbar/items/update`,
+          protected: true,
+        },
+      ],
+    },
   ],
 };
 

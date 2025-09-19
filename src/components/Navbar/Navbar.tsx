@@ -22,6 +22,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import DarkLightToggler from "../DarkLightToggler/DarkLightToggler";
 
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+
 interface NavbarProps {
   siteMetaData: SiteMetaData;
 }
@@ -59,26 +61,27 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
 
   const drawer = (
     <Box id="drawer" onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-  
-
       <Button
-            key="homeBtn2"
-            onClick={() => handleClose("home2")}
-            href="/"
-            LinkComponent={Link}
-          >
-            <Typography
-              variant="h6"
-              sx={{my: 2, color: theme.palette.primary.contrastText }}
-            >
-              {siteMetaData.title}
-            </Typography>
-          </Button>
+        key="homeBtn2"
+        onClick={() => handleClose("home2")}
+        href="/"
+        LinkComponent={Link}
+      >
+        <Typography
+          variant="h6"
+          sx={{ my: 2, color: theme.palette.primary.contrastText }}
+        >
+          {siteMetaData.title}
+        </Typography>
+      </Button>
 
       <Divider />
       <List sx={{ display: "block" }}>
         {siteMetaData.menuLinks.map((link) => {
-          if (!link.subMenu) {
+          if (
+            !link.subMenu &&
+            (!link.protected || (link.protected && isLocal))
+          ) {
             return (
               <ListItem
                 key={link.link}
@@ -100,43 +103,46 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
             );
           }
           // Submenu
-          return (
-            <ListItem
-              key={"drawer" + link.name}
-              disablePadding
-              sx={{ display: "block" }}
-            >
-              <ListItemButton
-                sx={{ textAlign: "left", width: "100%", display: "block" }}
+          if (link && (!link.protected || (link.protected && isLocal)))
+            return (
+              <ListItem
+                key={"drawer" + link.name}
+                disablePadding
+                sx={{ display: "block" }}
               >
-                <ListItemText
-                  primary={link.name}
-                  sx={{ width: "100%", display: "block" }}
-                />
-              </ListItemButton>
+                <ListItemButton
+                  sx={{ textAlign: "left", width: "100%", display: "block" }}
+                >
+                  <ListItemText
+                    primary={link.name}
+                    sx={{ width: "100%", display: "block" }}
+                  />
+                </ListItemButton>
 
-              <List sx={{ paddingLeft: 2, display: "block" }}>
-                {link.subMenu.map((subLink) => (
-                  <ListItem key={"drawer" + subLink.name} disablePadding>
-                    <ListItemButton
-                      sx={{
-                        textAlign: "left",
-                        width: "100%",
-                        display: "block",
-                      }}
-                      href={subLink.link}
-                      LinkComponent={Link}
-                    >
-                      <ListItemText
-                        primary={subLink.name}
-                        sx={{ width: "100%", display: "block" }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </ListItem>
-          );
+                <List sx={{ paddingLeft: 2, display: "block" }}>
+                  {link.subMenu &&
+                    (!link.protected || (link.protected && isLocal)) &&
+                    link.subMenu.map((subLink) => (
+                      <ListItem key={"drawer" + subLink.name} disablePadding>
+                        <ListItemButton
+                          sx={{
+                            textAlign: "left",
+                            width: "100%",
+                            display: "block",
+                          }}
+                          href={subLink.link}
+                          LinkComponent={Link}
+                        >
+                          <ListItemText
+                            primary={subLink.name}
+                            sx={{ width: "100%", display: "block" }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                </List>
+              </ListItem>
+            );
         })}
       </List>
     </Box>
@@ -167,7 +173,11 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
             onClick={() => handleClose("home")}
             href="/"
             LinkComponent={Link}
-            sx={{ flexGrow: 1, display: { sm: "block" }, color: theme.palette.primary.contrastText}}
+            sx={{
+              flexGrow: 1,
+              display: { sm: "block" },
+              color: theme.palette.primary.contrastText,
+            }}
           >
             <Typography
               variant="h6"
@@ -182,7 +192,8 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {siteMetaData.menuLinks.map((link) => (
               <Box key={link.name} sx={{ display: "inline" }}>
-                {link.subMenu ? (
+                {link.subMenu &&
+                (!link.protected || (link.protected && isLocal)) ? (
                   <>
                     <Button
                       color="inherit"
@@ -213,14 +224,16 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
                     </Menu>
                   </>
                 ) : (
-                  <Button
-                    href={link.link === "" ? "#" : link.link}
-                    LinkComponent={Link}
-                    color="inherit"
-                    sx={{ color: theme.palette.primary.contrastText }}
-                  >
-                    {link.name}
-                  </Button>
+                  (!link.protected || (link.protected && isLocal)) && (
+                    <Button
+                      href={link.link === "" ? "#" : link.link}
+                      LinkComponent={Link}
+                      color="inherit"
+                      sx={{ color: theme.palette.primary.contrastText }}
+                    >
+                      {link.name}
+                    </Button>
+                  )
                 )}
               </Box>
             ))}

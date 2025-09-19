@@ -1,5 +1,21 @@
 import { Dispatch, SetStateAction } from "react";
 
+
+interface SubMenu {
+  name: string;
+  link: string;
+  protected?: boolean;
+}
+
+interface MenuItem {
+  name: string;
+  link: string;
+  protected?: boolean;
+  subMenu?: SubMenu[];
+}
+
+type MenuLinks = MenuItem[];
+
 interface SiteMetaData {
   version: string;
   title: string;
@@ -11,11 +27,7 @@ interface SiteMetaData {
   instagramUrl?: string;
   extraBackgroundText?: string;
   defaultImage?: string;
-  menuLinks: Array<{
-    name: string;
-    link: string;
-    subMenu?: Array<{ name: string; link: string }>;
-  }>;
+  menuLinks: MenuLinks;
 }
 
 interface Frontmatter {
@@ -31,4 +43,4 @@ interface NavigationContextProps {
   setActivePageMenuItemIsVisible?: Dispatch<SetStateAction<boolean>>;
 }
 
-export type { SiteMetaData, Frontmatter, NavigationContextProps };
+export type { SiteMetaData, Frontmatter, NavigationContextProps, MenuLinks };

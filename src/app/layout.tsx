@@ -7,7 +7,7 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
-import siteMetaData from "@/config/siteConfig";
+import siteMetaData from "@/config/site-config.json";
 
 
 

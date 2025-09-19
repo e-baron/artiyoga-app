@@ -1,7 +1,7 @@
 import { allPages } from "contentlayer/generated";
 import { Box, Grid } from "@mui/material";
 import MdxContent from "@/components/MdxContent/MdxContent";
-import siteMetaData from "@/config/siteConfig";
+import siteMetaData from "@/config/site-config.json";
 import Content from "@/components/Content/Content";
 import Section from "@/components/Section/Section";
 import Image from "@/components/Image/Image";
