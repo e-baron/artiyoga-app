@@ -1,53 +1,79 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { handleGitFileCommit } from "@/utils/git";
-import { createFile } from "@/utils/files";
+"use client";
 
-const mdxPageDirectory = "mdxPages";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
-interface AddPageProps {
-  // searchParams: { pagename?: string; success?: string; error?: string };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  searchParams: any;
-}
+const AddPage = () => {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-// Function to sanitize the pagename
-const sanitizePagename = (pagename: string): string => {
-  return pagename.replace(/[^a-zA-Z0-9-_\/]/g, "");
-};
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-const AddPage = ({ searchParams }: AddPageProps) => {
-  let successMessage = "";
-  let errorMessage = isLocal && searchParams.error || "";
+    const formData = new FormData(event.currentTarget);
+    const pagename = formData.get("pagename")?.toString().trim();
 
-  if (isLocal && searchParams.pagename) {
-    const pagename = searchParams.pagename.trim();
-
-    // Sanitize the pagename
-    const sanitizedPagename = sanitizePagename(pagename);
-
-    if (sanitizedPagename) {
-      try {
-        // Create the file
-        const filePath = createFile(sanitizedPagename, mdxPageDirectory);
-
-        // Handle Git operations
-        handleGitFileCommit(filePath, sanitizedPagename);
-
-        // Set the success message
-        successMessage = `Page "${sanitizedPagename}" created successfully!`;
-      } catch (error) {
-        console.error("Error creating page:", error);
-        errorMessage =
-          error instanceof Error ? error.message : "An unknown error occurred.";
-      }
+    if (!pagename) {
+      setErrorMessage("Pagename is required!");
+      setSuccessMessage(null);
+      return;
     }
-  }
+
+    if (isLocal) {
+      // Call the server function only in development mode
+      try {
+        const response = await fetch("/api/create-page", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pagename }),
+        });
+
+        if (response.ok) {
+          setSuccessMessage(`Page "${pagename}" created successfully!`);
+          setErrorMessage(null);
+        } else {
+          const error = await response.json();
+          setErrorMessage(`Error: ${error.message}`);
+          setSuccessMessage(null);
+        }
+      } catch (error) {
+        console.error("Error calling server function:", error);
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        setErrorMessage("An error occurred while creating the page. " + errorMessage);
+        setSuccessMessage(null);
+      }
+    } else {
+      // In static export mode, just log the pagename
+      console.log(`Static export mode: Page "${pagename}" would be created.`);
+      setSuccessMessage(`Static export mode: Page "${pagename}" would be created.`);
+      setErrorMessage(null);
+    }
+  };
 
   return (
     <Box sx={{ padding: "1rem" }}>
       <h3>Add a New Page</h3>
-      <form method="get" action="/pages/add">
+
+      {/* Feedback Box */}
+      {(successMessage || errorMessage) && (
+        <Box
+          sx={{
+            marginBottom: "1rem",
+            padding: "1rem",
+            borderRadius: "4px",
+            backgroundColor: successMessage ? "green" : "red",
+            color: "white",
+          }}
+        >
+          <Typography variant="body1">
+            {successMessage || errorMessage}
+          </Typography>
+        </Box>
+      )}
+
+      <form onSubmit={handleSubmit}>
         <TextField
           label="Pagename (e.g., products or /contents/day1)"
           name="pagename"
@@ -60,20 +86,6 @@ const AddPage = ({ searchParams }: AddPageProps) => {
           Create Page
         </Button>
       </form>
-      {isLocal &&successMessage && (
-        <Typography
-          variant="body1"
-          color="success.main"
-          sx={{ marginTop: "1rem" }}
-        >
-          {successMessage}
-        </Typography>
-      )}
-      {isLocal &&errorMessage && (
-        <Typography variant="body1" color="error" sx={{ marginTop: "1rem" }}>
-          {errorMessage}
-        </Typography>
-      )}
     </Box>
   );
 };
