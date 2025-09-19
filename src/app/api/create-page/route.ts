@@ -29,7 +29,11 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error creating page:", error);
     return NextResponse.json(
-      { message: "An error occurred while creating the page." },
+      {
+        message:
+          "An error occurred while creating the page." +
+          (error instanceof Error ? " " + error.message : ""),
+      },
       { status: 500 }
     );
   }
