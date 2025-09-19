@@ -2,13 +2,12 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { handleGitFileCommit } from "@/utils/git";
 import { createFile } from "@/utils/files";
 
+const mdxPageDirectory = "mdxPages";
+
 interface AddPageProps {
   // searchParams: { pagename?: string; success?: string; error?: string };
-  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  searchParams: any; // because we use output: 'export' in next.config.js, the Server Component cannot be async (Static Generation).
-  // PageProps is not directly compatible, but close enough for our use case
-  mdxPageDirectory?: string; // default to "mdxPages" always within src;
+  searchParams: any;
 }
 
 // Function to sanitize the pagename
@@ -16,11 +15,7 @@ const sanitizePagename = (pagename: string): string => {
   return pagename.replace(/[^a-zA-Z0-9-_\/]/g, "");
 };
 
-
-const AddPage = async ({
-  searchParams,
-  mdxPageDirectory = "mdxPages",
-}: AddPageProps) => {
+const AddPage = ({ searchParams }: AddPageProps) => {
   let successMessage = "";
   let errorMessage = searchParams.error || "";
 
@@ -50,9 +45,7 @@ const AddPage = async ({
 
   return (
     <Box sx={{ padding: "1rem" }}>
-      <h3>
-        Add a New Page
-      </h3>
+      <h3>Add a New Page</h3>
       <form method="get" action="/pages/add">
         <TextField
           label="Pagename (e.g., products or /contents/day1)"
