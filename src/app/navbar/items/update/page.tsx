@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Box,
   Button,
@@ -161,7 +162,7 @@ const editItem = (
 };
 
 interface UpdateNavbarPageProps {
-  searchParams: {
+  /*searchParams: {
     action?: string;
     parentIndex?: string;
     index?: string;
@@ -169,7 +170,13 @@ interface UpdateNavbarPageProps {
     link?: string;
     protected?: string;
     successMessage?: string;
-  };
+  };*/
+  // searchParams should become a Promise, as expected by PageProps... but
+  // because we use output: 'export' in next.config.js, the Server Component
+  // cannot be async (Static Generation).
+  // PageProps is not directly compatible, but close enough for our use case
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchParams: any;
 }
 
 const UpdateNavbarPage = ({ searchParams }: UpdateNavbarPageProps) => {

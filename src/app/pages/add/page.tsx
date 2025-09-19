@@ -3,7 +3,11 @@ import { handleGitFileCommit } from "@/utils/git";
 import { createFile } from "@/utils/files";
 
 interface AddPageProps {
-  searchParams: { pagename?: string; success?: string; error?: string };
+  // searchParams: { pagename?: string; success?: string; error?: string };
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchParams: any; // because we use output: 'export' in next.config.js, the Server Component cannot be async (Static Generation).
+  // PageProps is not directly compatible, but close enough for our use case
   mdxPageDirectory?: string; // default to "mdxPages" always within src;
 }
 
