@@ -48,6 +48,11 @@
       ]
     },
     {
+      "name": "Start2",
+      "link": "/start2",
+      "protected": false
+    },
+    {
       "name": "Second",
       "link": "/second",
       "protected": false
