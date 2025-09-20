@@ -255,6 +255,26 @@ const UpdateNavbarPage = () => {
                       Add Child Item
                     </Button>
                   </form>
+
+                  {/* Add Delete Item Form */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      handleAction("delete", {
+                        parentIndex,
+                      });
+                    }}
+                  >
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      color="secondary"
+                      sx={{ marginRight: "0.5rem" }}
+                    >
+                      Delete Item
+                    </Button>
+                  </form>
                 </TableCell>
               </TableRow>
 
@@ -352,6 +372,26 @@ const UpdateNavbarPage = () => {
                           sx={{ marginRight: "0.5rem" }}
                         >
                           Add Next Item
+                        </Button>
+                      </form>
+
+                      {/* Delete Submenu Item Form */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
+                          handleAction("delete", {
+                            parentIndex,
+                            index,
+                          });
+                        }}
+                      >
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="secondary"
+                        >
+                          Delete Item
                         </Button>
                       </form>
                     </TableCell>
