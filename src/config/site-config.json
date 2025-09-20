@@ -16,8 +16,9 @@
       "protected": false
     },
     {
-      "name": "Reiki",
+      "name": "Reiki2",
       "link": "",
+      "protected": false,
       "subMenu": [
         {
           "name": "Introductie",

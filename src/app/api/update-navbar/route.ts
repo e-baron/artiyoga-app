@@ -50,7 +50,15 @@ export async function POST(request: Request) {
           protected: protectedItem,
         };
       } else {
-        menuLinks[parentIndex] = { name, link, protected: protectedItem };
+        // Only edit name, link, and protected status, keeping subMenu intact if it exists, else no subMenu props
+        const existingSubMenu = menuLinks[parentIndex].subMenu || [];
+        menuLinks[parentIndex] = {
+          name,
+          link,
+          protected: protectedItem,
+          ...(existingSubMenu.length > 0 && { subMenu: existingSubMenu }),
+        };
+        
       }
     } else {
       return NextResponse.json(
