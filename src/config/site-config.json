@@ -21,8 +21,9 @@
       "protected": false,
       "subMenu": [
         {
-          "name": "Introductie",
-          "link": "/reiki/intro"
+          "name": "Introductie2",
+          "link": "/reiki/intro",
+          "protected": false
         },
         {
           "name": "Reiki-cursus 1",
