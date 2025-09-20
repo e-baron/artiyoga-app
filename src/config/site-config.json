@@ -13,27 +13,37 @@
     {
       "name": "Yoga & Qigong",
       "link": "",
-      "protected": false
-    },
-    {
-      "name": "Start3",
-      "link": "/start3",
-      "protected": true
-    },
-    {
-      "name": "Reiki2",
-      "link": "",
-      "protected": false,
       "subMenu": [
         {
-          "name": "test22",
-          "link": "/test22",
+          "name": "Amazing qi",
+          "link": "/qi",
           "protected": false
         },
         {
-          "name": "Introductie2",
-          "link": "/reiki/intro",
-          "protected": false
+          "name": "Groepslessen",
+          "link": "/lessons/groups"
+        },
+        {
+          "name": "VrouwenYoga Cirkel",
+          "link": "/lessons/women"
+        },
+        {
+          "name": "Privé Lessen",
+          "link": "/lessons/personal"
+        },
+        {
+          "name": "Online Lessen",
+          "link": "/lessons/video"
+        }
+      ]
+    },
+    {
+      "name": "Reiki",
+      "link": "",
+      "subMenu": [
+        {
+          "name": "Introductie",
+          "link": "/reiki/intro"
         },
         {
           "name": "Reiki-cursus 1",
@@ -56,26 +66,6 @@
           "link": "/reiki/1to1"
         }
       ]
-    },
-    {
-      "name": "test23",
-      "link": "/test23",
-      "protected": false
-    },
-    {
-      "name": "TEST5",
-      "link": "/test5",
-      "protected": false
-    },
-    {
-      "name": "Start2",
-      "link": "/start2",
-      "protected": false
-    },
-    {
-      "name": "Second",
-      "link": "/second",
-      "protected": false
     },
     {
       "name": "Coaching",
@@ -105,8 +95,7 @@
     },
     {
       "name": "Contact",
-      "link": "/contact",
-      "protected": false
+      "link": "/contact"
     },
     {
       "name": "Admin",
@@ -119,7 +108,7 @@
           "protected": true
         },
         {
-          "name": "Update navbar2",
+          "name": "Update navbar",
           "link": "/navbar/items/update",
           "protected": true
         }
