@@ -137,25 +137,24 @@ const UpdateNavbarPage = () => {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
                       handleAction("edit", {
                         parentIndex,
-                        name: item.name,
-                        link: item.link,
-                        protected: item.protected,
+                        name: formData.get("name") as string,
+                        link: formData.get("link") as string,
+                        protected: formData.get("protected") === "on",
                       });
                     }}
                   >
                     <TextField
                       name="name"
                       defaultValue={item.name}
-                      onChange={(e) => (item.name = e.target.value)}
                       size="small"
                       sx={{ marginRight: "0.5rem" }}
                     />
                     <TextField
                       name="link"
                       defaultValue={item.link}
-                      onChange={(e) => (item.link = e.target.value)}
                       size="small"
                       sx={{ marginRight: "0.5rem" }}
                     />
@@ -163,10 +162,7 @@ const UpdateNavbarPage = () => {
                       control={
                         <Checkbox
                           name="protected"
-                          checked={item.protected}
-                          onChange={(e) =>
-                            (item.protected = e.target.checked)
-                          }
+                          defaultChecked={item.protected}
                         />
                       }
                       label="Protected"
@@ -185,11 +181,12 @@ const UpdateNavbarPage = () => {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
                       handleAction("add", {
                         parentIndex: parentIndex + 1,
-                        name: "New Next Item",
-                        link: "/new-next-item",
-                        protected: false,
+                        name: formData.get("name") as string,
+                        link: formData.get("link") as string,
+                        protected: formData.get("protected") === "on",
                       });
                     }}
                   >
@@ -224,11 +221,12 @@ const UpdateNavbarPage = () => {
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
+                        const formData = new FormData(e.currentTarget);
                         handleAction("add-child", {
                           parentIndex,
-                          name: "New Child Item",
-                          link: "/new-child-item",
-                          protected: false,
+                          name: formData.get("name") as string,
+                          link: formData.get("link") as string,
+                          protected: formData.get("protected") === "on",
                         });
                       }}
                     >
@@ -277,26 +275,25 @@ const UpdateNavbarPage = () => {
                       <form
                         onSubmit={(e) => {
                           e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
                           handleAction("edit", {
                             parentIndex,
                             index,
-                            name: subItem.name,
-                            link: subItem.link,
-                            protected: subItem.protected,
+                            name: formData.get("name") as string,
+                            link: formData.get("link") as string,
+                            protected: formData.get("protected") === "on",
                           });
                         }}
                       >
                         <TextField
                           name="name"
                           defaultValue={subItem.name}
-                          onChange={(e) => (subItem.name = e.target.value)}
                           size="small"
                           sx={{ marginRight: "0.5rem" }}
                         />
                         <TextField
                           name="link"
                           defaultValue={subItem.link}
-                          onChange={(e) => (subItem.link = e.target.value)}
                           size="small"
                           sx={{ marginRight: "0.5rem" }}
                         />
@@ -304,10 +301,7 @@ const UpdateNavbarPage = () => {
                           control={
                             <Checkbox
                               name="protected"
-                              checked={subItem.protected}
-                              onChange={(e) =>
-                                (subItem.protected = e.target.checked)
-                              }
+                              defaultChecked={subItem.protected}
                             />
                           }
                           label="Protected"
@@ -319,45 +313,6 @@ const UpdateNavbarPage = () => {
                           sx={{ marginRight: "0.5rem" }}
                         >
                           Update
-                        </Button>
-                      </form>
-
-                      {/* Add Next Item Form for Submenu Item */}
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          handleAction("add", {
-                            parentIndex,
-                            index: index + 1,
-                            name: "New Next Child Item",
-                            link: "/new-next-child-item",
-                            protected: false,
-                          });
-                        }}
-                      >
-                        <TextField
-                          name="name"
-                          placeholder="Next Child Item Name"
-                          size="small"
-                          sx={{ marginRight: "0.5rem" }}
-                        />
-                        <TextField
-                          name="link"
-                          placeholder="Next Child Item Link"
-                          size="small"
-                          sx={{ marginRight: "0.5rem" }}
-                        />
-                        <FormControlLabel
-                          control={<Checkbox name="protected" />}
-                          label="Protected"
-                        />
-                        <Button
-                          type="submit"
-                          variant="outlined"
-                          color="primary"
-                          sx={{ marginRight: "0.5rem" }}
-                        >
-                          Add Next Item
                         </Button>
                       </form>
                     </TableCell>

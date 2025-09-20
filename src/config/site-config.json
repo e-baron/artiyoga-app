@@ -11,9 +11,26 @@
   "defaultImage": "/images/lessons/priveyoga.jpg",
   "menuLinks": [
     {
-      "name": "Yoga & Qigong2",
+      "name": "Yoga & Qigong",
       "link": "",
-      "protected": true
+      "subMenu": [
+        {
+          "name": "Groepslessen",
+          "link": "/lessons/groups"
+        },
+        {
+          "name": "VrouwenYoga Cirkel",
+          "link": "/lessons/women"
+        },
+        {
+          "name": "Privé Lessen",
+          "link": "/lessons/personal"
+        },
+        {
+          "name": "Online Lessen",
+          "link": "/lessons/video"
+        }
+      ]
     },
     {
       "name": "Reiki",
@@ -46,11 +63,6 @@
       ]
     },
     {
-      "name": "New Next Item",
-      "link": "/new-next-item",
-      "protected": false
-    },
-    {
       "name": "Coaching",
       "link": "/coaching"
     },
@@ -81,9 +93,21 @@
       "link": "/contact"
     },
     {
-      "name": "Admin2",
+      "name": "Admin",
       "link": "",
-      "protected": true
+      "protected": true,
+      "subMenu": [
+        {
+          "name": "Add page",
+          "link": "/pages/add",
+          "protected": true
+        },
+        {
+          "name": "Update navbar2",
+          "link": "/navbar/items/update",
+          "protected": true
+        }
+      ]
     }
   ]
 }
