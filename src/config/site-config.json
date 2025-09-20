@@ -23,7 +23,7 @@
         {
           "name": "Introductie2",
           "link": "/reiki/intro",
-          "protected": false
+          "protected": true
         },
         {
           "name": "Reiki-cursus 1",
