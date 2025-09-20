@@ -80,21 +80,9 @@
       "link": "/contact"
     },
     {
-      "name": "Admin",
+      "name": "Admin2",
       "link": "",
-      "protected": true,
-      "subMenu": [
-        {
-          "name": "Add page",
-          "link": "/pages/add",
-          "protected": true
-        },
-        {
-          "name": "Update navbar",
-          "link": "/navbar/items/update",
-          "protected": true
-        }
-      ]
+      "protected": true
     }
   ]
 }
