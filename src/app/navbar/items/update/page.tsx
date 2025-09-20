@@ -322,6 +322,7 @@ const UpdateNavbarPage = () => {
                           const formData = new FormData(e.currentTarget);
                           handleAction("add", {
                             parentIndex: parentIndex,
+                            index: index,
                             name: formData.get("name") as string,
                             link: formData.get("link") as string,
                             protected: formData.get("protected") === "on",
