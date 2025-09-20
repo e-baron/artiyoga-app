@@ -26,6 +26,11 @@
       "protected": false,
       "subMenu": [
         {
+          "name": "test22",
+          "link": "/test22",
+          "protected": false
+        },
+        {
           "name": "Introductie2",
           "link": "/reiki/intro",
           "protected": false
