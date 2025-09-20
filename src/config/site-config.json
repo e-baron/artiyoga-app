@@ -89,8 +89,9 @@
       ]
     },
     {
-      "name": "Contact",
-      "link": "/contact"
+      "name": "Contact2",
+      "link": "/contact",
+      "protected": false
     },
     {
       "name": "Admin",
