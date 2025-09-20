@@ -36,6 +36,11 @@
           "protected": false
         },
         {
+          "name": "test23",
+          "link": "/test23",
+          "protected": false
+        },
+        {
           "name": "Introductie2",
           "link": "/reiki/intro",
           "protected": false
