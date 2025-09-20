@@ -15,11 +15,6 @@
       "link": "",
       "subMenu": [
         {
-          "name": "Amazing qi",
-          "link": "/qi",
-          "protected": false
-        },
-        {
           "name": "Groepslessen",
           "link": "/lessons/groups"
         },
