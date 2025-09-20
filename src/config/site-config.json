@@ -48,6 +48,11 @@
       ]
     },
     {
+      "name": "Second",
+      "link": "/second",
+      "protected": false
+    },
+    {
       "name": "Coaching",
       "link": "/coaching"
     },
