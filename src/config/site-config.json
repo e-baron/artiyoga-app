@@ -12,7 +12,8 @@
   "menuLinks": [
     {
       "name": "Yoga & Qigong2",
-      "link": ""
+      "link": "",
+      "protected": true
     },
     {
       "name": "Reiki",
