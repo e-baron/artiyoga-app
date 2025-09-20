@@ -11,26 +11,9 @@
   "defaultImage": "/images/lessons/priveyoga.jpg",
   "menuLinks": [
     {
-      "name": "Yoga & Qigong",
+      "name": "Yoga & Qigong2",
       "link": "",
-      "subMenu": [
-        {
-          "name": "Groepslessen",
-          "link": "/lessons/groups"
-        },
-        {
-          "name": "VrouwenYoga Cirkel",
-          "link": "/lessons/women"
-        },
-        {
-          "name": "Privé Lessen",
-          "link": "/lessons/personal"
-        },
-        {
-          "name": "Online Lessen",
-          "link": "/lessons/video"
-        }
-      ]
+      "protected": false
     },
     {
       "name": "Reiki",
