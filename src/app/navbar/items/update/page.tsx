@@ -130,7 +130,7 @@ const UpdateNavbarPage = () => {
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.link}</TableCell>
                 <TableCell>
-                  <Checkbox checked={item.protected} disabled />
+                  <Checkbox defaultChecked={item.protected} disabled />
                 </TableCell>
                 <TableCell>
                   {/* Update Form */}
