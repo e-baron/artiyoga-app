@@ -183,7 +183,7 @@ const UpdateNavbarPage = () => {
                       e.preventDefault();
                       const formData = new FormData(e.currentTarget);
                       handleAction("add", {
-                        parentIndex: parentIndex + 1,
+                        parentIndex: parentIndex,
                         name: formData.get("name") as string,
                         link: formData.get("link") as string,
                         protected: formData.get("protected") === "on",

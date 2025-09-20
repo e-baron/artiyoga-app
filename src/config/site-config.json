@@ -16,6 +16,11 @@
       "protected": false
     },
     {
+      "name": "Start3",
+      "link": "/start3",
+      "protected": true
+    },
+    {
       "name": "Reiki2",
       "link": "",
       "protected": false,
