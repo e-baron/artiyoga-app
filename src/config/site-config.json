@@ -53,6 +53,11 @@
       ]
     },
     {
+      "name": "TEST5",
+      "link": "/test5",
+      "protected": false
+    },
+    {
       "name": "Start2",
       "link": "/start2",
       "protected": false
