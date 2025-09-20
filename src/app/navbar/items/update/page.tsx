@@ -188,6 +188,7 @@ const UpdateNavbarPage = () => {
                         link: formData.get("link") as string,
                         protected: formData.get("protected") === "on",
                       });
+                      e.currentTarget.reset();
                     }}
                   >
                     <TextField
@@ -228,6 +229,7 @@ const UpdateNavbarPage = () => {
                         link: formData.get("link") as string,
                         protected: formData.get("protected") === "on",
                       });
+                      e.currentTarget.reset();
                     }}
                   >
                     <TextField
@@ -260,7 +262,6 @@ const UpdateNavbarPage = () => {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      const formData = new FormData(e.currentTarget);
                       handleAction("delete", {
                         parentIndex,
                       });
@@ -347,6 +348,7 @@ const UpdateNavbarPage = () => {
                             link: formData.get("link") as string,
                             protected: formData.get("protected") === "on",
                           });
+                          e.currentTarget.reset();
                         }}
                       >
                         <TextField
@@ -379,7 +381,6 @@ const UpdateNavbarPage = () => {
                       <form
                         onSubmit={(e) => {
                           e.preventDefault();
-                          const formData = new FormData(e.currentTarget);
                           handleAction("delete", {
                             parentIndex,
                             index,

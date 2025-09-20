@@ -13,6 +13,7 @@
     {
       "name": "Yoga & Qigong",
       "link": "",
+      "protected": false,
       "subMenu": [
         {
           "name": "Groepslessen",
