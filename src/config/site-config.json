@@ -11,14 +11,8 @@
   "defaultImage": "/images/lessons/priveyoga.jpg",
   "menuLinks": [
     {
-      "name": "Yoga & Qigong",
-      "link": "",
-      "protected": false
-    },
-    {
-      "name": "Test",
-      "link": "/test",
-      "protected": false
+      "name": "Yoga & Qigong2",
+      "link": ""
     },
     {
       "name": "Reiki",

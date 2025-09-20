@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 
@@ -32,6 +35,7 @@ interface ActionPayload {
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
 const UpdateNavbarPage = () => {
+  // State hooks
   const [menuLinks, setMenuLinks] = useState<MenuLink[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -48,7 +52,6 @@ const UpdateNavbarPage = () => {
           });
           if (response.ok) {
             const data = await response.json();
-            console.log("Fetched menu links:", data.menuLinks);
             setMenuLinks(data.menuLinks);
           } else {
             const error = await response.json();
@@ -126,64 +129,135 @@ const UpdateNavbarPage = () => {
               <TableRow>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.link}</TableCell>
-                <TableCell>{item.protected ? "Yes" : "No"}</TableCell>
                 <TableCell>
-                  {/* Edit Action */}
-                  <Button
-                    onClick={() =>
+                  <Checkbox checked={item.protected} disabled />
+                </TableCell>
+                <TableCell>
+                  {/* Update Form */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
                       handleAction("edit", {
                         parentIndex,
                         name: item.name,
                         link: item.link,
                         protected: item.protected,
-                      })
-                    }
-                    variant="outlined"
-                    color="primary"
+                      });
+                    }}
                   >
-                    Edit
-                  </Button>
+                    <TextField
+                      name="name"
+                      defaultValue={item.name}
+                      onChange={(e) => (item.name = e.target.value)}
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <TextField
+                      name="link"
+                      defaultValue={item.link}
+                      onChange={(e) => (item.link = e.target.value)}
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name="protected"
+                          checked={item.protected}
+                          onChange={(e) =>
+                            (item.protected = e.target.checked)
+                          }
+                        />
+                      }
+                      label="Protected"
+                    />
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      color="primary"
+                      sx={{ marginRight: "0.5rem" }}
+                    >
+                      Update
+                    </Button>
+                  </form>
 
-                  {/* Delete Action */}
-                  <Button
-                    onClick={() => handleAction("delete", { parentIndex })}
-                    variant="outlined"
-                    color="error"
-                  >
-                    Delete
-                  </Button>
-
-                  {/* Add Next Item */}
-                  <Button
-                    onClick={() =>
+                  {/* Add Next Item Form */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
                       handleAction("add", {
-                        parentIndex,
-                        name: "New Item",
-                        link: "/new-item",
+                        parentIndex: parentIndex + 1,
+                        name: "New Next Item",
+                        link: "/new-next-item",
                         protected: false,
-                      })
-                    }
-                    variant="outlined"
-                    color="primary"
+                      });
+                    }}
                   >
-                    Add Next Item
-                  </Button>
+                    <TextField
+                      name="name"
+                      placeholder="Next Item Name"
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <TextField
+                      name="link"
+                      placeholder="Next Item Link"
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox name="protected" />}
+                      label="Protected"
+                    />
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      color="primary"
+                      sx={{ marginRight: "0.5rem" }}
+                    >
+                      Add Next Item
+                    </Button>
+                  </form>
 
-                  {/* Add Child Item */}
-                  <Button
-                    onClick={() =>
-                      handleAction("add-child", {
-                        parentIndex,
-                        name: "New Child",
-                        link: "/new-child",
-                        protected: false,
-                      })
-                    }
-                    variant="outlined"
-                    color="primary"
-                  >
-                    Add Child Item
-                  </Button>
+                  {/* Add Child Item Form (Only for Parent Items) */}
+                  {item.subMenu && (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleAction("add-child", {
+                          parentIndex,
+                          name: "New Child Item",
+                          link: "/new-child-item",
+                          protected: false,
+                        });
+                      }}
+                    >
+                      <TextField
+                        name="name"
+                        placeholder="Child Item Name"
+                        size="small"
+                        sx={{ marginRight: "0.5rem" }}
+                      />
+                      <TextField
+                        name="link"
+                        placeholder="Child Item Link"
+                        size="small"
+                        sx={{ marginRight: "0.5rem" }}
+                      />
+                      <FormControlLabel
+                        control={<Checkbox name="protected" />}
+                        label="Protected"
+                      />
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        color="primary"
+                        sx={{ marginRight: "0.5rem" }}
+                      >
+                        Add Child Item
+                      </Button>
+                    </form>
+                  )}
                 </TableCell>
               </TableRow>
 
@@ -195,35 +269,97 @@ const UpdateNavbarPage = () => {
                       {subItem.name}
                     </TableCell>
                     <TableCell>{subItem.link}</TableCell>
-                    <TableCell>{subItem.protected ? "Yes" : "No"}</TableCell>
                     <TableCell>
-                      {/* Edit Submenu Item */}
-                      <Button
-                        onClick={() =>
+                      <Checkbox checked={subItem.protected} disabled />
+                    </TableCell>
+                    <TableCell>
+                      {/* Update Form for Submenu Item */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
                           handleAction("edit", {
                             parentIndex,
                             index,
                             name: subItem.name,
                             link: subItem.link,
                             protected: subItem.protected,
-                          })
-                        }
-                        variant="outlined"
-                        color="primary"
+                          });
+                        }}
                       >
-                        Edit
-                      </Button>
+                        <TextField
+                          name="name"
+                          defaultValue={subItem.name}
+                          onChange={(e) => (subItem.name = e.target.value)}
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <TextField
+                          name="link"
+                          defaultValue={subItem.link}
+                          onChange={(e) => (subItem.link = e.target.value)}
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              name="protected"
+                              checked={subItem.protected}
+                              onChange={(e) =>
+                                (subItem.protected = e.target.checked)
+                              }
+                            />
+                          }
+                          label="Protected"
+                        />
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="primary"
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          Update
+                        </Button>
+                      </form>
 
-                      {/* Delete Submenu Item */}
-                      <Button
-                        onClick={() =>
-                          handleAction("delete", { parentIndex, index })
-                        }
-                        variant="outlined"
-                        color="error"
+                      {/* Add Next Item Form for Submenu Item */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleAction("add", {
+                            parentIndex,
+                            index: index + 1,
+                            name: "New Next Child Item",
+                            link: "/new-next-child-item",
+                            protected: false,
+                          });
+                        }}
                       >
-                        Delete
-                      </Button>
+                        <TextField
+                          name="name"
+                          placeholder="Next Child Item Name"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <TextField
+                          name="link"
+                          placeholder="Next Child Item Link"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox name="protected" />}
+                          label="Protected"
+                        />
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="primary"
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          Add Next Item
+                        </Button>
+                      </form>
                     </TableCell>
                   </TableRow>
                 ))}
