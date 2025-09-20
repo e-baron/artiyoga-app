@@ -24,14 +24,26 @@ export async function POST(request: Request) {
       console.log("Fetched menu links:", menuLinks);
       return NextResponse.json({ menuLinks });
     } else if (action === "add") {
-      menuLinks.splice(parentIndex + 1, 0, {
-        name,
-        link,
-        protected: protectedItem,
-      });
+      if (index === undefined) {
+        // Add a new parent menu item at parentIndex + 1
+        menuLinks.splice(parentIndex + 1, 0, {
+          name,
+          link,
+          protected: protectedItem,
+        });
+      } else {
+        // Add a new child menu item at index + 1 under parentIndex
+        menuLinks[parentIndex].subMenu = menuLinks[parentIndex].subMenu || [];
+        menuLinks[parentIndex].subMenu.splice(index + 1, 0, {
+          name,
+          link,
+          protected: protectedItem,
+        });
+      }
     } else if (action === "add-child") {
       menuLinks[parentIndex].subMenu = menuLinks[parentIndex].subMenu || [];
-      menuLinks[parentIndex].subMenu.push({
+      // Add a new child menu item at the start of the subMenu array
+      menuLinks[parentIndex].subMenu.unshift({
         name,
         link,
         protected: protectedItem,
@@ -58,7 +70,6 @@ export async function POST(request: Request) {
           protected: protectedItem,
           ...(existingSubMenu.length > 0 && { subMenu: existingSubMenu }),
         };
-        
       }
     } else {
       return NextResponse.json(
