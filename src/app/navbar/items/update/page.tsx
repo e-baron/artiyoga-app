@@ -314,6 +314,45 @@ const UpdateNavbarPage = () => {
                           Update
                         </Button>
                       </form>
+
+                      {/* Add Next Item Form */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
+                          handleAction("add", {
+                            parentIndex: parentIndex,
+                            name: formData.get("name") as string,
+                            link: formData.get("link") as string,
+                            protected: formData.get("protected") === "on",
+                          });
+                        }}
+                      >
+                        <TextField
+                          name="name"
+                          placeholder="Next Item Name"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <TextField
+                          name="link"
+                          placeholder="Next Item Link"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox name="protected" />}
+                          label="Protected"
+                        />
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="primary"
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          Add Next Item
+                        </Button>
+                      </form>
                     </TableCell>
                   </TableRow>
                 ))}
