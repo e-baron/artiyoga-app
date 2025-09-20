@@ -45,6 +45,11 @@
       ]
     },
     {
+      "name": "New Next Item",
+      "link": "/new-next-item",
+      "protected": false
+    },
+    {
       "name": "Coaching",
       "link": "/coaching"
     },
