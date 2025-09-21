@@ -5,12 +5,11 @@ import {
   handleUncommittedChangesAndSwitchToDev,
 } from "@/utils/git";
 import { MenuLinks } from "@/types";
-// Import the site config so that a rebuild is triggered on change
-import siteConfig from "@/config/site-config.json";
 
 export async function POST(request: Request) {
   try {
     const siteConfigPath = getFilePath("src/config/site-config.json");
+    const siteConfig = JSON.parse(readFile(siteConfigPath));
     const body = await request.json();
     const {
       action,
