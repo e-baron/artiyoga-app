@@ -77,7 +77,7 @@ const EditPage = ({ page }: EditPageProps) => {
           variant="outlined"
           color="primary"
           onClick={fetchRawContent}
-          sx={{ marginBottom: "1rem" }}
+          sx={{ margin: "1rem" }}
         >
           Edit Page
         </Button>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createFile } from "@/utils/files";
 import { handleGitFileCommit } from "@/utils/git";
+import { Frontmatter } from "@/types";
 
 export async function POST(request: Request) {
   try {
@@ -17,8 +18,22 @@ export async function POST(request: Request) {
     // Sanitize the pagename
     const sanitizedPagename = pagename.replace(/[^a-zA-Z0-9-_\/]/g, "");
 
+    const frontmatter: Frontmatter = {
+      // Add a capitalized title by default
+      title: sanitizedPagename.charAt(0).toUpperCase() + pagename.slice(1),
+      description: `This is the ${pagename} page.`,
+      autoMargin: true,
+      autoCropPage: true,
+      published: false,
+    };
+
     // Create the file
-    const filePath = createFile(sanitizedPagename, "mdxPages");
+    const filePath = createFile(
+      sanitizedPagename,
+      "mdxPages",
+      "This is your new page. Please edit it.",
+      frontmatter
+    );
 
     // Handle Git operations
     handleGitFileCommit(filePath, sanitizedPagename);
