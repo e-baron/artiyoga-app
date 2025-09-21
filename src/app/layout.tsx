@@ -7,18 +7,22 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
-import siteMetaData from "@/config/site-config.json";
+// import siteMetaData from "@/config/site-config.json";
 
-
-
+const getSiteMetaData = async () => {
+  const siteMetaData = await import("@/config/site-config.json");
+  return siteMetaData.default;
+};
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-const RootLayout = ({ children }: RootLayoutProps) => {
+const RootLayout = async ({ children }: RootLayoutProps) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const faviconUrl = `${basePath}/favicon.svg`;
+
+  const siteMetaData = await getSiteMetaData();
 
   return (
     <AppRouterCacheProvider>
