@@ -1,66 +1,28 @@
 import { NextResponse } from "next/server";
-import path from "path";
-import fs from "fs/promises";
-
-const mdxDirectory = path.join(process.cwd(), "src/mdxPages");
+import { getFilePath, readFile, updateFile } from "@/utils/files";
 
 export async function POST(request: Request) {
   try {
     const { action, slug, code } = await request.json();
 
-    if (action === "update") {
-      let filePath = path.join(mdxDirectory, `${slug}.mdx`);
-      // Ensure the file exists before updating
-      try {
-        await fs.access(filePath);
-      } catch {
-        // Check if the file exists as an index.mdx in a directory
-        const dirPath = path.join(mdxDirectory, slug);
-        const indexPath = path.join(dirPath, "index.mdx");
-        try {
-          await fs.access(indexPath);
-          // If it exists, update the filePath to point to index.mdx
-          filePath = indexPath;
-        } catch {
-          return NextResponse.json(
-            { error: "File not found." },
-            { status: 404 }
-          );
-        }
-      }
-      console.log("Updating file at:", filePath);
-      await fs.writeFile(filePath, code, "utf8");
-      return NextResponse.json({ message: "File updated successfully" });
+    // Resolve the file path (either slug.mdx or slug/index.mdx)
+    const filePath = await resolveFilePath(slug);
+
+    if (action === "read") {
+      // Read the file content
+      const fileContent = readFile(filePath);
+      return NextResponse.json({ code: fileContent });
     }
 
-    if( action === "read" ) {
-      let filePath = path.join(mdxDirectory, `${slug}.mdx`);
-      // Ensure the file exists before reading
-      try {
-        await fs.access(filePath);
-      } catch {
-        // Check if the file exists as an index.mdx in a directory
-        const dirPath = path.join(mdxDirectory, slug);
-        const indexPath = path.join(dirPath, "index.mdx");
-        try {
-          await fs.access(indexPath);
-          // If it exists, update the filePath to point to index.mdx
-          filePath = indexPath;
-        } catch {
-          return NextResponse.json(
-            { error: "File not found." },
-            { status: 404 }
-          );
-        }
-      }
-      console.log("Reading file at:", filePath);
-      const fileContent = await fs.readFile(filePath, "utf8");
-      return NextResponse.json({ code: fileContent });
+    if (action === "update") {
+      // Update the file content
+      updateFile(filePath, code);
+      return NextResponse.json({ message: "File updated successfully" });
     }
 
     // If action is not recognized
     return NextResponse.json(
-      { error: "Invalid action. Use 'update'." },
+      { error: "Invalid action. Use 'read' or 'update'." },
       { status: 400 }
     );
   } catch (error) {
@@ -69,9 +31,40 @@ export async function POST(request: Request) {
       error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       {
-        error: "An error occurred while processing the request." + errorMessage,
+        error:
+          "An error occurred while processing the request. " + errorMessage,
       },
       { status: 500 }
     );
+  }
+}
+
+// Utility function to resolve the file path
+async function resolveFilePath(slug: string): Promise<string> {
+  const mdxDirectory = "src/mdxPages"; // Relative directory for MDX files
+  const filePath = getFilePath(`${mdxDirectory}/${slug}.mdx`);
+  const indexFilePath = getFilePath(`${mdxDirectory}/${slug}/index.mdx`);
+
+  // Check if the file exists
+  if (await fileExists(filePath)) {
+    return filePath;
+  }
+
+  // Check if the index.mdx file exists in the directory
+  if (await fileExists(indexFilePath)) {
+    return indexFilePath;
+  }
+
+  throw new Error("File not found.");
+}
+
+// Utility function to check if a file exists
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    const fs = (await import("fs/promises")).default;
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
   }
 }
