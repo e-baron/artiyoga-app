@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getFilePath, readFile, updateFile } from "@/utils/files";
+import { handleGitFileCommit } from "@/utils/git";
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
     if (action === "update") {
       // Update the file content
       updateFile(filePath, code);
+      handleGitFileCommit(filePath, "update");
       return NextResponse.json({ message: "File updated successfully" });
     }
 
