@@ -1,6 +1,11 @@
 import { execSync } from "child_process";
-
-// Function to handle Git commit operations
+/**
+ * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
+ * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
+ * @param filePath The path to the file to commit.
+ * @param fileOperationType The type of file operation (e.g., "add", "update").
+ * @returns void
+ */
 const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
   try {
     // Get the filename from the filePath
