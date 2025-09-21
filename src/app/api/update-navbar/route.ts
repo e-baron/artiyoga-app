@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { getFilePath, updateFile, readFile } from "@/utils/files";
-import { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev } from "@/utils/git";
+import {
+  handleGitFileCommit,
+  handleUncommittedChangesAndSwitchToDev,
+} from "@/utils/git";
+import { MenuLinks } from "@/types";
+// Import the site config so that a rebuild is triggered on change
+import siteConfig from "@/config/site-config.json";
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +21,8 @@ export async function POST(request: Request) {
       protected: protectedItem,
     } = body;
 
-    const siteConfig = JSON.parse(readFile(siteConfigPath));
-    const menuLinks = siteConfig.menuLinks;
+    // const siteConfig = JSON.parse(readFile(siteConfigPath));
+    const menuLinks: MenuLinks = siteConfig.menuLinks;
 
     if (action === "read") {
       // Handle the "read" action
@@ -50,17 +56,21 @@ export async function POST(request: Request) {
       });
     } else if (action === "delete") {
       if (index !== undefined) {
-        menuLinks[parentIndex].subMenu.splice(index, 1);
+        if (menuLinks[parentIndex].subMenu) {
+          menuLinks[parentIndex].subMenu.splice(index, 1);
+        }
       } else {
         menuLinks.splice(parentIndex, 1);
       }
     } else if (action === "edit") {
       if (index !== undefined) {
-        menuLinks[parentIndex].subMenu[index] = {
-          name,
-          link,
-          protected: protectedItem,
-        };
+        if (menuLinks[parentIndex].subMenu) {
+          menuLinks[parentIndex].subMenu[index] = {
+            name,
+            link,
+            protected: protectedItem,
+          };
+        }
       } else {
         // Only edit name, link, and protected status, keeping subMenu intact if it exists, else no subMenu props
         const existingSubMenu = menuLinks[parentIndex].subMenu || [];
