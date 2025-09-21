@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     );
 
     // Handle Git operations
-    handleGitFileCommit(filePath, sanitizedPagename);
+    handleGitFileCommit(filePath, "add");
 
     return NextResponse.json({
       message: `Page "${sanitizedPagename}" created successfully!`,
