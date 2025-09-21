@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getFilePath, updateFile, readFile } from "@/utils/files";
-import { handleGitFileCommit } from "@/utils/git";
+import { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev } from "@/utils/git";
 
 export async function POST(request: Request) {
   try {
@@ -79,6 +79,7 @@ export async function POST(request: Request) {
     }
 
     // Update the site config file
+    handleUncommittedChangesAndSwitchToDev();
     updateFile(siteConfigPath, JSON.stringify(siteConfig, null, 2));
     handleGitFileCommit(siteConfigPath, "update");
 

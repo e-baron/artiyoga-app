@@ -14,35 +14,8 @@ const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
       throw new Error("Invalid file path provided.");
     }
 
-    // Check if we are on another branch than "dev"
-    const currentBranch = execSync("git rev-parse --abbrev-ref HEAD", {
-      encoding: "utf8",
-    }).trim();
-    if (currentBranch !== "dev") {
-      // Commit any changes on the current branch before switching
-      const status = execSync("git status --porcelain", { encoding: "utf8" });
-      if (status) {
-        execSync(`git add .`);
-        execSync(
-          `git commit -m "chore: auto-commit changes before switching to dev branch"`
-        );
-      }
-    }
-
-    // Check if the "dev" branch exists
-    const branches = execSync("git branch", { encoding: "utf8" });
-    if (!branches.includes("dev")) {
-      // Create the "dev" branch if it doesn't exist
-      execSync("git branch dev");
-    }
-
-    // Switch to the "dev" branch only if not already on it
-    if (currentBranch !== "dev") {
-      execSync("git checkout dev");
-    }
-
-    // Add all the untracked files (including the new file)
-    execSync(`git add .`);
+    // Add the file to staging
+    execSync(`git add ${filePath}`);
 
     // Check if there are changes to commit
     const status = execSync("git status --porcelain", { encoding: "utf8" });
@@ -66,6 +39,38 @@ const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
   }
 };
 
-//
+// Function to deal with uncommitted changes to another branch than dev before switching to dev branch
+const handleUncommittedChangesAndSwitchToDev = () => {
+  try {
+    // Check if we are on another branch than "dev"
+    const currentBranch = execSync("git rev-parse --abbrev-ref HEAD", {
+      encoding: "utf8",
+    }).trim();
+    if (currentBranch !== "dev") {
+      // Commit any changes on the current branch before switching
+      const status = execSync("git status --porcelain", { encoding: "utf8" });
+      if (status) {
+        execSync(`git add .`);
+        execSync(
+          `git commit -m "chore: auto-commit changes before switching to dev branch"`
+        );
+      }
+      // If the "dev" branch doesn't exist, create it
+      const branches = execSync("git branch", { encoding: "utf8" });
+      if (!branches.includes("dev")) {
+        execSync("git branch dev");
+      }
+      // Switch to the "dev" branch
+      execSync("git checkout dev"); 
+    }
+  } catch (error) {
+    console.error("Error handling uncommitted changes:", error);
+    if (error instanceof Error) {
+      throw new Error(`Uncommitted changes handling failed: ${error.message}`);
+    } else {
+      throw new Error("Uncommitted changes handling failed: Unknown error");
+    }
+  }
+};
 
-export { handleGitFileCommit };
+export { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev };

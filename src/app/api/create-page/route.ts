@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createFile } from "@/utils/files";
-import { handleGitFileCommit } from "@/utils/git";
+import { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev } from "@/utils/git";
 import { Frontmatter } from "@/types";
 
 export async function POST(request: Request) {
@@ -26,6 +26,8 @@ export async function POST(request: Request) {
       autoCropPage: true,
       published: false,
     };
+
+    handleUncommittedChangesAndSwitchToDev();
 
     // Create the file
     const filePath = createFile(
