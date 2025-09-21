@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
-
 interface SubMenu {
   name: string;
   link: string;
@@ -31,9 +30,30 @@ interface SiteMetaData {
 }
 
 interface Frontmatter {
-  title: string;
-  description: string;
-  date: string;
+  title?: string;
+  description?: string;
+  date?: string;
+  author?: string;
+  autoMargin?: boolean;
+  navbarExtraStyles?: string;
+  footerExtraStyles?: string;
+  headerImage?: string;
+  footerImage?: string;
+  featuredImage?: string;
+  autoCropPage?: boolean;
+  category?: string;
+  autoFeatureImageAndText?: boolean;
+  published?: boolean;
+}
+
+interface MdxPage extends Frontmatter {
+  body: {
+    raw: string;
+    code: string;
+  };
+  _raw: {
+    flattenedPath: string;
+  };
 }
 
 interface NavigationContextProps {
@@ -43,4 +63,10 @@ interface NavigationContextProps {
   setActivePageMenuItemIsVisible?: Dispatch<SetStateAction<boolean>>;
 }
 
-export type { SiteMetaData, Frontmatter, NavigationContextProps, MenuLinks };
+export type {
+  SiteMetaData,
+  Frontmatter,
+  NavigationContextProps,
+  MenuLinks,
+  MdxPage,
+};

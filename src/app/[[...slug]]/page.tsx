@@ -1,10 +1,12 @@
 import { allPages } from "contentlayer/generated";
 import { Box, Grid } from "@mui/material";
-import MdxContent from "@/components/MdxContent/MdxContent";
 import siteMetaData from "@/config/site-config.json";
 import Content from "@/components/Content/Content";
 import Section from "@/components/Section/Section";
 import Image from "@/components/Image/Image";
+import EditPage from "@/components/EditPage/EditPage";
+
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
 const generateStaticParams = async () => {
   const allParams = allPages.map((page) => ({
@@ -75,15 +77,6 @@ interface MdxPageLayoutProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-/**
- * If autoMargin is not given or is true, we add a padding of 1rem around the content.
- * By default, autoMargin is true.
- * If autoCropPageContentWidth is not given or is true, the content width is cropped to 800px max.
- * By default, autoCropPageContentWidth is true.
- * @param param0
- * @returns
- */
-
 const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
   const resolvedParams = await params;
 
@@ -95,37 +88,15 @@ const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
   const page = allPages.find((page) => page._raw.flattenedPath === slug);
 
   const autoMargin = page?.autoMargin ?? true;
-  const autoCropPageContentWidth = page?.autoCropPage ?? true;
 
   return (
     <Grid container>
-      {/* Left column */}
-      {autoCropPageContentWidth && (
-        <Grid
-          sx={{
-            // Default width for small and large screens
-            "@media (min-aspect-ratio: 1.5)": {
-              width: "15%", // Set width to 15% when aspect ratio is <= 1.5
-            },
-            "@media (max-aspect-ratio: 1.5)": {
-              width: "100%", // Set width to 100% when aspect ratio is > 1.5
-            },
-          }}
-        />
-      )}
-
       {/* Middle column */}
       <Grid
         sx={{
           display: "flex",
           justifyContent: "center",
-
-          "@media (min-aspect-ratio: 1.5)": {
-            width: "70%", // Adjust width for aspect ratio <= 1.5
-          },
-          "@media (max-aspect-ratio: 1.5)": {
-            width: "100%", // Adjust width for aspect ratio > 1.5
-          },
+          width: "100%",
         }}
       >
         <Box
@@ -152,23 +123,10 @@ const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
             </Section>
           )}
 
-          <MdxContent code={page!.body.code} />
+          {/* Pass the entire page object to the EditPage component */}
+          <EditPage page={page!} />
         </Box>
       </Grid>
-
-      {/* Right column */}
-      {autoCropPageContentWidth && (
-        <Grid
-          sx={{
-            "@media (min-aspect-ratio: 1.5)": {
-              width: "15%", // Set width to 15% when aspect ratio is <= 1.5
-            },
-            "@media (max-aspect-ratio: 1.5)": {
-              width: "100%", // Set width to 100% when aspect ratio is > 1.5
-            },
-          }}
-        />
-      )}
     </Grid>
   );
 };
