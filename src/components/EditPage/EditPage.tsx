@@ -5,6 +5,9 @@ import { Button, TextareaAutosize, Typography } from "@mui/material";
 import MdxContent from "@/components/MdxContent/MdxContent";
 import { MdxPage } from "@/types";
 
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+
+
 interface EditPageProps {
   page: MdxPage;
 }
@@ -72,7 +75,7 @@ const EditPage = ({ page }: EditPageProps) => {
   return (
     <>
       {/* Edit Button at the top */}
-      {!isEditing && (
+      {!isEditing && isLocal && (
         <Button
           variant="outlined"
           color="primary"
