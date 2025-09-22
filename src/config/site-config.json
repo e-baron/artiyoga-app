@@ -113,21 +113,6 @@
           "protected": true
         }
       ]
-    },
-    {
-      "name": "Test",
-      "link": "/test",
-      "protected": true
-    },
-    {
-      "name": "Test2",
-      "link": "/test2",
-      "protected": true
-    },
-    {
-      "name": "Test3",
-      "link": "/test3",
-      "protected": true
     }
   ]
 }
