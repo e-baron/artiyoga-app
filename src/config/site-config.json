@@ -113,6 +113,11 @@
           "protected": true
         }
       ]
+    },
+    {
+      "name": "Test",
+      "link": "/test",
+      "protected": true
     }
   ]
 }
