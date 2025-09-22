@@ -117,13 +117,24 @@
     {
       "name": "Test",
       "link": "/test",
-      "protected": false
+      "protected": false,
+      "subMenu": [
+        {
+          "name": "Test1.1",
+          "link": "/test1-1",
+          "protected": false
+        }
+      ]
     }
   ],
   "unpublishedMenuItems": [
     {
       "parentIndex": 7,
       "operation": "add"
+    },
+    {
+      "parentIndex": 8,
+      "operation": "add-child"
     }
   ]
 }
