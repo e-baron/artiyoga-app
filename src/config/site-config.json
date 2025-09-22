@@ -113,6 +113,17 @@
           "protected": true
         }
       ]
+    },
+    {
+      "name": "Test",
+      "link": "/test",
+      "protected": false
+    }
+  ],
+  "unpublishedMenuItems": [
+    {
+      "parentIndex": 7,
+      "operation": "add"
     }
   ]
 }
