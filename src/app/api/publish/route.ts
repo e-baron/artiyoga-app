@@ -21,6 +21,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Site published successfully" });
     }
 
+    if (action === "read config") {
+      return NextResponse.json(siteConfig);
+    }
+
     // If action is not recognized
     return NextResponse.json(
       { error: "Invalid action. Use 'read' or 'update'." },
