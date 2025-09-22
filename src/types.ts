@@ -40,6 +40,9 @@ interface UnpublishedMenuItem{
   parentIndex: number;
   index?: number;
   operation: "add" | "add-child" | "delete" | "edit";
+  name?: string;
+  link?: string;
+  protected?: boolean;
 }
 
 interface Frontmatter {
@@ -84,4 +87,6 @@ export type {
   MdxPage,
   UnpublishedMenuItem,
   UnpublishedPage,
+  MenuItem,
+  SubMenu,
 };

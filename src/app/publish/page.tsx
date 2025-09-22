@@ -1,6 +1,12 @@
 "use client";
 
-import { MenuLinks, UnpublishedMenuItem, UnpublishedPage } from "@/types";
+import {
+  MenuItem,
+  MenuLinks,
+  SubMenu,
+  UnpublishedMenuItem,
+  UnpublishedPage,
+} from "@/types";
 
 import { Box, Button, TextField, Typography } from "@mui/material";
 
@@ -23,13 +29,14 @@ const PublishPage = () => {
     const fetchUnpublishedItems = async () => {
       if (isLocal) {
         try {
-          const response = await fetch("/api/update-navbar", {
+          const response = await fetch("/api/publish", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "read" }),
+            body: JSON.stringify({ action: "read config" }),
           });
           if (response.ok) {
             const data = await response.json();
+            console.log("Fetched unpublished items:", data);
             setUnpublishedMenuItems(data.unpublishedMenuItems ?? []);
             setUnpublishedPages(data.unpublishedPages ?? []);
             setMenuLinks(data.menuLinks ?? []);
@@ -127,16 +134,18 @@ const PublishPage = () => {
       <h4>Unpublished Menu Items</h4>
       {unpublishedMenuItems.length === 0 && <p>No unpublished menu items.</p>}
       {unpublishedMenuItems.map((item, index) => {
-        const menuItem =
-          item.index === undefined
-            ? menuLinks[item.parentIndex]
-            : menuLinks[item.parentIndex]?.subMenu?.[item.index] ?? {
-                name: "Unknown",
-              };
+        // const menuItem: MenuItem | SubMenu =
+        //   item.index === undefined
+        //     ? menuLinks[item.parentIndex]
+        //     : menuLinks[item.parentIndex]?.subMenu?.[item.index] ?? {
+        //         name: "Unknown",
+        //         link: "Unknown",
+        //         protected: false,
+        //       };
         return (
           <Box key={index} sx={{ marginBottom: "0.5rem" }}>
             <TextField
-              label={`Menu Item: ${menuItem.name}`}
+              label={`Menu Item: ${item.name} ${item.link}`}
               value={item.operation}
               slotProps={{
                 input: { readOnly: true },

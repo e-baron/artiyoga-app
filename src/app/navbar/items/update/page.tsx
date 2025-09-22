@@ -227,6 +227,7 @@ const UpdateNavbarPage = () => {
                         parentIndex,
                         name: formData.get("name") as string,
                         link: formData.get("link") as string,
+                        index: 0,
                         protected: formData.get("protected") === "on",
                       });
                       e.currentTarget.reset();
@@ -264,6 +265,9 @@ const UpdateNavbarPage = () => {
                       e.preventDefault();
                       handleAction("delete", {
                         parentIndex,
+                        name: item.name,
+                        link: item.link,
+                        protected: item.protected,
                       });
                     }}
                   >
@@ -384,6 +388,9 @@ const UpdateNavbarPage = () => {
                           handleAction("delete", {
                             parentIndex,
                             index,
+                            name: subItem.name,
+                            link: subItem.link,
+                            protected: subItem.protected,
                           });
                         }}
                       >

@@ -1,13 +1,16 @@
 "use client";
 
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
 const AddPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Ref for the form element
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,6 +35,10 @@ const AddPage = () => {
 
         if (response.ok) {
           setSuccessMessage(`Page "${pagename}" created successfully!`);
+          // Clear the form using the ref
+          if (formRef.current) {
+            formRef.current.reset();
+          }
           setErrorMessage(null);
         } else {
           const error = await response.json();
@@ -40,14 +47,19 @@ const AddPage = () => {
         }
       } catch (error) {
         console.error("Error calling server function:", error);
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        setErrorMessage("An error occurred while creating the page. " + errorMessage);
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        setErrorMessage(
+          "An error occurred while creating the page. " + errorMessage
+        );
         setSuccessMessage(null);
       }
     } else {
       // In static export mode, just log the pagename
       console.log(`Static export mode: Page "${pagename}" would be created.`);
-      setSuccessMessage(`Static export mode: Page "${pagename}" would be created.`);
+      setSuccessMessage(
+        `Static export mode: Page "${pagename}" would be created.`
+      );
       setErrorMessage(null);
     }
   };
@@ -73,7 +85,7 @@ const AddPage = () => {
         </Box>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} ref={formRef}>
         <TextField
           label="Pagename (e.g., products or /contents/day1)"
           name="pagename"

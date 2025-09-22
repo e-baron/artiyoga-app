@@ -21,7 +21,12 @@ export async function POST(request: Request) {
       protected: protectedItem,
     } = body;
 
-    // const siteConfig = JSON.parse(readFile(siteConfigPath));
+    console.log(
+      "Received action, parentIndex and index:",
+      action,
+      parentIndex,
+      index
+    );
     const menuLinks: MenuLinks = siteConfig.menuLinks;
 
     if (action === "read") {
@@ -91,6 +96,9 @@ export async function POST(request: Request) {
     const updatedSiteConfig = addUnpublishedMenuItem(siteConfig, {
       parentIndex,
       index,
+      name,
+      link,
+      protected: protectedItem,
       operation: action,
     });
     updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
