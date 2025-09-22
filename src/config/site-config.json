@@ -120,6 +120,11 @@
       "protected": false,
       "subMenu": [
         {
+          "name": "Test1.2",
+          "link": "/test1-2",
+          "protected": false
+        },
+        {
           "name": "Test1.1",
           "link": "/test1-1",
           "protected": false
@@ -131,6 +136,10 @@
     {
       "parentIndex": 7,
       "operation": "add"
+    },
+    {
+      "parentIndex": 8,
+      "operation": "add-child"
     },
     {
       "parentIndex": 8,
