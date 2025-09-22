@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getFilePath, readFile, updateFile } from "@/utils/files";
+import { getFilePath, readFile, updateFile, resolveMdxFilePath } from "@/utils/files";
 import {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const siteConfig = JSON.parse(readFile(siteConfigPath));
 
     // Resolve the file path (either slug.mdx or slug/index.mdx)
-    const filePath = await resolveFilePath(slug);
+    const filePath = await resolveMdxFilePath(slug);
 
     if (action === "read") {
       // Read the file content
@@ -56,32 +56,4 @@ export async function POST(request: Request) {
   }
 }
 
-// Utility function to resolve the file path
-async function resolveFilePath(slug: string): Promise<string> {
-  const mdxDirectory = "src/mdxPages"; // Relative directory for MDX files
-  const filePath = getFilePath(`${mdxDirectory}/${slug}.mdx`);
-  const indexFilePath = getFilePath(`${mdxDirectory}/${slug}/index.mdx`);
 
-  // Check if the file exists
-  if (await fileExists(filePath)) {
-    return filePath;
-  }
-
-  // Check if the index.mdx file exists in the directory
-  if (await fileExists(indexFilePath)) {
-    return indexFilePath;
-  }
-
-  throw new Error("File not found.");
-}
-
-// Utility function to check if a file exists
-async function fileExists(filePath: string): Promise<boolean> {
-  try {
-    const fs = (await import("fs/promises")).default;
-    await fs.access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}

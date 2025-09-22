@@ -61,4 +61,41 @@ const readFile = (filePath: string): string => {
   return fs.readFileSync(filePath, "utf8");
 };
 
-export { createFile, getFilePath, updateFile, readFile };
+// Utility function to resolve the file path
+async function resolveMdxFilePath(slug: string): Promise<string> {
+  const mdxDirectory = "src/mdxPages"; // Relative directory for MDX files
+  const filePath = getFilePath(`${mdxDirectory}/${slug}.mdx`);
+  const indexFilePath = getFilePath(`${mdxDirectory}/${slug}/index.mdx`);
+
+  // Check if the file exists
+  if (await fileExists(filePath)) {
+    return filePath;
+  }
+
+  // Check if the index.mdx file exists in the directory
+  if (await fileExists(indexFilePath)) {
+    return indexFilePath;
+  }
+
+  throw new Error("File not found.");
+}
+
+// Utility function to check if a file exists
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    const fs = (await import("fs/promises")).default;
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export {
+  createFile,
+  getFilePath,
+  updateFile,
+  readFile,
+  resolveMdxFilePath,
+  fileExists,
+};
