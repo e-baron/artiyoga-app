@@ -125,11 +125,6 @@
           "protected": false
         },
         {
-          "name": "sub1",
-          "link": "/sub1",
-          "protected": false
-        },
-        {
           "name": "sub2",
           "link": "/sub2",
           "protected": false
@@ -193,6 +188,14 @@
       "link": "/sub0",
       "protected": false,
       "operation": "add-child"
+    },
+    {
+      "parentIndex": 8,
+      "index": 1,
+      "name": "sub1",
+      "link": "/sub1",
+      "protected": false,
+      "operation": "delete"
     }
   ]
 }
