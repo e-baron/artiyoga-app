@@ -118,6 +118,11 @@
       "name": "Test",
       "link": "/test",
       "protected": true
+    },
+    {
+      "name": "Test2",
+      "link": "/test2",
+      "protected": false
     }
   ]
 }
