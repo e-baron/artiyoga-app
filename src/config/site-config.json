@@ -119,20 +119,5 @@
       "link": "/test",
       "protected": true
     }
-  ],
-  "unpublishedPages": [
-    {
-      "name": "test",
-      "operation": "add"
-    }
-  ],
-  "unpublishedMenuItems": [
-    {
-      "parentIndex": 7,
-      "name": "Test",
-      "link": "/test",
-      "protected": true,
-      "operation": "add"
-    }
   ]
 }
