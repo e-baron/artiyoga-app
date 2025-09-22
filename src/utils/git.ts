@@ -95,14 +95,16 @@ const handleUncommittedChangesAndSwitchToDev = async (
 
 // Operation to merge changes from "dev" to "main" branch
 // This function can be expanded as needed
-const mergeDevToMain = async () => {
+const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
   try {
     // Ensure we are on the main branch
     await git.checkout("main");
 
-    // Merge dev into main with a squash commit message : "Merge dev into main (auto-generated)"
+    // Merge dev into main with a squash commit message : "Merge dev into main (auto-generated)" for author
     await git.merge(["--squash", "dev"]);
-    await git.commit('Merge dev into main (auto-generated)'); 
+    await git.commit(`Merge dev into main (auto-generated)`, {
+      "--author": author,
+    }); 
 
     // Push the changes to the remote repository
     // await git.push("origin", "main");
