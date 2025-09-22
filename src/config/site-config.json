@@ -118,7 +118,13 @@
       "name": "Test",
       "link": "/test",
       "protected": false,
-      "subMenu": []
+      "subMenu": [
+        {
+          "name": "sub1",
+          "link": "/sub1",
+          "protected": false
+        }
+      ]
     }
   ],
   "unpublishedMenuItems": [
@@ -153,6 +159,14 @@
       "parentIndex": 8,
       "index": 0,
       "operation": "delete"
+    },
+    {
+      "parentIndex": 8,
+      "index": 0,
+      "name": "sub1",
+      "link": "/sub1",
+      "protected": false,
+      "operation": "add-child"
     }
   ]
 }
