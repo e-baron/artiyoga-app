@@ -120,6 +120,11 @@
       "protected": false,
       "subMenu": [
         {
+          "name": "sub0",
+          "link": "/sub0",
+          "protected": false
+        },
+        {
           "name": "sub1",
           "link": "/sub1",
           "protected": false
@@ -180,6 +185,14 @@
       "link": "/sub2",
       "protected": false,
       "operation": "add"
+    },
+    {
+      "parentIndex": 8,
+      "index": 0,
+      "name": "sub0",
+      "link": "/sub0",
+      "protected": false,
+      "operation": "add-child"
     }
   ]
 }
