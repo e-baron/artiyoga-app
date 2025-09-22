@@ -7,11 +7,13 @@ const git: SimpleGit = simpleGit();
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
  * @param filePath The path to the file to commit.
  * @param fileOperationType The type of file operation (e.g., "add", "update").
+ * @param author The author to use for the commit (e.g., "web-app <web-app@example.com>").
  * @returns void
  */
 const handleGitFileCommit = async (
   filePath: string,
-  fileOperationType = "add"
+  fileOperationType = "add",
+  author = "web-app <web-app@example.com>"
 ) => {
   try {
     // Get the filename from the filePath
@@ -30,9 +32,14 @@ const handleGitFileCommit = async (
       return;
     }
 
-    // Commit the file with a message
+    // Commit the file with a message and custom author
     console.log(`Committing new file: ${filename}`);
-    await git.commit(`docs: ${fileOperationType} ${filename} (auto-generated)`);
+    await git.commit(
+      `docs: ${fileOperationType} ${filename} (auto-generated)`,
+      {
+        "--author": author,
+      }
+    );
   } catch (error) {
     console.error("Error handling Git operations:", error);
     if (error instanceof Error) {
@@ -45,8 +52,11 @@ const handleGitFileCommit = async (
 
 /**
  * Handles uncommitted changes and switches to the "dev" branch. If the "dev" branch doesn't exist, it creates it.
+ * @param author The author to use for the commit (e.g., "web-app <web-app@example.com>").
  */
-const handleUncommittedChangesAndSwitchToDev = async () => {
+const handleUncommittedChangesAndSwitchToDev = async (
+  author = "web-app <web-app@example.com>"
+) => {
   try {
     // Check the current branch
     const currentBranch = await git.revparse(["--abbrev-ref", "HEAD"]);
@@ -54,10 +64,13 @@ const handleUncommittedChangesAndSwitchToDev = async () => {
       // Check for uncommitted changes
       const status = await git.status();
       if (status.not_added.length > 0 || status.modified.length > 0) {
-        // Stage and commit all changes
+        // Stage and commit all changes with a custom author
         await git.add(".");
         await git.commit(
-          "chore: auto-commit changes before switching to dev branch"
+          "chore: auto-commit changes before switching to dev branch",
+          {
+            "--author": author,
+          }
         );
       }
 
