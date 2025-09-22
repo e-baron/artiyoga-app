@@ -1,0 +1,164 @@
+"use client";
+
+import { MenuLinks, UnpublishedMenuItem, UnpublishedPage } from "@/types";
+
+import { Box, Button, TextField, Typography } from "@mui/material";
+
+import { useEffect, useState } from "react";
+
+const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+
+const PublishPage = () => {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [unpublishedPages, setUnpublishedPages] = useState<UnpublishedPage[]>(
+    []
+  );
+  const [unpublishedMenuItems, setUnpublishedMenuItems] = useState<
+    UnpublishedMenuItem[]
+  >([]);
+  const [menuLinks, setMenuLinks] = useState<MenuLinks>([]);
+
+  useEffect(() => {
+    const fetchUnpublishedItems = async () => {
+      if (isLocal) {
+        try {
+          const response = await fetch("/api/update-navbar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "read" }),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setUnpublishedMenuItems(data.unpublishedMenuItems ?? []);
+            setUnpublishedPages(data.unpublishedPages ?? []);
+            setMenuLinks(data.menuLinks ?? []);
+          } else {
+            const error = await response.json();
+            setErrorMessage(error.message);
+          }
+        } catch (error) {
+          console.error("Error fetching unpublished items:", error);
+          setErrorMessage("Failed to fetch unpublished items.");
+        }
+      }
+    };
+
+    fetchUnpublishedItems();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isLocal) {
+      setErrorMessage("Publishing is only available in development mode.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "publish all" }),
+      });
+
+      if (response.ok) {
+        setSuccessMessage("All unpublished items have been published.");
+        setErrorMessage(null);
+        setUnpublishedMenuItems([]);
+        setUnpublishedPages([]);
+      } else {
+        const error = await response.json();
+        setErrorMessage(error.message || "Failed to publish items.");
+        setSuccessMessage(null);
+      }
+    } catch (error) {
+      console.error("Error publishing items:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      setErrorMessage(
+        "An error occurred while publishing items. " + errorMessage
+      );
+      setSuccessMessage(null);
+    }
+  };
+
+  if (!isLocal) {
+    return null;
+  }
+
+  return (
+    <Box sx={{ padding: "1rem" }}>
+      <h3>Publish all items</h3>
+
+      {/* Feedback Box */}
+      {(successMessage || errorMessage) && (
+        <Box
+          sx={{
+            marginBottom: "1rem",
+            padding: "1rem",
+            borderRadius: "4px",
+            backgroundColor: successMessage ? "green" : "red",
+            color: "white",
+          }}
+        >
+          <Typography variant="body1">
+            {successMessage || errorMessage}
+          </Typography>
+        </Box>
+      )}
+
+      <h4>Unpublished Pages</h4>
+      {unpublishedPages.length === 0 && <p>No unpublished pages.</p>}
+      {unpublishedPages.map((page, index) => (
+        <Box key={index} sx={{ marginBottom: "0.5rem" }}>
+          <TextField
+            label={`Page: ${page.name}`}
+            value={page.operation}
+            slotProps={{
+              input: { readOnly: true },
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </Box>
+      ))}
+
+      <h4>Unpublished Menu Items</h4>
+      {unpublishedMenuItems.length === 0 && <p>No unpublished menu items.</p>}
+      {unpublishedMenuItems.map((item, index) => {
+        const menuItem =
+          item.index === undefined
+            ? menuLinks[item.parentIndex]
+            : menuLinks[item.parentIndex]?.subMenu?.[item.index] ?? {
+                name: "Unknown",
+              };
+        return (
+          <Box key={index} sx={{ marginBottom: "0.5rem" }}>
+            <TextField
+              label={`Menu Item: ${menuItem.name}`}
+              value={item.operation}
+              slotProps={{
+                input: { readOnly: true },
+              }}
+              variant="outlined"
+              fullWidth
+            />
+          </Box>
+        );
+      })}
+
+      <br />
+
+      {unpublishedMenuItems.length > 0 || unpublishedPages.length > 0 ? (
+        <form onSubmit={handleSubmit}>
+          <Button type="submit" variant="contained" color="primary">
+            Publish All
+          </Button>
+        </form>
+      ) : null}
+    </Box>
+  );
+};
+
+export default PublishPage;

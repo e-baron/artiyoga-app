@@ -25,15 +25,11 @@ const addUnpublishedPage = (
   return newConfig;
 };
 
-const publishAllUnpublishedItems = (siteConfig: SiteMetaData) => {
+const clearAllUnpublishedItems = (siteConfig: SiteMetaData) => {
   const newConfig = { ...siteConfig };
   delete newConfig.unpublishedMenuItems;
   delete newConfig.unpublishedPages;
   return newConfig;
 };
 
-export {
-  addUnpublishedMenuItem,
-  addUnpublishedPage,
-  publishAllUnpublishedItems,
-};
+export { addUnpublishedMenuItem, addUnpublishedPage, clearAllUnpublishedItems };

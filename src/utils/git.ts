@@ -93,4 +93,33 @@ const handleUncommittedChangesAndSwitchToDev = async (
   }
 };
 
-export { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev };
+// Operation to merge changes from "dev" to "main" branch
+// This function can be expanded as needed
+const mergeDevToMain = async () => {
+  try {
+    // Ensure we are on the main branch
+    await git.checkout("main");
+
+    // Merge dev into main with a commit message : "Merge dev into main (auto-generated)"
+    await git.mergeFromTo("dev", "main", {
+      "--no-ff": null,
+      "-m": "Merge dev into main (auto-generated)",
+    });
+
+    // Push the changes to the remote repository
+    // await git.push("origin", "main");
+  } catch (error) {
+    console.error("Error merging dev to main:", error);
+    if (error instanceof Error) {
+      throw new Error(`Merge failed: ${error.message}`);
+    } else {
+      throw new Error("Merge failed: Unknown error");
+    }
+  }
+};
+
+export {
+  handleGitFileCommit,
+  handleUncommittedChangesAndSwitchToDev,
+  mergeDevToMain,
+};

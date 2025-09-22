@@ -6,8 +6,6 @@ import Section from "@/components/Section/Section";
 import Image from "@/components/Image/Image";
 import EditPage from "@/components/EditPage/EditPage";
 
-const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
-
 const generateStaticParams = async () => {
   const allParams = allPages.map((page) => ({
     slug: page._raw.flattenedPath.split("/"),
