@@ -40,7 +40,8 @@
     "react-responsive-carousel": "^3.2.23",
     "rehype-prism-plus": "^2.0.1",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "simple-git": "^3.28.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

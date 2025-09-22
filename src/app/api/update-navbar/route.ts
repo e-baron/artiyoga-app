@@ -88,9 +88,9 @@ export async function POST(request: Request) {
     }
 
     // Update the site config file
-    handleUncommittedChangesAndSwitchToDev();
+    await handleUncommittedChangesAndSwitchToDev();
     updateFile(siteConfigPath, JSON.stringify(siteConfig, null, 2));
-    handleGitFileCommit(siteConfigPath, "update");
+    await handleGitFileCommit(siteConfigPath, "update");
 
     return NextResponse.json({
       message: `Action "${action}" completed successfully.`,

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       published: false,
     };
 
-    handleUncommittedChangesAndSwitchToDev();
+    await handleUncommittedChangesAndSwitchToDev();
 
     // Create the file
     const filePath = createFile(
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     );
 
     // Handle Git operations
-    handleGitFileCommit(filePath, "add");
+    await handleGitFileCommit(filePath, "add");
 
     return NextResponse.json({
       message: `Page "${sanitizedPagename}" created successfully!`,

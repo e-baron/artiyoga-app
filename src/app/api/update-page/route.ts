@@ -20,9 +20,9 @@ export async function POST(request: Request) {
 
     if (action === "update") {
       // Update the file content
-      handleUncommittedChangesAndSwitchToDev();
+      await handleUncommittedChangesAndSwitchToDev();
       updateFile(filePath, code);
-      handleGitFileCommit(filePath, "update");
+      await handleGitFileCommit(filePath, "update");
       return NextResponse.json({ message: "File updated successfully" });
     }
 

@@ -1,4 +1,7 @@
-import { execSync } from "child_process";
+import simpleGit, { SimpleGit } from "simple-git";
+
+const git: SimpleGit = simpleGit();
+
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
@@ -6,7 +9,10 @@ import { execSync } from "child_process";
  * @param fileOperationType The type of file operation (e.g., "add", "update").
  * @returns void
  */
-const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
+const handleGitFileCommit = async (
+  filePath: string,
+  fileOperationType = "add"
+) => {
   try {
     // Get the filename from the filePath
     const filename = filePath.split("/").pop();
@@ -15,20 +21,18 @@ const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
     }
 
     // Add the file to staging
-    execSync(`git add ${filePath}`);
+    await git.add(filePath);
 
     // Check if there are changes to commit
-    const status = execSync("git status --porcelain", { encoding: "utf8" });
-    if (!status) {
+    const status = await git.status();
+    if (status.staged.length === 0) {
       console.log("No changes to commit.");
       return;
     }
 
     // Commit the file with a message
     console.log(`Committing new file: ${filename}`);
-    execSync(
-      `git commit -m "docs: ${fileOperationType} ${filename} (auto-generated)"`
-    );
+    await git.commit(`docs: ${fileOperationType} ${filename} (auto-generated)`);
   } catch (error) {
     console.error("Error handling Git operations:", error);
     if (error instanceof Error) {
@@ -39,29 +43,32 @@ const handleGitFileCommit = (filePath: string, fileOperationType = "add") => {
   }
 };
 
-// Function to deal with uncommitted changes to another branch than dev before switching to dev branch
-const handleUncommittedChangesAndSwitchToDev = () => {
+/**
+ * Handles uncommitted changes and switches to the "dev" branch. If the "dev" branch doesn't exist, it creates it.
+ */
+const handleUncommittedChangesAndSwitchToDev = async () => {
   try {
-    // Check if we are on another branch than "dev"
-    const currentBranch = execSync("git rev-parse --abbrev-ref HEAD", {
-      encoding: "utf8",
-    }).trim();
+    // Check the current branch
+    const currentBranch = await git.revparse(["--abbrev-ref", "HEAD"]);
     if (currentBranch !== "dev") {
-      // Commit any changes on the current branch before switching
-      const status = execSync("git status --porcelain", { encoding: "utf8" });
-      if (status) {
-        execSync(`git add .`);
-        execSync(
-          `git commit -m "chore: auto-commit changes before switching to dev branch"`
+      // Check for uncommitted changes
+      const status = await git.status();
+      if (status.not_added.length > 0 || status.modified.length > 0) {
+        // Stage and commit all changes
+        await git.add(".");
+        await git.commit(
+          "chore: auto-commit changes before switching to dev branch"
         );
       }
-      // If the "dev" branch doesn't exist, create it
-      const branches = execSync("git branch", { encoding: "utf8" });
-      if (!branches.includes("dev")) {
-        execSync("git branch dev");
+
+      // Check if the "dev" branch exists
+      const branches = await git.branch();
+      if (!branches.all.includes("dev")) {
+        await git.branch(["dev"]);
       }
+
       // Switch to the "dev" branch
-      execSync("git checkout dev"); 
+      await git.checkout("dev");
     }
   } catch (error) {
     console.error("Error handling uncommitted changes:", error);
