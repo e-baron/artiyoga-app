@@ -122,7 +122,12 @@
     {
       "name": "Test2",
       "link": "/test2",
-      "protected": false
+      "protected": true
+    },
+    {
+      "name": "Test3",
+      "link": "/test3",
+      "protected": true
     }
   ]
 }

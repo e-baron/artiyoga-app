@@ -292,7 +292,7 @@ const UpdateNavbarPage = () => {
                     </TableCell>
                     <TableCell>{subItem.link}</TableCell>
                     <TableCell>
-                      <Checkbox defaultChecked={subItem.protected} disabled />
+                      <Checkbox checked={subItem.protected} disabled />
                     </TableCell>
                     <TableCell>
                       {/* Update Form for Submenu Item */}
@@ -325,7 +325,7 @@ const UpdateNavbarPage = () => {
                           control={
                             <Checkbox
                               name="protected"
-                              defaultChecked={subItem.protected}
+                              checked={subItem.protected}
                             />
                           }
                           label="Protected"
