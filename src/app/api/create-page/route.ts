@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
-import { createFile } from "@/utils/files";
-import { handleGitFileCommit, handleUncommittedChangesAndSwitchToDev } from "@/utils/git";
+import { createFile, getFilePath, readFile, updateFile } from "@/utils/files";
+import {
+  handleGitFileCommit,
+  handleUncommittedChangesAndSwitchToDev,
+} from "@/utils/git";
 import { Frontmatter } from "@/types";
+import { addUnpublishedPage } from "@/utils/config";
 
 export async function POST(request: Request) {
   try {
+    const siteConfigPath = getFilePath("src/config/site-config.json");
+    const siteConfig = JSON.parse(readFile(siteConfigPath));
     const body = await request.json();
     const { pagename } = body;
 
@@ -36,6 +42,13 @@ export async function POST(request: Request) {
       "This is your new page. Please edit it.",
       frontmatter
     );
+
+    // Update the site-config.json to add the new page to unpublishedPages
+    const updatedSiteConfig = addUnpublishedPage(siteConfig, {
+      name: sanitizedPagename,
+      operation: "add",
+    });
+    updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
 
     // Handle Git operations
     await handleGitFileCommit(filePath, "add");

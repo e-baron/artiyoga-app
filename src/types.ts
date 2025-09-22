@@ -27,6 +27,19 @@ interface SiteMetaData {
   extraBackgroundText?: string;
   defaultImage?: string;
   menuLinks: MenuLinks;
+  unpublishedMenuItems?: UnpublishedMenuItem[];
+  unpublishedPages?: UnpublishedPage[];
+}
+
+interface UnpublishedPage{
+  name: string;
+  operation: "add" | "delete" | "edit";
+}
+
+interface UnpublishedMenuItem{
+  parentIndex: number;
+  index?: number;
+  operation: "add" | "add-child" | "delete" | "edit";
 }
 
 interface Frontmatter {
@@ -69,4 +82,6 @@ export type {
   NavigationContextProps,
   MenuLinks,
   MdxPage,
+  UnpublishedMenuItem,
+  UnpublishedPage,
 };

@@ -4,10 +4,13 @@ import {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
 } from "@/utils/git";
+import { addUnpublishedPage } from "@/utils/config";
 
 export async function POST(request: Request) {
   try {
     const { action, slug, code } = await request.json();
+    const siteConfigPath = getFilePath("src/config/site-config.json");
+    const siteConfig = JSON.parse(readFile(siteConfigPath));
 
     // Resolve the file path (either slug.mdx or slug/index.mdx)
     const filePath = await resolveFilePath(slug);
@@ -22,6 +25,14 @@ export async function POST(request: Request) {
       // Update the file content
       await handleUncommittedChangesAndSwitchToDev();
       updateFile(filePath, code);
+
+      // Update the site-config.json to add the new page to unpublishedPages
+      const updatedSiteConfig = addUnpublishedPage(siteConfig, {
+        name: slug,
+        operation: "edit",
+      });
+      updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
+
       await handleGitFileCommit(filePath, "update");
       return NextResponse.json({ message: "File updated successfully" });
     }

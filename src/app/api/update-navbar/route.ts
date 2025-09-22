@@ -5,6 +5,7 @@ import {
   handleUncommittedChangesAndSwitchToDev,
 } from "@/utils/git";
 import { MenuLinks } from "@/types";
+import { addUnpublishedMenuItem } from "@/utils/config";
 
 export async function POST(request: Request) {
   try {
@@ -25,8 +26,6 @@ export async function POST(request: Request) {
 
     if (action === "read") {
       // Handle the "read" action
-      console.log("Fetching menu links...");
-      console.log("Fetched menu links:", menuLinks);
       return NextResponse.json({ menuLinks });
     } else if (action === "add") {
       if (index === undefined) {
@@ -89,7 +88,12 @@ export async function POST(request: Request) {
 
     // Update the site config file
     await handleUncommittedChangesAndSwitchToDev();
-    updateFile(siteConfigPath, JSON.stringify(siteConfig, null, 2));
+    const updatedSiteConfig = addUnpublishedMenuItem(siteConfig, {
+      parentIndex,
+      index,
+      operation: action,
+    });
+    updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
     await handleGitFileCommit(siteConfigPath, "update");
 
     return NextResponse.json({
