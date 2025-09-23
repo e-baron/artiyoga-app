@@ -10,6 +10,7 @@
     "deploy": "npm run build && cp .nojekyll out/ && gh-pages -d out -t"
   },
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.3.4",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -23,6 +24,7 @@
     "@types/lodash": "^4.17.19",
     "@types/mdx": "^2.0.13",
     "@types/plantuml-encoder": "^1.4.2",
+    "@uiw/react-codemirror": "^4.25.2",
     "contentlayer2": "^0.5.8",
     "date-fns": "^4.1.0",
     "gh-pages": "^6.3.0",

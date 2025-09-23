@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button, TextareaAutosize, Typography } from "@mui/material";
-import MdxContent from "@/components/MdxContent/MdxContent";
+import { Button, Typography, Box } from "@mui/material";
+import CodeMirror from "@uiw/react-codemirror";
+import { markdown } from "@codemirror/lang-markdown";
 import { MdxPage } from "@/types";
+import MdxContent from "@/components/MdxContent/MdxContent";
 
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
-
 
 interface EditPageProps {
   page: MdxPage;
@@ -108,36 +109,36 @@ const EditPage = ({ page }: EditPageProps) => {
       {!isEditing ? (
         <MdxContent code={page.body.code} />
       ) : (
-        <>
-          <TextareaAutosize
+        <Box sx={{ marginTop: "1rem" }}>
+          <CodeMirror
             value={content || ""}
-            onChange={(e) => setContent(e.target.value)}
+            extensions={[markdown()]} // Enable Markdown syntax highlighting
+            onChange={(value) => setContent(value)}
+            height="400px"
+            theme="light"
             style={{
-              width: "100%",
-              height: "400px",
-              marginTop: "1rem",
               fontFamily: "monospace",
               fontSize: "14px",
-              padding: "1rem",
             }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={saveContent}
-            sx={{ marginTop: "1rem", marginRight: "1rem" }}
-          >
-            Save
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => setIsEditing(false)}
-            sx={{ marginTop: "1rem" }}
-          >
-            Cancel
-          </Button>
-        </>
+          <Box sx={{ marginTop: "1rem" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={saveContent}
+              sx={{ marginRight: "1rem" }}
+            >
+              Save
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
       )}
     </>
   );
