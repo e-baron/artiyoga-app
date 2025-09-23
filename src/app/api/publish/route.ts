@@ -17,23 +17,8 @@ export async function POST(request: Request) {
     const siteConfigPath = getFilePath("src/config/site-config.json");
     const siteConfig = JSON.parse(readFile(siteConfigPath));
 
-    if (action === "publish all") {
-      // For all pages that have been created or edited during this publishing phase,
-      // set their "publish" status in front-matter to true
-      for (const page of siteConfig.unpublishedPages) {
-        const filePath = await resolveMdxFilePath(page.name);
-        const fileContent = readFile(filePath);
-
-        if (/published:\s*false/.test(fileContent)) {
-          const updatedContent = fileContent.replace(
-            /published:\s*false/,
-            "published: true"
-          );
-          updateFile(filePath, updatedContent);
-          await handleGitFileCommit(filePath, "update");
-        }
-      }
-
+    if (action === "publish all") {   
+      // No need to update the published frontmatter props as it is git which deal with publishing state and site-config
       // Update the site-config.json to clear all unpublished items
       const updatedSiteConfig = clearAllUnpublishedItems(siteConfig);
       updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
