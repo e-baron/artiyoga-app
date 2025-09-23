@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Typography, Box } from "@mui/material";
+import { Button, Typography, Box, Grid } from "@mui/material";
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
 import { MdxPage } from "@/types";
 import MdxContent from "@/components/MdxContent/MdxContent";
+import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 
@@ -19,6 +20,9 @@ const EditPage = ({ page }: EditPageProps) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Debug the page object
+  console.log("Page object:", page);
+
   // Fetch the raw content of the page using the POST API
   const fetchRawContent = async () => {
     try {
@@ -27,7 +31,7 @@ const EditPage = ({ page }: EditPageProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "read",
-          slug: page._raw.flattenedPath,
+          slug: page._raw?.flattenedPath || "",
         }),
       });
       if (response.ok) {
@@ -53,7 +57,7 @@ const EditPage = ({ page }: EditPageProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "update",
-          slug: page._raw.flattenedPath,
+          slug: page._raw?.flattenedPath || "",
           code: content,
         }),
       });
@@ -72,7 +76,6 @@ const EditPage = ({ page }: EditPageProps) => {
       setErrorMessage("An error occurred while updating the content.");
     }
   };
-  console.log("Page body:", page.body);
 
   return (
     <>
@@ -108,20 +111,53 @@ const EditPage = ({ page }: EditPageProps) => {
 
       {/* Render the MDX content or the raw content editor */}
       {!isEditing ? (
-        <MdxContent code={page.body.code} />
+        page?.body?.code ? (
+          <MdxContent code={page.body.code} />
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            No content available to display.
+          </Typography>
+        )
       ) : (
         <Box sx={{ marginTop: "1rem" }}>
-          <CodeMirror
-            value={content || ""}
-            extensions={[markdown()]} // Enable Markdown syntax highlighting
-            onChange={(value) => setContent(value)}
-            height="400px"
-            theme="light"
-            style={{
-              fontFamily: "monospace",
-              fontSize: "14px",
-            }}
-          />
+          <Grid container spacing={2}>
+            {/* Markdown Editor */}
+            <Grid size={6}>
+              <CodeMirror
+                value={content || ""}
+                extensions={[markdown()]} // Enable Markdown syntax highlighting
+                onChange={(value) => setContent(value)} // Update content state on change
+                height="400px"
+                theme="light"
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: "14px",
+                }}
+              />
+            </Grid>
+
+            {/* Live MDX Preview */}
+            <Grid size={6}>
+              <Box
+                sx={{
+                  // padding: "1rem",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  backgroundColor: "#f9f9f9",
+                  height: "400px",
+                  overflowY: "auto",
+                }}
+              >
+                {content ? (
+                  <MdxPreview content={content} />
+                ) : (
+                  <Typography variant="body2" color="textSecondary">
+                    Live preview will appear here.
+                  </Typography>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
           <Box sx={{ marginTop: "1rem" }}>
             <Button
               variant="contained"
