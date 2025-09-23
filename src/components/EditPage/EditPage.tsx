@@ -20,9 +20,6 @@ const EditPage = ({ page }: EditPageProps) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Debug the page object
-  console.log("Page object:", page);
-
   // Fetch the raw content of the page using the POST API
   const fetchRawContent = async () => {
     try {
