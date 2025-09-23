@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       description: `This is the ${pagename} page.`,
       autoMargin: true,
       autoCropPage: true,
-      // published: false, // By default, the publishing state is linked to git
+      // published: false, // By default, the publishing state is linked to git and site-config
     };
 
     await handleUncommittedChangesAndSwitchToDev();

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       });
       updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
 
-      await handleGitFileCommit(filePath, "update");
+      await handleGitFileCommit(siteConfigPath, "update");
       return NextResponse.json({ message: "File updated successfully" });
     }
 
