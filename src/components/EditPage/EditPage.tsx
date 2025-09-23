@@ -72,6 +72,7 @@ const EditPage = ({ page }: EditPageProps) => {
       setErrorMessage("An error occurred while updating the content.");
     }
   };
+  console.log("Page body:", page.body);
 
   return (
     <>
