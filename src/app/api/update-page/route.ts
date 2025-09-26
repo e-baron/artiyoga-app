@@ -25,6 +25,7 @@ export async function POST(request: Request) {
       // Update the file content
       await handleUncommittedChangesAndSwitchToDev();
       updateFile(filePath, code);
+      await handleGitFileCommit(filePath, "update");
 
       // Update the site-config.json to add the new page to unpublishedPages
       const updatedSiteConfig = addUnpublishedPage(siteConfig, {
