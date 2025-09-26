@@ -104,10 +104,11 @@ const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
     await git.merge(["--squash", "dev"]);
     await git.commit(`Merge dev into main (auto-generated)`, {
       "--author": author,
-    }); 
+    });
 
-    // Push the changes to the remote repository
-    // await git.push("origin", "main");
+    // Push the changes to the remote repository for author
+    await git.push("origin", "main");
+    
   } catch (error) {
     console.error("Error merging dev to main:", error);
     if (error instanceof Error) {
