@@ -2,14 +2,12 @@
 import { NextResponse } from "next/server";
 import {
   getFilePath,
-  readFile,
   fileExists,
   listFilesInDirectory,
   createFile,
   deleteFile,
 } from "@/utils/files";
-import { Box } from "@mui/material";
-import React from "react";
+
 import {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
@@ -42,6 +40,7 @@ export async function POST(request: Request) {
             { status: 400 }
           );
         }
+        await handleUncommittedChangesAndSwitchToDev();
 
         const buffer = Buffer.from(await file.arrayBuffer());
         createFile(filepath, buffer.toString("utf-8"));
@@ -56,6 +55,7 @@ export async function POST(request: Request) {
     }
 
     if (action === "delete") {
+      await handleUncommittedChangesAndSwitchToDev();
       if (!deleteFile(filepath)) {
         return NextResponse.json(
           { error: "File does not exist" },
