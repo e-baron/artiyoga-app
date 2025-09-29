@@ -127,7 +127,13 @@ const publishToGitHubPages = async (branch = "dev") => {
   try {
     // Build the project
     try {
-      execSync("npm run build:gh-pages", { stdio: "inherit" });
+      execSync("npm run build", {
+        stdio: "inherit",
+        env: {
+          ...process.env, 
+          NODE_ENV: "production", 
+        },
+      });
     } catch (error) {
       throw new Error(
         `Build process failed: ${
@@ -157,9 +163,9 @@ const publishToGitHubPages = async (branch = "dev") => {
         },
         (err) => {
           if (err) {
-            reject(err); 
+            reject(err);
           } else {
-            resolve(); 
+            resolve();
           }
         }
       );
