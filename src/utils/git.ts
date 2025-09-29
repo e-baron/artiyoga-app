@@ -127,7 +127,7 @@ const publishToGitHubPages = async (branch = "dev") => {
   try {
     // Build the project
     try {
-      execSync("npm run build", { stdio: "inherit" });
+      execSync("npm run build:gh-pages", { stdio: "inherit" });
     } catch (error) {
       throw new Error(
         `Build process failed: ${
