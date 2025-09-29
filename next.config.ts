@@ -6,7 +6,7 @@ console.log("Environment:", process.env.NODE_ENV);
 const nextConfig: NextConfig = {
   output: "export",
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  distDir: process.env.NODE_ENV === "production" ? ".next-gh-pages" : ".next",
+  // distDir: process.env.NODE_ENV === "production" ? ".next-gh-pages" : ".next",
   experimental: {
     globalNotFound: true,
   },

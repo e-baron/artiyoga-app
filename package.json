@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "contentlayer2 dev & next dev --turbopack -p 3001",
     "build": "contentlayer2 build && next build",
-    "build:no-contentlayer-build": "next build",
+    "stop-dev-build-build-restart-dev": "pkill -f 'next dev' && pkill -f 'contentlayer2 dev' && npm run build && npm run dev",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && cp .nojekyll out/ && gh-pages -d out -t"

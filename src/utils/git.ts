@@ -2,6 +2,7 @@ import simpleGit, { SimpleGit } from "simple-git";
 import fs from "fs";
 import ghpages from "gh-pages";
 import { execSync } from "child_process";
+import path from "path";
 
 const git: SimpleGit = simpleGit();
 
@@ -121,13 +122,21 @@ const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
   }
 };
 
-// Function to publish the dev branch to GitHub Pages
-// It shall be the equivalent of : npm run build && cp .nojekyll out/ && gh-pages -d out -t
+/**
+ * Publishes the project to GitHub Pages.
+ * @param branch The branch to publish (default: "dev").
+ */
 const publishToGitHubPages = async (branch = "dev") => {
   try {
-    // Build the project
+    const distDir = path.resolve("dist");
+
+    // Step 1: Copy project files to the new directory
+    copyProjectFiles(distDir);
+
+    // Step 2: Build the project
     try {
-      execSync("npm run build:no-contentlayer-build", {
+      execSync("npm run build", {
+        cwd: distDir,
         stdio: "inherit",
         env: {
           ...process.env,
@@ -142,21 +151,11 @@ const publishToGitHubPages = async (branch = "dev") => {
       );
     }
 
-    // Copy .nojekyll to the output directory
-    try {
-      fs.copyFileSync(".nojekyll", "out/.nojekyll");
-    } catch (error) {
-      throw new Error(
-        `Failed to copy .nojekyll: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
-    }
-
-    // Wrap ghpages.publish in a Promise to use async/await
+    // Step 3: Publish to GitHub Pages
+    console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) => {
       ghpages.publish(
-        "out",
+        path.join(distDir, "out"),
         {
           branch: "gh-pages",
           message: "Auto-publish to GitHub Pages",
@@ -176,6 +175,89 @@ const publishToGitHubPages = async (branch = "dev") => {
     console.error("Error publishing to GitHub Pages:", error);
     throw new Error(
       `Publishing failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};
+
+/**
+ * Copies all project files (excluding those in .gitignore) to a new directory.
+ * Adds `.env.production` and `.nojekyll` to the new directory.
+ * @param targetDir The target directory where files will be copied.
+ */
+const copyProjectFiles = (targetDir: string) => {
+  try {
+    const gitignorePath = path.resolve(".gitignore");
+    const projectRoot = path.resolve(".");
+    const filesToCopy = new Set<string>();
+
+    // Read .gitignore and exclude those files
+    if (fs.existsSync(gitignorePath)) {
+      const gitignoreContent = fs.readFileSync(gitignorePath, "utf-8");
+      const ignoredPatterns = gitignoreContent.split("\n").filter(Boolean);
+
+      // Recursively collect files not in .gitignore
+      const collectFiles = (dir: string) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          const relativePath = path.relative(projectRoot, fullPath);
+
+          // Skip ignored patterns
+          if (ignoredPatterns.some((pattern) => relativePath.startsWith(pattern))) {
+            continue;
+          }
+
+          if (entry.isDirectory()) {
+            collectFiles(fullPath);
+          } else {
+            filesToCopy.add(relativePath);
+          }
+        }
+      };
+
+      collectFiles(projectRoot);
+    } else {
+      throw new Error(".gitignore file not found.");
+    }
+
+    // Create the target directory if it doesn't exist
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    // Copy files to the target directory
+    filesToCopy.forEach((file) => {
+      const src = path.resolve(file);
+      const dest = path.join(targetDir, file);
+
+      // Ensure the destination directory exists
+      const destDir = path.dirname(dest);
+      if (!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
+      }
+
+      fs.copyFileSync(src, dest);
+    });
+
+    // Add `.env.production` and `.nojekyll` to the target directory
+    const additionalFiles = [".env.production", ".nojekyll"];
+    additionalFiles.forEach((file) => {
+      const src = path.resolve(file);
+      const dest = path.join(targetDir, file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      } else {
+        console.warn(`Optional file ${file} not found. Skipping...`);
+      }
+    });
+
+    console.log(`Project files copied to ${targetDir}`);
+  } catch (error) {
+    console.error("Error copying project files:", error);
+    throw new Error(
+      `Failed to copy project files: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
