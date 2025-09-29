@@ -6,12 +6,16 @@ import {
   Button,
   Typography,
   TextField,
-  List,
-  ListItem,
-  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   IconButton,
   CircularProgress,
   Alert,
+  Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -128,6 +132,12 @@ const ManageAssetsPage = () => {
     fetchAssets();
   }, []);
 
+  // Helper function to calculate padding based on directory depth
+  const getPadding = (filepath: string): number => {
+    const depth = filepath.split("/").length - 1; // Calculate depth based on slashes
+    return depth * 16; // Each level adds 16px of padding
+  };
+
   return (
     <Box sx={{ padding: "1rem" }}>
       <Typography variant="h4" gutterBottom>
@@ -166,6 +176,7 @@ const ManageAssetsPage = () => {
           variant="contained"
           color="primary"
           disabled={loading}
+          sx={{ alignSelf: "flex-start", width: "200px" }} // Restrict button width
         >
           Upload
         </Button>
@@ -182,24 +193,41 @@ const ManageAssetsPage = () => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <List>
-          {assets.map((asset) => (
-            <ListItem
-              key={asset}
-              secondaryAction={
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => handleDelete(`public/${asset}`)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              }
-            >
-              <ListItemText primary={asset} />
-            </ListItem>
-          ))}
-        </List>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Asset Name</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {assets.map((asset) => (
+                <TableRow key={asset}>
+                  <TableCell>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        paddingLeft: `${getPadding(asset)}px`, // Add padding based on depth
+                      }}
+                    >
+                      {asset}
+                    </span>
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDelete(`public/${asset}`)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Box>
   );
