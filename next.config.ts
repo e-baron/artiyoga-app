@@ -1,7 +1,8 @@
 import { withContentlayer } from "next-contentlayer2";
 import type { NextConfig } from "next";
 
-const isGitHubPagesBuild = process.env.NEXT_DIST_DIR === ".next-gh-pages";
+const isGitHubPagesBuild = process.env.NEXT_PUBLIC_NEXT_DIST_DIR === ".next-gh-pages";
+console.log("Is GitHub Pages Build:", process.env.NEXT_PUBLIC_NEXT_DIST_DIR);
 
 const nextConfig: NextConfig = {
   output: "export",
