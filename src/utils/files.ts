@@ -48,6 +48,25 @@ const createFile = (
   return filePath; // Return the absolute path of the created file
 };
 
+const createFileFromBlob = async (
+  filepath: string, // Relative path within the root folder, including the filename and extension
+  blob: Blob
+): Promise<string> => {
+  const filePath = path.join(process.cwd(), filepath); // Resolve the absolute path
+  const directory = path.dirname(filePath); // Get the directory path
+
+  // Ensure the directory exists
+  fs.mkdirSync(directory, { recursive: true });
+
+  // Create the file if it doesn't already exist
+  if (!fs.existsSync(filePath)) {
+    const buffer = Buffer.from(await blob.arrayBuffer()); // Convert Blob to Buffer
+    fs.writeFileSync(filePath, buffer); // Write the buffer to the file
+  }
+
+  return filePath; // Return the absolute path of the created file
+};
+
 // Provide relative project path (e.g. "src/mdxPages/yourpage.mdx") and returns absolute path
 const getFilePath = (projectRelativePath: string) => {
   return path.join(process.cwd(), projectRelativePath);
@@ -131,6 +150,7 @@ const deleteFile = (filePath: string): boolean => {
 
 export {
   createFile,
+  createFileFromBlob,
   getFilePath,
   updateFile,
   deleteFile,

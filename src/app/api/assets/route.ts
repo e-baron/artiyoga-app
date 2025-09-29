@@ -7,6 +7,7 @@ import {
   deleteFile,
   readFile,
   updateFile,
+  createFileFromBlob,
 } from "@/utils/files";
 
 import {
@@ -37,7 +38,6 @@ export async function POST(request: Request) {
 
       await handleUncommittedChangesAndSwitchToDev();
 
-      const buffer = Buffer.from(await file.arrayBuffer());
       // Add "public/" prefix to the filepath if not already present
       const fullFilePath = filepath.startsWith("public/")
         ? filepath
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
         );
       }
 
-      createFile(filepath, buffer.toString("utf-8"));
+      await createFileFromBlob(fullFilePath, file);
       await handleGitFileCommit(filepath, "add (asset)");
 
       // Update the site-config.json to add the asset to unpublishedAssets
