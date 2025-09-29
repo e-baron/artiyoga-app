@@ -173,7 +173,9 @@ const PublishPage = () => {
 
       <br />
 
-      {unpublishedMenuItems.length > 0 || unpublishedPages.length > 0 ? (
+      {unpublishedMenuItems.length > 0 ||
+      unpublishedPages.length > 0 ||
+      unpublishedAssets.length > 0 ? (
         <form onSubmit={handleSubmit}>
           <Button type="submit" variant="contained" color="primary">
             Publish All
