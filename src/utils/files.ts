@@ -20,32 +20,32 @@ const generateFrontmatter = (frontmatter: Frontmatter): string => {
     .join("\n")}\n---\n`;
 };
 
-// Function to create the file and its directories
+// Generic function to create a file
 const createFile = (
-  sanitizedPagename: string,
-  mdxPageDirectory: string,
-  content: string = "This is your new page. Please edit it.",
-  frontmatter: Frontmatter
-) => {
-  const filePath = path.join(
-    process.cwd(),
-    "src",
-    mdxPageDirectory,
-    `${sanitizedPagename}.mdx`
-  );
-  const directory = path.dirname(filePath);
+  filepath: string, // Relative path within the "src" folder, including the filename and extension
+  content: string = "This is your new file. Please edit it.",
+  frontmatter?: Frontmatter // Optional frontmatter
+): string => {
+  const filePath = path.join(process.cwd(), "src", filepath); // Resolve the absolute path
+  const directory = path.dirname(filePath); // Get the directory path
 
   // Ensure the directory exists
   fs.mkdirSync(directory, { recursive: true });
 
   // Create the file if it doesn't already exist
   if (!fs.existsSync(filePath)) {
-    const frontmatterString = generateFrontmatter(frontmatter);
-    const fileContent = `${frontmatterString}\n${content}`;
+    let fileContent = content;
+
+    // Add frontmatter at the start of the file if provided
+    if (frontmatter) {
+      const frontmatterString = generateFrontmatter(frontmatter);
+      fileContent = `${frontmatterString}\n${content}`;
+    }
+
     fs.writeFileSync(filePath, fileContent, "utf8");
   }
 
-  return filePath;
+  return filePath; // Return the absolute path of the created file
 };
 
 // Provide relative project path (e.g. "src/mdxPages/yourpage.mdx") and returns absolute path
@@ -91,11 +91,51 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
+// Function to provide all the files in a directory (recursively) to list assets
+// In a relative path of a directory ("such as /public" or /src/assets" for instance
+async function listFilesInDirectory(
+  relativeDirPath: string
+): Promise<string[]> {
+  const dirPath = getFilePath(relativeDirPath);
+
+  const filesList: string[] = [];
+
+  async function readDirRecursively(currentPath: string) {
+    const entries = await fs.promises.readdir(currentPath, {
+      withFileTypes: true,
+    });
+
+    for (const entry of entries) {
+      const fullPath = path.join(currentPath, entry.name);
+      if (entry.isDirectory()) {
+        await readDirRecursively(fullPath); // Recurse into subdirectory
+      } else {
+        // Store the path relative to the provided directory
+        filesList.push(path.relative(dirPath, fullPath));
+      }
+    }
+  }
+
+  await readDirRecursively(dirPath);
+  return filesList;
+}
+
+// Delete a file and inform if successful
+const deleteFile = (filePath: string): boolean => {
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+    return true;
+  }
+  return false;
+};
+
 export {
   createFile,
   getFilePath,
   updateFile,
+  deleteFile,
   readFile,
   resolveMdxFilePath,
   fileExists,
+  listFilesInDirectory,
 };

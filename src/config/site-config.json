@@ -103,6 +103,11 @@
           "protected": true
         },
         {
+          "name": "Manage assets",
+          "link": "/assets/manage",
+          "protected": true
+        },
+        {
           "name": "Update navbar",
           "link": "/navbar/items/update",
           "protected": true
