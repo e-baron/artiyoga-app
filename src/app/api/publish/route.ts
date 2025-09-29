@@ -9,7 +9,6 @@ import {
 } from "@/utils/files";
 import { handleGitFileCommit, mergeDevToMain } from "@/utils/git";
 import { clearAllUnpublishedItems } from "@/utils/config";
-import { UnpublishedPage } from "@/types";
 
 export async function POST(request: Request) {
   try {
