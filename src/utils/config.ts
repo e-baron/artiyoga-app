@@ -25,11 +25,29 @@ const addUnpublishedPage = (
   return newConfig;
 };
 
+const addUnpublishedAsset = (
+  siteConfig: SiteMetaData,
+  unpublishedAsset: { filepath: string; operation: "add" | "delete" }
+) => {
+  const newConfig = { ...siteConfig };
+  newConfig.unpublishedAssets = [
+    ...(newConfig.unpublishedAssets || []),
+    unpublishedAsset,
+  ];
+  return newConfig;
+};
+
 const clearAllUnpublishedItems = (siteConfig: SiteMetaData) => {
   const newConfig = { ...siteConfig };
   delete newConfig.unpublishedMenuItems;
   delete newConfig.unpublishedPages;
+  delete newConfig.unpublishedAssets;
   return newConfig;
 };
 
-export { addUnpublishedMenuItem, addUnpublishedPage, clearAllUnpublishedItems };
+export {
+  addUnpublishedMenuItem,
+  addUnpublishedPage,
+  addUnpublishedAsset,
+  clearAllUnpublishedItems,
+};

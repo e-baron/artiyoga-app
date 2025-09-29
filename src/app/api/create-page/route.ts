@@ -42,15 +42,17 @@ export async function POST(request: Request) {
       frontmatter
     );
 
+    // Handle Git operations
+    await handleGitFileCommit(filePath, "add");
+
     // Update the site-config.json to add the new page to unpublishedPages
     const updatedSiteConfig = addUnpublishedPage(siteConfig, {
       name: sanitizedPagename,
       operation: "add",
     });
     updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
-
-    // Handle Git operations
-    await handleGitFileCommit(filePath, "add");
+    await handleGitFileCommit(siteConfigPath, "update");
+    
 
     return NextResponse.json({
       message: `Page "${sanitizedPagename}" created successfully!`,

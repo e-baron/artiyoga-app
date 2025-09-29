@@ -5,12 +5,15 @@ import {
   listFilesInDirectory,
   createFile,
   deleteFile,
+  readFile,
+  updateFile,
 } from "@/utils/files";
 
 import {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
 } from "@/utils/git";
+import { addUnpublishedAsset } from "@/utils/config";
 
 export async function POST(request: Request) {
   try {
@@ -34,48 +37,18 @@ export async function POST(request: Request) {
       const buffer = Buffer.from(await file.arrayBuffer());
       createFile(filepath, buffer.toString("utf-8"));
       await handleGitFileCommit(filepath, "add (asset)");
+
+      // Update the site-config.json to add the asset to unpublishedAssets
+      const siteConfigPath = getFilePath("src/config/site-config.json");
+      const siteConfig = JSON.parse(readFile(siteConfigPath));
+      const updatedSiteConfig = addUnpublishedAsset(siteConfig, {
+        filepath,
+        operation: "add",
+      });
+      updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
+      await handleGitFileCommit(siteConfigPath, "update");
+
       return NextResponse.json({ message: "File uploaded successfully." });
-    } else if (contentType.includes("application/json")) {
-      // Handle JSON requests
-      const { action, filepath } = await request.json();
-
-      if (action === "create") {
-        if (await fileExists(getFilePath(filepath))) {
-          return NextResponse.json(
-            { error: "File already exists" },
-            { status: 400 }
-          );
-        }
-
-        await handleUncommittedChangesAndSwitchToDev();
-        createFile(filepath, "This is your new asset file.");
-        await handleGitFileCommit(filepath, "add (asset)");
-        return NextResponse.json({ message: "File created successfully" });
-      }
-
-      if (action === "read") {
-        const fileNames = await listFilesInDirectory("public");
-        return NextResponse.json({ fileNames });
-      }
-
-      if (action === "delete") {
-        await handleUncommittedChangesAndSwitchToDev();
-        if (!deleteFile(filepath)) {
-          return NextResponse.json(
-            { error: "File does not exist" },
-            { status: 400 }
-          );
-        }
-        await handleGitFileCommit(filepath, "delete (asset)");
-        return NextResponse.json({ message: "File deleted successfully" });
-      }
-
-      return NextResponse.json({ message: "Invalid action." }, { status: 400 });
-    } else {
-      return NextResponse.json(
-        { error: "Unsupported content type." },
-        { status: 415 }
-      );
     }
   } catch (error) {
     console.error("Error in Asset API:", error);

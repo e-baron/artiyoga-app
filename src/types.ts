@@ -29,6 +29,7 @@ interface SiteMetaData {
   menuLinks: MenuLinks;
   unpublishedMenuItems?: UnpublishedMenuItem[];
   unpublishedPages?: UnpublishedPage[];
+  unpublishedAssets?: UnpublishedAsset[];
 }
 
 interface UnpublishedPage{
@@ -43,6 +44,11 @@ interface UnpublishedMenuItem{
   name?: string;
   link?: string;
   protected?: boolean;
+}
+
+interface UnpublishedAsset{
+  filepath: string;
+  operation: "add" | "delete";
 }
 
 interface Frontmatter {
@@ -87,6 +93,7 @@ export type {
   MdxPage,
   UnpublishedMenuItem,
   UnpublishedPage,
+  UnpublishedAsset,
   MenuItem,
   SubMenu,
 };

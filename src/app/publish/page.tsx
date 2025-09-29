@@ -4,6 +4,7 @@ import {
   MenuItem,
   MenuLinks,
   SubMenu,
+  UnpublishedAsset,
   UnpublishedMenuItem,
   UnpublishedPage,
 } from "@/types";
@@ -23,6 +24,9 @@ const PublishPage = () => {
   const [unpublishedMenuItems, setUnpublishedMenuItems] = useState<
     UnpublishedMenuItem[]
   >([]);
+  const [unpublishedAssets, setUnpublishedAssets] = useState<
+    UnpublishedAsset[]
+  >([]);
   const [menuLinks, setMenuLinks] = useState<MenuLinks>([]);
 
   useEffect(() => {
@@ -39,6 +43,7 @@ const PublishPage = () => {
             console.log("Fetched unpublished items:", data);
             setUnpublishedMenuItems(data.unpublishedMenuItems ?? []);
             setUnpublishedPages(data.unpublishedPages ?? []);
+            setUnpublishedAssets(data.unpublishedAssets ?? []);
             setMenuLinks(data.menuLinks ?? []);
           } else {
             const error = await response.json();
@@ -74,6 +79,7 @@ const PublishPage = () => {
         setErrorMessage(null);
         setUnpublishedMenuItems([]);
         setUnpublishedPages([]);
+        setUnpublishedAssets([]);
       } else {
         const error = await response.json();
         setErrorMessage(error.message || "Failed to publish items.");
@@ -131,17 +137,25 @@ const PublishPage = () => {
         </Box>
       ))}
 
+      <h4>Unpublished Assets</h4>
+      {unpublishedAssets.length === 0 && <p>No unpublished assets.</p>}
+      {unpublishedAssets.map((asset, index) => (
+        <Box key={index} sx={{ marginBottom: "0.5rem" }}>
+          <TextField
+            label={`Asset: ${asset.filepath}`}
+            value={asset.operation}
+            slotProps={{
+              input: { readOnly: true },
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </Box>
+      ))}
+
       <h4>Unpublished Menu Items</h4>
       {unpublishedMenuItems.length === 0 && <p>No unpublished menu items.</p>}
       {unpublishedMenuItems.map((item, index) => {
-        // const menuItem: MenuItem | SubMenu =
-        //   item.index === undefined
-        //     ? menuLinks[item.parentIndex]
-        //     : menuLinks[item.parentIndex]?.subMenu?.[item.index] ?? {
-        //         name: "Unknown",
-        //         link: "Unknown",
-        //         protected: false,
-        //       };
         return (
           <Box key={index} sx={{ marginBottom: "0.5rem" }}>
             <TextField
