@@ -123,6 +123,7 @@ const EditPage = ({ page }: EditPageProps) => {
             height: "100%",
             marginTop: "1rem",
             overflow: "hidden",
+            marginLeft: "1rem",
           }}
         >
           <Grid container spacing={2} sx={{ flex: 1, overflow: "hidden" }}>
@@ -132,7 +133,7 @@ const EditPage = ({ page }: EditPageProps) => {
                 value={content || ""}
                 extensions={[markdown()]} // Enable Markdown syntax highlighting
                 onChange={(value) => setContent(value)} // Update content state on change
-                height="400px"
+                // height="400px"
                 theme="light"
                 style={{
                   fontFamily: "monospace",
@@ -154,7 +155,8 @@ const EditPage = ({ page }: EditPageProps) => {
                 sx={{
                   
                   backgroundColor: "#f9f9f9",
-                  height: "400px",
+                  height: "100%",
+                  // height: "400px",
                   justifyContent: "center", 
                 display: "flex",
                 alignItems: "center",
@@ -171,7 +173,7 @@ const EditPage = ({ page }: EditPageProps) => {
               </Box>
             </Grid>
           </Grid>
-          <Box sx={{ marginTop: "1rem" }}>
+          <Box sx={{ marginTop: "1rem", marginBottom: "2rem", }}>
             <Button
               variant="contained"
               color="primary"
