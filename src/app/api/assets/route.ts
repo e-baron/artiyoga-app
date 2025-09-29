@@ -87,7 +87,14 @@ export async function POST(request: Request) {
       await handleGitFileCommit(siteConfigPath, "update");
 
       return NextResponse.json({ message: "File deleted successfully." });
-    } else {
+    }
+
+    if (action === "read") {
+      const fileNames = await listFilesInDirectory("public");
+      return NextResponse.json({ fileNames });
+    }
+
+    if (!action || !filepath) {
       return NextResponse.json(
         { error: "Invalid action or missing filepath." },
         { status: 400 }
