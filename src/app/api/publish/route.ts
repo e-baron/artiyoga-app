@@ -7,7 +7,10 @@ import {
   resolveMdxFilePath,
   updateFile,
 } from "@/utils/files";
-import { handleGitFileCommit, mergeDevToMain } from "@/utils/git";
+import {
+  handleGitFileCommit,
+  publishToGitHubPages,
+} from "@/utils/git";
 import { clearAllUnpublishedItems } from "@/utils/config";
 
 export async function POST(request: Request) {
@@ -16,7 +19,7 @@ export async function POST(request: Request) {
     const siteConfigPath = getFilePath("src/config/site-config.json");
     const siteConfig = JSON.parse(readFile(siteConfigPath));
 
-    if (action === "publish all") {   
+    if (action === "publish all") {
       // No need to update the published frontmatter props as it is git which deal with publishing state and site-config
       // Update the site-config.json to clear all unpublished items
       const updatedSiteConfig = clearAllUnpublishedItems(siteConfig);
@@ -24,8 +27,7 @@ export async function POST(request: Request) {
 
       await handleGitFileCommit(siteConfigPath, "update");
 
-      // Merge the "dev" branch into "main"
-      await mergeDevToMain();
+      await publishToGitHubPages("dev");
 
       return NextResponse.json({ message: "Site published successfully" });
     }

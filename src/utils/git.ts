@@ -1,4 +1,7 @@
 import simpleGit, { SimpleGit } from "simple-git";
+import fs from "fs";
+import ghpages from "gh-pages";
+import { execSync } from "child_process";
 
 const git: SimpleGit = simpleGit();
 
@@ -108,7 +111,6 @@ const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
 
     // Push the changes to the remote repository for author
     await git.push("origin", "main");
-    
   } catch (error) {
     console.error("Error merging dev to main:", error);
     if (error instanceof Error) {
@@ -119,8 +121,64 @@ const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
   }
 };
 
+// Function to publish the dev branch to GitHub Pages
+// It shall be the equivalent of : npm run build && cp .nojekyll out/ && gh-pages -d out -t
+const publishToGitHubPages = async (branch = "dev") => {
+  try {
+    // Build the project
+    try {
+      execSync("npm run build", { stdio: "inherit" });
+    } catch (error) {
+      throw new Error(
+        `Build process failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+
+    // Copy .nojekyll to the output directory
+    try {
+      fs.copyFileSync(".nojekyll", "out/.nojekyll");
+    } catch (error) {
+      throw new Error(
+        `Failed to copy .nojekyll: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+
+    // Wrap ghpages.publish in a Promise to use async/await
+    await new Promise<void>((resolve, reject) => {
+      ghpages.publish(
+        "out",
+        {
+          branch: "gh-pages",
+          message: "Auto-publish to GitHub Pages",
+        },
+        (err) => {
+          if (err) {
+            reject(err); 
+          } else {
+            resolve(); 
+          }
+        }
+      );
+    });
+
+    console.log("Successfully published to GitHub Pages!");
+  } catch (error) {
+    console.error("Error publishing to GitHub Pages:", error);
+    throw new Error(
+      `Publishing failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};
+
 export {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
   mergeDevToMain,
+  publishToGitHubPages,
 };
