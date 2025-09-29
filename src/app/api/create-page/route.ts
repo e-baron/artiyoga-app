@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     // Create the file
     const filePath = createFile(
-      `mdxPages/${sanitizedPagename}.mdx`,
+      `src/mdxPages/${sanitizedPagename}.mdx`,
       "This is your new page. Please edit it.",
       frontmatter
     );

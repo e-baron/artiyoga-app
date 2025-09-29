@@ -38,6 +38,18 @@ export async function POST(request: Request) {
       await handleUncommittedChangesAndSwitchToDev();
 
       const buffer = Buffer.from(await file.arrayBuffer());
+      // Add "public/" prefix to the filepath if not already present
+      const fullFilePath = filepath.startsWith("public/")
+        ? filepath
+        : `public/${filepath}`;
+
+      if (await fileExists(fullFilePath)) {
+        return NextResponse.json(
+          { error: "File already exists." },
+          { status: 400 }
+        );
+      }
+
       createFile(filepath, buffer.toString("utf-8"));
       await handleGitFileCommit(filepath, "add (asset)");
 

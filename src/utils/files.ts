@@ -22,11 +22,11 @@ const generateFrontmatter = (frontmatter: Frontmatter): string => {
 
 // Generic function to create a file
 const createFile = (
-  filepath: string, // Relative path within the "src" folder, including the filename and extension
+  filepath: string, // Relative path within the root folder, including the filename and extension
   content: string = "This is your new file. Please edit it.",
   frontmatter?: Frontmatter // Optional frontmatter
 ): string => {
-  const filePath = path.join(process.cwd(), "src", filepath); // Resolve the absolute path
+  const filePath = path.join(process.cwd(), filepath); // Resolve the absolute path
   const directory = path.dirname(filePath); // Get the directory path
 
   // Ensure the directory exists
