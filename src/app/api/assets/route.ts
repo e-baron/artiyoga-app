@@ -1,4 +1,3 @@
-// Add POST endpoint to handle asset uploads and to allow to list and delete assets
 import { NextResponse } from "next/server";
 import {
   getFilePath,
@@ -15,58 +14,69 @@ import {
 
 export async function POST(request: Request) {
   try {
-    // Handle other actions (create, read, delete)
-    const { action, filepath } = await request.json();
+    const contentType = request.headers.get("content-type") || "";
 
-    if (action === "create") {
-      if (await fileExists(getFilePath(filepath))) {
+    if (contentType.includes("multipart/form-data")) {
+      // Handle file upload
+      const formData = await request.formData();
+      const file = formData.get("file") as Blob | null;
+      const filepath = formData.get("filepath") as string;
+
+      if (!file || !filepath) {
         return NextResponse.json(
-          { error: "File already exists" },
+          { error: "File or filepath is missing." },
           { status: 400 }
         );
       }
 
-      const contentType = request.headers.get("content-type") || "";
+      await handleUncommittedChangesAndSwitchToDev();
 
-      if (contentType.includes("multipart/form-data")) {
-        // Handle file upload
-        const formData = await request.formData();
-        const file = formData.get("file") as Blob | null;
-        const filepath = formData.get("filepath") as string;
+      const buffer = Buffer.from(await file.arrayBuffer());
+      createFile(filepath, buffer.toString("utf-8"));
+      await handleGitFileCommit(filepath, "add (asset)");
+      return NextResponse.json({ message: "File uploaded successfully." });
+    } else if (contentType.includes("application/json")) {
+      // Handle JSON requests
+      const { action, filepath } = await request.json();
 
-        if (!file || !filepath) {
+      if (action === "create") {
+        if (await fileExists(getFilePath(filepath))) {
           return NextResponse.json(
-            { error: "File or filepath is missing." },
+            { error: "File already exists" },
             { status: 400 }
           );
         }
+
         await handleUncommittedChangesAndSwitchToDev();
-
-        const buffer = Buffer.from(await file.arrayBuffer());
-        createFile(filepath, buffer.toString("utf-8"));
+        createFile(filepath, "This is your new asset file.");
         await handleGitFileCommit(filepath, "add (asset)");
-        return NextResponse.json({ message: "File uploaded successfully." });
+        return NextResponse.json({ message: "File created successfully" });
       }
-    }
 
-    if (action === "read") {
-      const fileNames = await listFilesInDirectory("public");
-      return NextResponse.json({ fileNames });
-    }
-
-    if (action === "delete") {
-      await handleUncommittedChangesAndSwitchToDev();
-      if (!deleteFile(filepath)) {
-        return NextResponse.json(
-          { error: "File does not exist" },
-          { status: 400 }
-        );
+      if (action === "read") {
+        const fileNames = await listFilesInDirectory("public");
+        return NextResponse.json({ fileNames });
       }
-      await handleGitFileCommit(filepath, "delete (asset)");
-      return NextResponse.json({ message: "File deleted successfully" });
-    }
 
-    return NextResponse.json({ message: "Invalid action." }, { status: 400 });
+      if (action === "delete") {
+        await handleUncommittedChangesAndSwitchToDev();
+        if (!deleteFile(filepath)) {
+          return NextResponse.json(
+            { error: "File does not exist" },
+            { status: 400 }
+          );
+        }
+        await handleGitFileCommit(filepath, "delete (asset)");
+        return NextResponse.json({ message: "File deleted successfully" });
+      }
+
+      return NextResponse.json({ message: "Invalid action." }, { status: 400 });
+    } else {
+      return NextResponse.json(
+        { error: "Unsupported content type." },
+        { status: 415 }
+      );
+    }
   } catch (error) {
     console.error("Error in Asset API:", error);
     const errorMessage =
