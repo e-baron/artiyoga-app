@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { evaluate } from "@mdx-js/mdx";
 import { useMDXComponents } from "@mdx-js/react";
-import Frame from "react-frame-component";
 import * as runtime from "react/jsx-runtime";
 import shortcodes from "@/utils/mdx";
 import { Box, Button, ButtonGroup } from "@mui/material";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
+import IFrame from "@/components/IFrame/IFrame";
 
 type MdxPreviewProps = { content: string };
 
@@ -21,25 +21,9 @@ export const MdxPreview = ({ content }: MdxPreviewProps) => {
   // State to toggle between "Desktop" and "Mobile" views
   const [isMobileView, setIsMobileView] = useState(false); // Default to Desktop view
 
-  // State to store the parent styles (collected once)
-  const [parentStyles, setParentStyles] = useState<string>("");
 
-  // Collect parent styles on the first render
-  useEffect(() => {
-    const styles = Array.from(document.styleSheets)
-      .map((styleSheet) => {
-        try {
-          return Array.from(styleSheet.cssRules)
-            .map((rule) => rule.cssText)
-            .join("\n");
-        } catch (e) {
-          console.warn("Skipping cross-origin stylesheet:", styleSheet.href);
-          return ""; // Ignore cross-origin styles
-        }
-      })
-      .join("\n");
-    setParentStyles(styles);
-  }, []);
+
+
 
   // Load the MDX content
   useEffect(() => {
@@ -65,55 +49,60 @@ export const MdxPreview = ({ content }: MdxPreviewProps) => {
   }, [content]);
 
   return (
-    <Frame
+     
+    <IFrame
       style={{
-        width: isMobileView ? "375px" : "1024px", // Mobile width (375px) or Desktop width (1024px)
-        height: "100vh", // Full viewport height
-        border: "none",
-        overflow: "hidden", // Ensure no extra scrollbars
+        width: isMobileView ? "375px" : "100%",
+        height: "100%",
+        border: "1px solid #ccc",
+        overflow: "hidden",  
+        borderRadius: isMobileView ? "20px" : "0", // Rounded corners for mobile view
+        boxShadow: isMobileView
+          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+          : "none", // Subtle shadow for mobile view
       }}
-      head={<style>{parentStyles}</style>}
-    >
-      <ClientThemeProvider>
-        <Box
+    ><Box
           sx={{
             display: "flex",
+            justifyContent: "center", 
             flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
+            alignItems: "center", 
+            width: "100%", 
+            marginBottom: "1rem",
+            overflow: "hidden",
             height: "100%",
-            overflow: "hidden", // Ensure no extra scrollbars
           }}
         >
-          {/* View Toggle Buttons */}
-          <ButtonGroup variant="contained" sx={{ marginBottom: "1rem" }}>
-            <Button
-              onClick={() => setIsMobileView(false)}
-              color={!isMobileView ? "primary" : "inherit"}
-            >
-              Desktop
-            </Button>
-            <Button
-              onClick={() => setIsMobileView(true)}
-              color={isMobileView ? "primary" : "inherit"}
-            >
-              Mobile
-            </Button>
-          </ButtonGroup>
-
-          {/* Render the MDX content */}
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              padding: "1rem",
-              overflowY: "auto", // Single scrollbar for the iframe content
-            }}
+      
+        {/* View Toggle Buttons */}
+        <ButtonGroup variant="contained" sx={{ marginBottom: "1rem" }}>
+          <Button
+            onClick={() => setIsMobileView(false)}
+            color={!isMobileView ? "primary" : "inherit"}
           >
-            <Content />
-          </Box>
+            Desktop
+          </Button>
+          <Button
+            onClick={() => setIsMobileView(true)}
+            color={isMobileView ? "primary" : "inherit"}
+          >
+            Mobile
+          </Button>
+        </ButtonGroup>
+
+        {/* Render the MDX content */}
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            padding: "1rem",
+            overflowY: "auto", // Single scrollbar for the iframe content
+            overflowX: "hidden", // Prevent horizontal overflow
+          }}
+        >
+          <Content />
         </Box>
-      </ClientThemeProvider>
-    </Frame>
+   </Box>
+    </IFrame>
   );
 };

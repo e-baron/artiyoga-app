@@ -38,7 +38,6 @@
     "prism-themes": "^1.9.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-frame-component": "^5.2.7",
     "react-markdown": "^10.1.0",
     "react-responsive-carousel": "^3.2.23",
     "rehype-prism-plus": "^2.0.1",

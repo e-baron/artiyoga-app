@@ -116,10 +116,18 @@ const EditPage = ({ page }: EditPageProps) => {
           </Typography>
         )
       ) : (
-        <Box sx={{ marginTop: "1rem" }}>
-          <Grid container spacing={2}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            marginTop: "1rem",
+            overflow: "hidden",
+          }}
+        >
+          <Grid container spacing={2} sx={{ flex: 1, overflow: "hidden" }}>
             {/* Markdown Editor */}
-            <Grid size={6}>
+            <Grid size={6} sx={{ height: "100%", overflow: "hidden" }}>
               <CodeMirror
                 value={content || ""}
                 extensions={[markdown()]} // Enable Markdown syntax highlighting
@@ -134,15 +142,23 @@ const EditPage = ({ page }: EditPageProps) => {
             </Grid>
 
             {/* Live MDX Preview */}
-            <Grid size={6}>
+            <Grid
+              size={6}
+              sx={{
+                height: "100%",
+                
+                overflow: "hidden",
+              }}
+            >
               <Box
                 sx={{
-                  // padding: "1rem",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
+                  
                   backgroundColor: "#f9f9f9",
                   height: "400px",
-                  overflowY: "auto",
+                  justifyContent: "center", 
+                display: "flex",
+                alignItems: "center",
+                  overflow: "hidden",
                 }}
               >
                 {content ? (
