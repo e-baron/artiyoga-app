@@ -123,6 +123,11 @@
       "name": "Test",
       "link": "/test",
       "protected": true
+    },
+    {
+      "name": "Designer",
+      "link": "/designer",
+      "protected": true
     }
   ]
 }
