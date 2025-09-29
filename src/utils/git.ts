@@ -127,11 +127,11 @@ const publishToGitHubPages = async (branch = "dev") => {
   try {
     // Build the project
     try {
-      execSync("npm run build", {
+      execSync("npm run build:no-contentlayer-build", {
         stdio: "inherit",
         env: {
-          ...process.env, 
-          NODE_ENV: "production", 
+          ...process.env,
+          NODE_ENV: "production",
         },
       });
     } catch (error) {
