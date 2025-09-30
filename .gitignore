@@ -23,6 +23,9 @@
 # production
 /build
 
+/dist
+/export
+
 # misc
 .DS_Store
 *.pem

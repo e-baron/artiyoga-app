@@ -3,6 +3,7 @@ import fs from "fs";
 import ghpages from "gh-pages";
 import { execSync } from "child_process";
 import path from "path";
+import { copyProjectFiles, deleteDirectory } from "./files";
 
 const git: SimpleGit = simpleGit();
 
@@ -130,11 +131,27 @@ const publishToGitHubPages = async (branch = "dev") => {
   try {
     const distDir = path.resolve("dist");
 
+    deleteDirectory(distDir);
+    console.log("Old dist directory deleted.");
+
     // Step 1: Copy project files to the new directory
     copyProjectFiles(distDir);
 
+    console.log("Project files copied to dist directory.");
+    console.log("Starting build process... with env variables:", process.env);
     // Step 2: Build the project
     try {
+      execSync("npm i", {
+        cwd: distDir,
+        stdio: "inherit",
+        env: {
+          ...process.env,
+          NODE_ENV: "production",
+        },
+      });
+
+      console.log("Dependencies installed in dist directory.");
+
       execSync("npm run build", {
         cwd: distDir,
         stdio: "inherit",
@@ -143,6 +160,8 @@ const publishToGitHubPages = async (branch = "dev") => {
           NODE_ENV: "production",
         },
       });
+
+      console.log("Project built successfully in dist directory.");
     } catch (error) {
       throw new Error(
         `Build process failed: ${
@@ -175,89 +194,6 @@ const publishToGitHubPages = async (branch = "dev") => {
     console.error("Error publishing to GitHub Pages:", error);
     throw new Error(
       `Publishing failed: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`
-    );
-  }
-};
-
-/**
- * Copies all project files (excluding those in .gitignore) to a new directory.
- * Adds `.env.production` and `.nojekyll` to the new directory.
- * @param targetDir The target directory where files will be copied.
- */
-const copyProjectFiles = (targetDir: string) => {
-  try {
-    const gitignorePath = path.resolve(".gitignore");
-    const projectRoot = path.resolve(".");
-    const filesToCopy = new Set<string>();
-
-    // Read .gitignore and exclude those files
-    if (fs.existsSync(gitignorePath)) {
-      const gitignoreContent = fs.readFileSync(gitignorePath, "utf-8");
-      const ignoredPatterns = gitignoreContent.split("\n").filter(Boolean);
-
-      // Recursively collect files not in .gitignore
-      const collectFiles = (dir: string) => {
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-        for (const entry of entries) {
-          const fullPath = path.join(dir, entry.name);
-          const relativePath = path.relative(projectRoot, fullPath);
-
-          // Skip ignored patterns
-          if (ignoredPatterns.some((pattern) => relativePath.startsWith(pattern))) {
-            continue;
-          }
-
-          if (entry.isDirectory()) {
-            collectFiles(fullPath);
-          } else {
-            filesToCopy.add(relativePath);
-          }
-        }
-      };
-
-      collectFiles(projectRoot);
-    } else {
-      throw new Error(".gitignore file not found.");
-    }
-
-    // Create the target directory if it doesn't exist
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true });
-    }
-
-    // Copy files to the target directory
-    filesToCopy.forEach((file) => {
-      const src = path.resolve(file);
-      const dest = path.join(targetDir, file);
-
-      // Ensure the destination directory exists
-      const destDir = path.dirname(dest);
-      if (!fs.existsSync(destDir)) {
-        fs.mkdirSync(destDir, { recursive: true });
-      }
-
-      fs.copyFileSync(src, dest);
-    });
-
-    // Add `.env.production` and `.nojekyll` to the target directory
-    const additionalFiles = [".env.production", ".nojekyll"];
-    additionalFiles.forEach((file) => {
-      const src = path.resolve(file);
-      const dest = path.join(targetDir, file);
-      if (fs.existsSync(src)) {
-        fs.copyFileSync(src, dest);
-      } else {
-        console.warn(`Optional file ${file} not found. Skipping...`);
-      }
-    });
-
-    console.log(`Project files copied to ${targetDir}`);
-  } catch (error) {
-    console.error("Error copying project files:", error);
-    throw new Error(
-      `Failed to copy project files: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );

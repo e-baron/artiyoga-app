@@ -2,6 +2,9 @@ import { Frontmatter } from "@/types";
 import fs from "fs";
 import path from "path";
 import siteConfig from "@/config/site-config.json";
+import { copySync } from "fs-extra";
+import ignore from "ignore";
+import { execSync } from "child_process";
 
 // Function to generate frontmatter string
 const generateFrontmatter = (frontmatter: Frontmatter): string => {
@@ -148,6 +151,54 @@ const deleteFile = (filePath: string): boolean => {
   return false;
 };
 
+// Function to delete a directory and all its contents
+const deleteDirectory = (dirPath: string): boolean => {
+  if (fs.existsSync(dirPath)) {
+    fs.rmSync(dirPath, { recursive: true, force: true });
+    return true;
+  }
+  return false;
+};
+
+
+
+/**
+ * Copies all project files to a new directory, including `.env.production` and `.nojekyll`.
+ * @param targetDir The target directory where files will be copied.
+ */
+const copyProjectFiles = (targetDir: string) => {
+      // Please use the git checkout-index command to copy only tracked files
+  try {
+    // Ensure the target directory exists
+    fs.mkdirSync(targetDir, { recursive: true });
+    // Use git checkout-index to copy only tracked files
+    execSync(`git checkout-index --all --prefix=${targetDir}/`, {
+      stdio: "inherit", // Inherit stdio to see command output      
+    });
+
+    // Add `.env.production` and `.nojekyll` to the target directory
+    const additionalFiles = [".env.production", ".nojekyll"];
+    additionalFiles.forEach((file) => {
+      const src = path.resolve(file);
+      const dest = path.join(targetDir, file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      } else {
+        console.warn(`Optional file ${file} not found. Skipping...`);
+      }
+    });
+
+    console.log(`All project files copied to ${targetDir}`);
+  } catch (error) {
+    console.error("Error copying project files:", error);
+    throw new Error(
+      `Failed to copy project files: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};
+
 export {
   createFile,
   createFileFromBlob,
@@ -158,4 +209,6 @@ export {
   resolveMdxFilePath,
   fileExists,
   listFilesInDirectory,
+  deleteDirectory,
+  copyProjectFiles,
 };
