@@ -138,7 +138,7 @@ const publishToGitHubPages = async (branch = "dev") => {
     copyProjectFiles(distDir);
 
     console.log("Project files copied to dist directory.");
-    console.log("Starting build process... with env variables:", process.env);
+    
     // Step 2: Build the project
     try {
       // Generate a clean environment for the `dist` directory
@@ -150,6 +150,8 @@ const publishToGitHubPages = async (branch = "dev") => {
         npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
         NODE_ENV: "production", // Explicitly set NODE_ENV to production
       };
+
+      console.log("Starting build process... with env variables:", cleanEnv);
 
       execSync("npm i", {
         cwd: distDir,
