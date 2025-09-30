@@ -1,7 +1,7 @@
 import simpleGit, { SimpleGit } from "simple-git";
 import fs from "fs";
 import ghpages from "gh-pages";
-import { execSync } from "child_process";
+import { execSync, spawnSync } from "child_process";
 import path from "path";
 import { copyProjectFiles, deleteDirectory } from "./files";
 
@@ -138,34 +138,46 @@ const publishToGitHubPages = async (branch = "dev") => {
     copyProjectFiles(distDir);
 
     console.log("Project files copied to dist directory.");
-    
+
     // Step 2: Build the project
     try {
-      // Generate a clean environment for the `dist` directory
-      const cleanEnv: NodeJS.ProcessEnv = {
-        ...process.env, // Start with the current environment
-        PWD: distDir, // Set PWD to the dist directory
-        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
-        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
-        NODE_ENV: "production", // Explicitly set NODE_ENV to production
-      };
+      console.log("Starting build process...");
 
-      console.log("Starting build process... with env variables:", cleanEnv);
-
-      execSync("npm i", {
+      // Install dependencies
+      const installResult = spawnSync("npm", ["install"], {
         cwd: distDir,
-        stdio: "inherit",
-        env: cleanEnv,
+        stdio: "inherit", // Inherit stdio to show output in the terminal
+        shell: true, // Use a shell to mimic terminal behavior
+        env: {
+          ...process.env, // Inherit the current environment
+          PWD: distDir, // Set PWD to the dist directory
+          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
+          NODE_ENV: "production", // Explicitly set NODE_ENV to production
+        },
       });
+
+      if (installResult.status !== 0) {
+        throw new Error(`npm install failed with code ${installResult.status}`);
+      }
 
       console.log("Dependencies installed in dist directory.");
 
-      execSync("npm run build", {
+      // Run the build command
+      const buildResult = spawnSync("npm", ["run", "build"], {
         cwd: distDir,
-        stdio: "inherit",
-        env: cleanEnv,
+        stdio: "inherit", // Inherit stdio to show output in the terminal
+        shell: true, // Use a shell to mimic terminal behavior
+        env: {
+          ...process.env, // Inherit the current environment
+          PWD: distDir, // Set PWD to the dist directory
+          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
+          NODE_ENV: "production", // Explicitly set NODE_ENV to production
+        },
       });
+
+      if (buildResult.status !== 0) {
+        throw new Error(`npm run build failed with code ${buildResult.status}`);
+      }
 
       console.log("Project built successfully in dist directory.");
     } catch (error) {
