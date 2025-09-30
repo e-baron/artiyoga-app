@@ -4,6 +4,7 @@ import ghpages from "gh-pages";
 import { execSync, spawnSync } from "child_process";
 import path from "path";
 import { copyProjectFiles, deleteDirectory } from "./files";
+import build from "next/dist/build";
 
 const git: SimpleGit = simpleGit();
 
@@ -142,19 +143,31 @@ const publishToGitHubPages = async (branch = "dev") => {
     // Step 2: Build the project
     try {
       console.log("Starting build process...");
+      const cleanEnv: NodeJS.ProcessEnv = {
+        ...process.env, // Inherit the current environment
+        PWD: distDir, // Set PWD to the dist directory
+        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
+        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
+        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
+        NODE_ENV: "production", // Explicitly set NODE_ENV to production
+        NEXT_PUBLIC_NODE_ENV: "production", // Ensure public environment is production
+        TURBOPACK: undefined, // Remove Turbopack flag for production builds
+        npm_lifecycle_event: undefined, // Remove lifecycle event
+        npm_lifecycle_script: undefined, // Remove lifecycle script
+        _: undefined, // Remove reference to the parent `next` binary
+      };
+
+      console.log("Environment for build:", cleanEnv);
 
       // Install dependencies
-      const installResult = spawnSync("npm", ["install"], {
-        cwd: distDir,
-        stdio: "inherit", // Inherit stdio to show output in the terminal
-        shell: true, // Use a shell to mimic terminal behavior
-        env: {
-          ...process.env, // Inherit the current environment
-          PWD: distDir, // Set PWD to the dist directory
-          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-          NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        },
-      });
+      const installResult = spawnSync(
+        "sh",
+        ["-c", `cd ${distDir} && npm install`],
+        {
+          stdio: "inherit", // Inherit stdio to show output in the terminal
+          env: cleanEnv,
+        }
+      );
 
       if (installResult.status !== 0) {
         throw new Error(`npm install failed with code ${installResult.status}`);
@@ -163,17 +176,14 @@ const publishToGitHubPages = async (branch = "dev") => {
       console.log("Dependencies installed in dist directory.");
 
       // Run the build command
-      const buildResult = spawnSync("npm", ["run", "build"], {
-        cwd: distDir,
-        stdio: "inherit", // Inherit stdio to show output in the terminal
-        shell: true, // Use a shell to mimic terminal behavior
-        env: {
-          ...process.env, // Inherit the current environment
-          PWD: distDir, // Set PWD to the dist directory
-          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-          NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        },
-      });
+      const buildResult = spawnSync(
+        "sh",
+        ["-c", `cd ${distDir} && npm run build`],
+        {
+          stdio: "inherit", // Inherit stdio to show output in the terminal
+          env: cleanEnv,
+        }
+      );
 
       if (buildResult.status !== 0) {
         throw new Error(`npm run build failed with code ${buildResult.status}`);
