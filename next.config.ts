@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
+  turbopack: {
+    root: path.join(__dirname, './'),
+  },
 };
 
 export default withContentlayer(nextConfig);
