@@ -148,12 +148,6 @@ const publishToGitHubPages = async (branch = "dev") => {
         cwd: distDir,
         stdio: "inherit", // Inherit stdio to show output in the terminal
         shell: true, // Use a shell to mimic terminal behavior
-        env: {
-          ...process.env, // Inherit the current environment
-          PWD: distDir, // Set PWD to the dist directory
-          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-          NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        },
       });
 
       if (installResult.status !== 0) {
@@ -167,12 +161,6 @@ const publishToGitHubPages = async (branch = "dev") => {
         cwd: distDir,
         stdio: "inherit", // Inherit stdio to show output in the terminal
         shell: true, // Use a shell to mimic terminal behavior
-        env: {
-          ...process.env, // Inherit the current environment
-          PWD: distDir, // Set PWD to the dist directory
-          INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-          NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        },
       });
 
       if (buildResult.status !== 0) {
