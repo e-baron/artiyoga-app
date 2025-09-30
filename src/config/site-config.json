@@ -129,5 +129,11 @@
       "link": "/designer",
       "protected": true
     }
+  ],
+  "unpublishedPages": [
+    {
+      "name": "contact",
+      "operation": "edit"
+    }
   ]
 }
