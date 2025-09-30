@@ -141,13 +141,20 @@ const publishToGitHubPages = async (branch = "dev") => {
     console.log("Starting build process... with env variables:", process.env);
     // Step 2: Build the project
     try {
+      // Generate a clean environment for the `dist` directory
+      const cleanEnv: NodeJS.ProcessEnv = {
+        ...process.env, // Start with the current environment
+        PWD: distDir, // Set PWD to the dist directory
+        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
+        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
+        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
+        NODE_ENV: "production", // Explicitly set NODE_ENV to production
+      };
+
       execSync("npm i", {
         cwd: distDir,
         stdio: "inherit",
-        env: {
-          ...process.env,
-          NODE_ENV: "production",
-        },
+        env: cleanEnv,
       });
 
       console.log("Dependencies installed in dist directory.");
@@ -155,10 +162,7 @@ const publishToGitHubPages = async (branch = "dev") => {
       execSync("npm run build", {
         cwd: distDir,
         stdio: "inherit",
-        env: {
-          ...process.env,
-          NODE_ENV: "production",
-        },
+        env: cleanEnv,
       });
 
       console.log("Project built successfully in dist directory.");

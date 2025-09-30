@@ -11,10 +11,6 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
-  turbopack: {
-    root: __dirname,
-  },
-  appDir: true,
 };
 
 export default withContentlayer(nextConfig);
