@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       }
 
       await createFileFromBlob(fullFilePath, file);
-      await handleGitFileCommit(filepath, "add (asset)");
+      await handleGitFileCommit(fullFilePath, "add (asset)");
 
       // Update the site-config.json to add the asset to unpublishedAssets
       const siteConfigPath = getFilePath("src/config/site-config.json");

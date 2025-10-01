@@ -8,7 +8,7 @@ import { deleteDirectory } from "./files";
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
- * @param filePath The path to the file to commit.
+ * @param filePath The path to the file to commit. It can be absolute or relative to the repository root.
  * @param fileOperationType The type of file operation (e.g., "add", "update").
  * @param author The author to use for the commit (e.g., "web-app <web-app@example.com>").
  * @returns void
