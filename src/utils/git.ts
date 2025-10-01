@@ -1,12 +1,9 @@
-import simpleGit, { SimpleGit } from "simple-git";
 import fs from "fs";
 import ghpages from "gh-pages";
-import { execSync, spawnSync } from "child_process";
+import { spawnSync } from "child_process";
+import * as git from "isomorphic-git";
 import path from "path";
-import { copyProjectFiles, deleteDirectory } from "./files";
-import build from "next/dist/build";
-
-const git: SimpleGit = simpleGit();
+import { deleteDirectory } from "./files";
 
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
@@ -22,37 +19,40 @@ const handleGitFileCommit = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
-    // Get the filename from the filePath
+    const repoDir = path.resolve(".");
     const filename = filePath.split("/").pop();
     if (!filename) {
       throw new Error("Invalid file path provided.");
     }
 
-    // Add the file to staging
-    await git.add(filePath);
+    // Add the file to the index
+    await git.add({ fs, dir: repoDir, filepath: filePath });
 
     // Check if there are changes to commit
-    const status = await git.status();
-    if (status.staged.length === 0) {
+    const status = await git.status({ fs, dir: repoDir, filepath: filePath });
+    if (status === "unmodified") {
       console.log("No changes to commit.");
       return;
     }
 
     // Commit the file with a message and custom author
     console.log(`Committing new file: ${filename}`);
-    await git.commit(
-      `docs: ${fileOperationType} ${filename} (auto-generated)`,
-      {
-        "--author": author,
-      }
-    );
+    await git.commit({
+      fs,
+      dir: repoDir,
+      message: `docs: ${fileOperationType} ${filename} (auto-generated)`,
+      author: {
+        name: author.split(" <")[0],
+        email: author.split("<")[1]?.replace(">", ""),
+      },
+    });
   } catch (error) {
     console.error("Error handling Git operations:", error);
-    if (error instanceof Error) {
-      throw new Error(`Git operation failed: ${error.message}`);
-    } else {
-      throw new Error("Git operation failed: Unknown error");
-    }
+    throw new Error(
+      `Git operation failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 };
 
@@ -64,63 +64,99 @@ const handleUncommittedChangesAndSwitchToDev = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
+    const repoDir = path.resolve(".");
+
     // Check the current branch
-    const currentBranch = await git.revparse(["--abbrev-ref", "HEAD"]);
+    const currentBranch = await git.currentBranch({ fs, dir: repoDir });
     if (currentBranch !== "dev") {
       // Check for uncommitted changes
-      const status = await git.status();
-      if (status.not_added.length > 0 || status.modified.length > 0) {
-        // Stage and commit all changes with a custom author
-        await git.add(".");
-        await git.commit(
-          "chore: auto-commit changes before switching to dev branch",
-          {
-            "--author": author,
-          }
-        );
+      const statusMatrix = await git.statusMatrix({ fs, dir: repoDir });
+      const hasUncommittedChanges = statusMatrix.some(
+        ([, , worktreeStatus]) => worktreeStatus !== 0
+      );
+
+      if (hasUncommittedChanges) {
+        // Stage and commit all changes
+        for (const [filepath] of statusMatrix) {
+          await git.add({ fs, dir: repoDir, filepath });
+        }
+        await git.commit({
+          fs,
+          dir: repoDir,
+          message: "chore: auto-commit changes before switching to dev branch",
+          author: {
+            name: author.split(" <")[0],
+            email: author.split("<")[1]?.replace(">", ""),
+          },
+        });
       }
 
       // Check if the "dev" branch exists
-      const branches = await git.branch();
-      if (!branches.all.includes("dev")) {
-        await git.branch(["dev"]);
+      const branches = await git.listBranches({ fs, dir: repoDir });
+      if (!branches.includes("dev")) {
+        await git.branch({ fs, dir: repoDir, ref: "dev" });
       }
 
       // Switch to the "dev" branch
-      await git.checkout("dev");
+      await git.checkout({ fs, dir: repoDir, ref: "dev" });
     }
   } catch (error) {
     console.error("Error handling uncommitted changes:", error);
-    if (error instanceof Error) {
-      throw new Error(`Uncommitted changes handling failed: ${error.message}`);
-    } else {
-      throw new Error("Uncommitted changes handling failed: Unknown error");
-    }
+    throw new Error(
+      `Uncommitted changes handling failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 };
 
-// Operation to merge changes from "dev" to "main" branch
-// This function can be expanded as needed
-const mergeDevToMain = async (author = "web-app <web-app@example.com>") => {
+/**
+ * Merges changes from the source branch into the target branch.
+ * This performs a simple merge using isomorphic-git's `merge` function.
+ *
+ * @param sourceBranch The branch to merge from.
+ * @param targetBranch The branch to merge into.
+ * @param author The author to use for the merge commit (e.g., "web-app <web-app@example.com>").
+ */
+const mergeBranches = async (
+  sourceBranch: string,
+  targetBranch: string,
+  author = "web-app <web-app@example.com>"
+) => {
   try {
-    // Ensure we are on the main branch
-    await git.checkout("main");
+    const repoDir = path.resolve(".");
 
-    // Merge dev into main with a squash commit message : "Merge dev into main (auto-generated)" for author
-    await git.merge(["--squash", "dev"]);
-    await git.commit(`Merge dev into main (auto-generated)`, {
-      "--author": author,
+    // Ensure we are on the target branch
+    await git.checkout({ fs, dir: repoDir, ref: targetBranch });
+
+    // Perform the merge
+    const mergeResult = await git.merge({
+      fs,
+      dir: repoDir,
+      ours: targetBranch,
+      theirs: sourceBranch,
+      author: {
+        name: author.split(" <")[0],
+        email: author.split("<")[1]?.replace(">", ""),
+      },
     });
 
-    // Push the changes to the remote repository for author
-    await git.push("origin", "main");
-  } catch (error) {
-    console.error("Error merging dev to main:", error);
-    if (error instanceof Error) {
-      throw new Error(`Merge failed: ${error.message}`);
+    if (mergeResult.fastForward) {
+      console.log(
+        `Fast-forward merge completed: ${sourceBranch} -> ${targetBranch}`
+      );
+    } else if (mergeResult.mergeCommit) {
+      console.log(`Merge commit created: ${mergeResult.mergeCommit}`);
     } else {
-      throw new Error("Merge failed: Unknown error");
+      console.log(`Merge completed without a commit.`);
     }
+  } catch (error) {
+    console.error("Error merging branches:", error);
+    throw new Error(
+      `Merge failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 };
 
@@ -136,7 +172,8 @@ const publishToGitHubPages = async (branch = "dev") => {
     console.log("Old dist directory deleted.");
 
     // Step 1: Copy project files to the new directory
-    copyProjectFiles(distDir);
+    const projectDir = path.resolve(".");
+    await checkoutIndexLike(projectDir, distDir);
 
     console.log("Project files copied to dist directory.");
 
@@ -144,17 +181,13 @@ const publishToGitHubPages = async (branch = "dev") => {
     try {
       console.log("Starting build process...");
       const cleanEnv: NodeJS.ProcessEnv = {
-        ...process.env, // Inherit the current environment
-        PWD: distDir, // Set PWD to the dist directory
-        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
-        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
-        NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        NEXT_PUBLIC_NODE_ENV: "production", // Ensure public environment is production
-        TURBOPACK: undefined, // Remove Turbopack flag for production builds
-        npm_lifecycle_event: undefined, // Remove lifecycle event
-        npm_lifecycle_script: undefined, // Remove lifecycle script
-        _: undefined, // Remove reference to the parent `next` binary
+        ...process.env,
+        PWD: distDir,
+        INIT_CWD: distDir,
+        npm_config_local_prefix: distDir,
+        npm_package_json: path.join(distDir, "package.json"),
+        NODE_ENV: "production",
+        NEXT_PUBLIC_NODE_ENV: "production",
       };
 
       console.log("Environment for build:", cleanEnv);
@@ -164,7 +197,7 @@ const publishToGitHubPages = async (branch = "dev") => {
         "sh",
         ["-c", `cd ${distDir} && npm install`],
         {
-          stdio: "inherit", // Inherit stdio to show output in the terminal
+          stdio: "inherit",
           env: cleanEnv,
         }
       );
@@ -180,7 +213,7 @@ const publishToGitHubPages = async (branch = "dev") => {
         "sh",
         ["-c", `cd ${distDir} && npm run build`],
         {
-          stdio: "inherit", // Inherit stdio to show output in the terminal
+          stdio: "inherit",
           env: cleanEnv,
         }
       );
@@ -228,9 +261,48 @@ const publishToGitHubPages = async (branch = "dev") => {
   }
 };
 
+/**
+ * Mimics: git checkout-index -a --prefix=<targetDir>
+ *
+ * @param repoDir  Path to the .git repository root
+ * @param targetDir Destination folder to export the files into
+ */
+async function checkoutIndexLike(repoDir: string, targetDir: string) {
+  const commitOid = await git.resolveRef({ fs, dir: repoDir, ref: "HEAD" });
+  const { commit } = await git.readCommit({ fs, dir: repoDir, oid: commitOid });
+  const { tree } = await git.readTree({ fs, dir: repoDir, oid: commit.tree });
+
+  async function walkTree(treeEntries: git.TreeEntry[], basePath = "") {
+    for (const entry of treeEntries) {
+      const entryPath = path.join(basePath, entry.path);
+
+      if (entry.type === "tree") {
+        const { tree: childTree } = await git.readTree({
+          fs,
+          dir: repoDir,
+          oid: entry.oid,
+        });
+        await walkTree(childTree, entryPath);
+      } else if (entry.type === "blob") {
+        const { blob } = await git.readBlob({
+          fs,
+          dir: repoDir,
+          oid: entry.oid,
+        });
+        const outPath = path.join(targetDir, entryPath);
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.writeFileSync(outPath, blob);
+      }
+    }
+  }
+
+  await walkTree(tree);
+}
+
 export {
   handleGitFileCommit,
   handleUncommittedChangesAndSwitchToDev,
-  mergeDevToMain,
+  mergeBranches,
   publishToGitHubPages,
+  checkoutIndexLike,
 };
