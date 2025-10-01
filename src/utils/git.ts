@@ -78,6 +78,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
     const repoDir = path.resolve(".");
 
     // Check the current branch
+    console.log("Checking current branch...");
     const currentBranch = await git.currentBranch({ fs, dir: repoDir });
     if (currentBranch !== "dev") {
       // Check for uncommitted changes
@@ -103,13 +104,17 @@ const handleUncommittedChangesAndSwitchToDev = async (
       }
 
       // Check if the "dev" branch exists
+      console.log("Checking if 'dev' branch exists...");  
       const branches = await git.listBranches({ fs, dir: repoDir });
       if (!branches.includes("dev")) {
+        console.log("'dev' branch does not exist. Creating it...");
         await git.branch({ fs, dir: repoDir, ref: "dev" });
+        console.log("'dev' branch created.");
       }
 
       // Switch to the "dev" branch
       await git.checkout({ fs, dir: repoDir, ref: "dev" });
+      console.log("Switched to 'dev' branch.");
     }
   } catch (error) {
     console.error("Error handling uncommitted changes:", error);
