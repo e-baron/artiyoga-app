@@ -212,7 +212,7 @@ const publishToGitHubPages = async (branch = "dev") => {
     // Step 1: Copy project files to the new directory
     const projectDir = path.resolve(".");
     await checkoutIndexLike(projectDir, distDir);
-    copyAdditionalProjectFiles(distDir, [".env.production", ".nojekyll"]);
+    copyAdditionalProjectFiles(distDir, [".env.production", ".nojekyll", "CNAME"]);
 
     console.log("Project files copied to dist directory.");
 
