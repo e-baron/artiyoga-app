@@ -7,11 +7,12 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
+import { SiteMetaData } from "@/types";
 // import siteMetaData from "@/config/site-config.json";
 
-const getSiteMetaData = async () => {
+const getSiteMetaData = async (): Promise<SiteMetaData> => {
   const siteMetaData = await import("@/config/site-config.json");
-  return siteMetaData.default;
+  return siteMetaData.default as SiteMetaData ;
 };
 
 interface RootLayoutProps {
