@@ -11,7 +11,7 @@ import { Box, Button, TextField, Typography, CircularProgress } from "@mui/mater
 
 import { useEffect, useState } from "react";
 
-const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development";
 
 const PublishPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -30,7 +30,7 @@ const PublishPage = () => {
 
   useEffect(() => {
     const fetchUnpublishedItems = async () => {
-      if (isLocal) {
+      if (isDev) {
         try {
           const response = await fetch("/api/publish", {
             method: "POST",
@@ -61,7 +61,7 @@ const PublishPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isLocal) {
+    if (!isDev) {
       setErrorMessage("Publishing is only available in development mode.");
       return;
     }
@@ -99,7 +99,7 @@ const PublishPage = () => {
     }
   };
 
-  if (!isLocal) {
+  if (!isDev) {
     return null;
   }
 

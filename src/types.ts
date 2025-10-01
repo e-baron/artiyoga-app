@@ -30,6 +30,7 @@ interface SiteMetaData {
   unpublishedMenuItems?: UnpublishedMenuItem[];
   unpublishedPages?: UnpublishedPage[];
   unpublishedAssets?: UnpublishedAsset[];
+  basePath?: string;
 }
 
 interface UnpublishedPage{

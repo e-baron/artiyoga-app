@@ -225,7 +225,6 @@ const publishToGitHubPages = async (branch = "dev") => {
         npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
         npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
         NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        NEXT_PUBLIC_NODE_ENV: "production", // Ensure public environment is production
         TURBOPACK: undefined, // Remove Turbopack flag for production builds
         npm_lifecycle_event: undefined, // Remove lifecycle event
         npm_lifecycle_script: undefined, // Remove lifecycle script

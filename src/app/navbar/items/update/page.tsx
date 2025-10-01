@@ -33,7 +33,7 @@ interface ActionPayload {
   protected?: boolean;
 }
 
-const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development";
 
 const UpdateNavbarPage = () => {
   // State hooks
@@ -44,7 +44,7 @@ const UpdateNavbarPage = () => {
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
-      if (isLocal) {
+      if (isDev) {
         try {
           const response = await fetch("/api/update-navbar", {
             method: "POST",
@@ -73,7 +73,7 @@ const UpdateNavbarPage = () => {
     payload: ActionPayload,
     buttonId: string
   ) => {
-    if (isLocal) {
+    if (isDev) {
       setLoading(buttonId);
       try {
         const response = await fetch("/api/update-navbar", {

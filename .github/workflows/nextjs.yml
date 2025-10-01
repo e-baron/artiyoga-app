@@ -28,8 +28,6 @@ jobs:
 
   # Build job
   build:
-    # env:
-      # NEXT_PUBLIC_BASE_PATH: /artiyoga-new-arch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -85,8 +83,6 @@ jobs:
 
   # Deployment job
   deploy:
-    # env:
-      # NEXT_PUBLIC_BASE_PATH: /cae-project
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

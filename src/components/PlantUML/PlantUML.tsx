@@ -2,6 +2,7 @@
 import { Container } from "@mui/material";
 import plantumlEncoder from "plantuml-encoder";
 import { useEffect, useState } from "react";
+import siteConfig from "@/config/site-config.json";
 
 interface ReactPlantUMLProps {
   src: string;
@@ -19,7 +20,8 @@ interface ReactPlantUMLProps {
 const PlantUML = ({ src, alt }: ReactPlantUMLProps) => {
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const isDev = process.env.NODE_ENV === "development";
+  const basePath = isDev ? "" : siteConfig.basePath;
   const fetchUrl = `${basePath}/${src}`.replace("//", "/");
   useEffect(() => {
     const fetchContent = async () => {
@@ -51,7 +53,7 @@ const PlantUML = ({ src, alt }: ReactPlantUMLProps) => {
 
   return (
     <Container sx={{ overflowX: "auto" }}>
-      <img  alt={alt} src={url} />
+      <img alt={alt} src={url} />
     </Container>
   );
 };

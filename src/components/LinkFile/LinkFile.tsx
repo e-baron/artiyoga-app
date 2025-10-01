@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import siteConfig from "@/config/site-config.json";
 
 interface LinkFileProps {
   children: React.ReactNode;
@@ -17,7 +18,8 @@ interface LinkFileProps {
 const LinkFile = ({ children, name, ...other }: LinkFileProps) => {
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const isDev = process.env.NODE_ENV === "development";
+  const basePath = isDev ? "" : siteConfig.basePath;
 
   const url = `${basePath}/${name}`.replace("//", "/");
 

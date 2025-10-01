@@ -8,7 +8,7 @@ import { MdxPage } from "@/types";
 import MdxContent from "@/components/MdxContent/MdxContent";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 
-const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development";
 
 interface EditPageProps {
   page: MdxPage;
@@ -81,7 +81,7 @@ const EditPage = ({ page }: EditPageProps) => {
   return (
     <>
       {/* Edit Button at the top */}
-      {!isEditing && isLocal && (
+      {!isEditing && isDev && (
         <Button
           variant="outlined"
           color="primary"

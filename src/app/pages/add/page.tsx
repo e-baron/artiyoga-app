@@ -9,7 +9,7 @@ import {
 } from "@mui/material"; // Import CircularProgress
 import { useState, useRef } from "react";
 
-const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development";
 
 const AddPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -31,7 +31,7 @@ const AddPage = () => {
       return;
     }
 
-    if (isLocal) {
+    if (isDev) {
       // Call the server function only in development mode
       setLoading(true); // Set loading to true when the button is clicked
       try {
