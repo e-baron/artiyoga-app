@@ -2,13 +2,16 @@
   "name": "jam-site",
   "version": "0.1.0",
   "private": true,
-  "main": "main/main.js",
+  "main": "dist-electron/main/main.js",
   "scripts": {
-    "dev": "PORT=3001 nextron dev",
-    "build": "nextron build",
-    "start": "nextron start",
-    "lint": "next lint",
-    "deploy": "npm run build && cp .nojekyll out/ && gh-pages -d out -t"
+    "next:dev": "next dev -p 3001",
+    "watch:main": "tsc -p tsconfig.main.json -w",
+    "dev": "concurrently -k -r -n NEXT,MAIN,ELECTRON \"npm:next:dev\" \"npm:watch:main\" \"wait-on tcp:3001 && electron .\"",
+    "build:next": "next build",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build": "npm run build:next && npm run build:main",
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.4",
@@ -49,6 +52,7 @@
     "simple-git": "^3.28.0"
   },
   "devDependencies": {
+    "@electron/remote": "^2.1.3",
     "@eslint/eslintrc": "^3",
     "@types/electron": "^1.4.38",
     "@types/fs-extra": "^11.0.4",
@@ -56,10 +60,13 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "electron": "^32.0.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^32.3.3",
+    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "^15.5.3",
-    "nextron": "^9.0.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^9.0.1"
   }
 }
