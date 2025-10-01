@@ -2,11 +2,11 @@
   "name": "jam-site",
   "version": "0.1.0",
   "private": true,
+  "main": "main/main.js",
   "scripts": {
-    "dev": "next dev -p 3001",
-    "build": "next build",
-    "stop-dev-build-build-restart-dev": "pkill -f 'next dev' && pkill -f 'contentlayer2 dev' && npm run build && npm run dev",
-    "start": "next start",
+    "dev": "PORT=3001 nextron dev",
+    "build": "nextron build",
+    "start": "nextron start",
     "lint": "next lint",
     "deploy": "npm run build && cp .nojekyll out/ && gh-pages -d out -t"
   },
@@ -50,13 +50,16 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/electron": "^1.4.38",
     "@types/fs-extra": "^11.0.4",
     "@types/gh-pages": "^6.1.0",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^32.0.0",
     "eslint": "^9",
     "eslint-config-next": "^15.5.3",
+    "nextron": "^9.0.0",
     "typescript": "^5"
   }
 }
