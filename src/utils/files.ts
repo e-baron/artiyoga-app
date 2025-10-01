@@ -199,6 +199,38 @@ const copyProjectFiles = (targetDir: string) => {
   }
 };
 
+// Function to copy additional project files to a new directory, such as `.env.production` and `.nojekyll` given in a table
+const copyAdditionalProjectFiles = (
+  targetDir: string,
+  files: string[] = [".env.production", ".nojekyll"]
+) => {
+  try {
+    // Ensure the target directory exists
+    fs.mkdirSync(targetDir, { recursive: true });
+
+    files.forEach((file) => {
+      const src = path.resolve(file);
+      const dest = path.join(targetDir, file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      } else {
+        console.warn(`Optional file ${file} not found. Skipping...`);
+      }
+    });
+
+    console.log(`Additional project files copied to ${targetDir}`);
+  } catch (error) {
+    console.error("Error copying additional project files:", error);
+    throw new Error(
+      `Failed to copy additional project files: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};
+
+
+
 export {
   createFile,
   createFileFromBlob,
@@ -211,4 +243,5 @@ export {
   listFilesInDirectory,
   deleteDirectory,
   copyProjectFiles,
+  copyAdditionalProjectFiles,
 };

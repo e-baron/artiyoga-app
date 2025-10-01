@@ -3,7 +3,7 @@ import ghpages from "gh-pages";
 import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
-import { deleteDirectory } from "./files";
+import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
 
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
@@ -212,6 +212,7 @@ const publishToGitHubPages = async (branch = "dev") => {
     // Step 1: Copy project files to the new directory
     const projectDir = path.resolve(".");
     await checkoutIndexLike(projectDir, distDir);
+    copyAdditionalProjectFiles(distDir, [".env.production", ".nojekyll"]);
 
     console.log("Project files copied to dist directory.");
 
