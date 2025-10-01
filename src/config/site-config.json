@@ -9,7 +9,7 @@
   "authorEmail": "baroni.kati@gmail.com",
   "extraBackgroundText": "Content by Kati | Web design by e-baron",
   "defaultImage": "/images/lessons/priveyoga.jpg",
-  "basePath": "",
+  "basePath": "/artiyoga-app",
   "menuLinks": [
     {
       "name": "Yoga & Qigong",
