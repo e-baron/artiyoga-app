@@ -219,13 +219,17 @@ const publishToGitHubPages = async (branch = "dev") => {
     try {
       console.log("Starting build process...");
       const cleanEnv: NodeJS.ProcessEnv = {
-        ...process.env,
-        PWD: distDir,
-        INIT_CWD: distDir,
-        npm_config_local_prefix: distDir,
-        npm_package_json: path.join(distDir, "package.json"),
-        NODE_ENV: "production",
-        NEXT_PUBLIC_NODE_ENV: "production",
+        ...process.env, // Inherit the current environment
+        PWD: distDir, // Set PWD to the dist directory
+        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
+        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
+        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
+        NODE_ENV: "production", // Explicitly set NODE_ENV to production
+        NEXT_PUBLIC_NODE_ENV: "production", // Ensure public environment is production
+        TURBOPACK: undefined, // Remove Turbopack flag for production builds
+        npm_lifecycle_event: undefined, // Remove lifecycle event
+        npm_lifecycle_script: undefined, // Remove lifecycle script
+        _: undefined, // Remove reference to the parent `next` binary
       };
 
       console.log("Environment for build:", cleanEnv);
