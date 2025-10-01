@@ -1,15 +1,13 @@
 "use client";
 
 import {
-  MenuItem,
   MenuLinks,
-  SubMenu,
   UnpublishedAsset,
   UnpublishedMenuItem,
   UnpublishedPage,
 } from "@/types";
 
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, CircularProgress } from "@mui/material";
 
 import { useEffect, useState } from "react";
 
@@ -28,6 +26,7 @@ const PublishPage = () => {
     UnpublishedAsset[]
   >([]);
   const [menuLinks, setMenuLinks] = useState<MenuLinks>([]);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   useEffect(() => {
     const fetchUnpublishedItems = async () => {
@@ -67,6 +66,8 @@ const PublishPage = () => {
       return;
     }
 
+    setLoading(true); 
+
     try {
       const response = await fetch("/api/publish", {
         method: "POST",
@@ -93,6 +94,8 @@ const PublishPage = () => {
         "An error occurred while publishing items. " + errorMessage
       );
       setSuccessMessage(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -177,8 +180,14 @@ const PublishPage = () => {
       unpublishedPages.length > 0 ||
       unpublishedAssets.length > 0 ? (
         <form onSubmit={handleSubmit}>
-          <Button type="submit" variant="contained" color="primary">
-            Publish All
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={loading} // Disable the button while loading
+            startIcon={loading && <CircularProgress size={20} />} // Add spinner
+          >
+            {loading ? "Publishing..." : "Publish All"}
           </Button>
         </form>
       ) : null}
