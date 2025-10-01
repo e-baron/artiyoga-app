@@ -88,8 +88,10 @@ const handleUncommittedChangesAndSwitchToDev = async (
       );
 
       if (hasUncommittedChanges) {
+        console.log("Uncommitted changes detected. Committing them...");
         // Stage and commit all changes
         for (const [filepath] of statusMatrix) {
+          console.log(`Staging file: ${filepath}`);
           await git.add({ fs, dir: repoDir, filepath });
         }
         await git.commit({
@@ -111,7 +113,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
         await git.branch({ fs, dir: repoDir, ref: "dev" });
         console.log("'dev' branch created.");
       }
-
+      console.log("Switching to 'dev' branch...");
       // Switch to the "dev" branch
       await git.checkout({ fs, dir: repoDir, ref: "dev", nonBlocking: true });
       console.log("Switched to 'dev' branch.");
