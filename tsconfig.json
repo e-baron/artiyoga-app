@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.ts"
-  ],
+, "nextron.config.js"  ],
   "exclude": ["node_modules"]
 }
