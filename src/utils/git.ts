@@ -252,7 +252,7 @@ const publishToGitHubPages = async (branch = "dev") => {
       // Run the build command
       const buildResult = spawnSync(
         "sh",
-        ["-c", `cd ${distDir} && npm run build`],
+        ["-c", `cd ${distDir} && npm run build:next`],
         {
           stdio: "inherit",
           env: cleanEnv,
