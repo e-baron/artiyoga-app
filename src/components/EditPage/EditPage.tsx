@@ -7,8 +7,7 @@ import { markdown } from "@codemirror/lang-markdown";
 import { MdxPage } from "@/types";
 import MdxContent from "@/components/MdxContent/MdxContent";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
-
-const isDev = process.env.NODE_ENV === "development";
+import { isDev } from "@/utils/env";
 
 interface EditPageProps {
   page: MdxPage;
@@ -81,7 +80,7 @@ const EditPage = ({ page }: EditPageProps) => {
   return (
     <>
       {/* Edit Button at the top */}
-      {!isEditing && isDev && (
+      {!isEditing && isDev() && (
         <Button
           variant="outlined"
           color="primary"

@@ -3,6 +3,7 @@ import { Container } from "@mui/material";
 import plantumlEncoder from "plantuml-encoder";
 import { useEffect, useState } from "react";
 import siteConfig from "@/config/site-config.json";
+import { isDev } from "@/utils/env";
 
 interface ReactPlantUMLProps {
   src: string;
@@ -20,8 +21,7 @@ interface ReactPlantUMLProps {
 const PlantUML = ({ src, alt }: ReactPlantUMLProps) => {
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const isDev = process.env.NODE_ENV === "development";
-  const basePath = isDev ? "" : siteConfig.basePath;
+  const basePath = isDev() ? "" : siteConfig.basePath;
   const fetchUrl = `${basePath}/${src}`.replace("//", "/");
   useEffect(() => {
     const fetchContent = async () => {

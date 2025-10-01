@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import siteConfig from "@/config/site-config.json";
+import { isDev } from "@/utils/env";
 
 interface ImageProps {
   height?: string;
@@ -31,8 +32,7 @@ const Image = ({
   alignItems = "center",
   ...rest
 }: ImageProps) => {
-  const isDev = process.env.NODE_ENV === "development";
-  const basePath = isDev ? "" : siteConfig.basePath;
+  const basePath = isDev() ? "" : siteConfig.basePath;
   const url = `${basePath}/${src}`.replace("//", "/");
 
   if (noContainer) {

@@ -204,7 +204,7 @@ const mergeBranches = async (
  */
 const publishToGitHubPages = async (branch = "dev") => {
   try {
-    const distDir = path.resolve("dist");
+    const distDir = path.resolve("export");
 
     deleteDirectory(distDir);
     console.log("Old dist directory deleted.");

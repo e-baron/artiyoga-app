@@ -7,11 +7,34 @@
     "next:dev": "next dev -p 3001",
     "watch:main": "tsc -p tsconfig.main.json -w",
     "dev": "concurrently -k -r -n NEXT,MAIN,ELECTRON \"npm:next:dev\" \"npm:watch:main\" \"wait-on tcp:3001 && electron .\"",
-    "build:next": "next build",
-    "build:main": "tsc -p tsconfig.main.json",
-    "build": "npm run build:next && npm run build:main",
-    "start": "electron .",
-    "dist": "electron-builder"
+    "build:wrapper": "tsc -p tsconfig.main.json",
+    "build:next": "FORCE_DEV=1 next build",
+    "dist": "npm run build:wrapper && electron-builder",
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "be.e-baron.jamsite",
+    "productName": "JamSite",
+    "asar": false,                
+     "files": [
+      "dist-electron/main/**",
+      "src/**",
+      "public/**",    
+      "contentlayer.config.*",
+      "next.config.*",
+      "package.json",
+      "node_modules/**",         
+      "CNAME",
+      ".nojekyll",
+      "tsconfig.json",
+      "next-env.d.ts",
+      "eslint.config.mjs",
+      ".gitignore",
+      ".git/**"
+    ],
+    "mac": { "target": ["dmg","zip"] },
+    "win": { "target": ["nsis","zip"] },
+    "linux": { "target": ["AppImage","deb","tar.gz"] }
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.4",

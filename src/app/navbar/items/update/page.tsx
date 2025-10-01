@@ -15,6 +15,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import { isDev } from "@/utils/env";
 
 // Define the structure of a menu link
 interface MenuLink {
@@ -33,8 +34,6 @@ interface ActionPayload {
   protected?: boolean;
 }
 
-const isDev = process.env.NODE_ENV === "development";
-
 const UpdateNavbarPage = () => {
   // State hooks
   const [menuLinks, setMenuLinks] = useState<MenuLink[]>([]);
@@ -44,7 +43,7 @@ const UpdateNavbarPage = () => {
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
-      if (isDev) {
+      if (isDev()) {
         try {
           const response = await fetch("/api/update-navbar", {
             method: "POST",
@@ -73,7 +72,7 @@ const UpdateNavbarPage = () => {
     payload: ActionPayload,
     buttonId: string
   ) => {
-    if (isDev) {
+    if (isDev()) {
       setLoading(buttonId);
       try {
         const response = await fetch("/api/update-navbar", {

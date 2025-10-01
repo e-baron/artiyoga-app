@@ -1,15 +1,18 @@
 import { withContentlayer } from "next-contentlayer2";
 import type { NextConfig } from "next";
 import siteConfig from "@/config/site-config.json";
-
-const isDev = process.env.NODE_ENV === "development";
+import { isDev } from "@/utils/env";
 
 const nextConfig: NextConfig = {
-  output: "export",
-  basePath: isDev ? "" : siteConfig.basePath,
+  output: "standalone",
+  basePath: isDev() ? "" : siteConfig.basePath,
 
   experimental: {
     globalNotFound: true,
+  },
+
+  env: {
+    FORCE_DEV: process.env.FORCE_DEV, // available at build time (and runtime in server-side code)
   },
 };
 

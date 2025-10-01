@@ -10,8 +10,7 @@ import {
 import { Box, Button, TextField, Typography, CircularProgress } from "@mui/material";
 
 import { useEffect, useState } from "react";
-
-const isDev = process.env.NODE_ENV === "development";
+import { isDev } from "@/utils/env";
 
 const PublishPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -30,7 +29,7 @@ const PublishPage = () => {
 
   useEffect(() => {
     const fetchUnpublishedItems = async () => {
-      if (isDev) {
+      if (isDev()) {
         try {
           const response = await fetch("/api/publish", {
             method: "POST",

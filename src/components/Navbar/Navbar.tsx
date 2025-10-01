@@ -21,8 +21,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import { useTheme } from "@mui/material/styles";
 import DarkLightToggler from "../DarkLightToggler/DarkLightToggler";
-
-const isDev = process.env.NODE_ENV === "development";
+import { isDev } from "@/utils/env";
 
 interface NavbarProps {
   siteMetaData: SiteMetaData;
@@ -80,7 +79,7 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
         {siteMetaData.menuLinks.map((link) => {
           if (
             !link.subMenu &&
-            (!link.protected || (link.protected && isDev))
+            (!link.protected || (link.protected && isDev()))
           ) {
             return (
               <ListItem
@@ -103,7 +102,7 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
             );
           }
           // Submenu
-          if (link && (!link.protected || (link.protected && isDev)))
+          if (link && (!link.protected || (link.protected && isDev())))
             return (
               <ListItem
                 key={"drawer" + link.name}
@@ -121,7 +120,7 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
 
                 <List sx={{ paddingLeft: 2, display: "block" }}>
                   {link.subMenu &&
-                    (!link.protected || (link.protected && isDev)) &&
+                    (!link.protected || (link.protected && isDev())) &&
                     link.subMenu.map((subLink) => (
                       <ListItem key={"drawer" + subLink.name} disablePadding>
                         <ListItemButton
@@ -193,7 +192,7 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
             {siteMetaData.menuLinks.map((link) => (
               <Box key={link.name} sx={{ display: "inline" }}>
                 {link.subMenu &&
-                (!link.protected || (link.protected && isDev)) ? (
+                (!link.protected || (link.protected && isDev())) ? (
                   <>
                     <Button
                       color="inherit"
@@ -224,7 +223,7 @@ const Navbar = ({ siteMetaData }: NavbarProps) => {
                     </Menu>
                   </>
                 ) : (
-                  (!link.protected || (link.protected && isDev)) && (
+                  (!link.protected || (link.protected && isDev())) && (
                     <Button
                       href={link.link === "" ? "#" : link.link}
                       LinkComponent={Link}
