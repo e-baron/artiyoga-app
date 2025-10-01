@@ -212,7 +212,6 @@ const publishToGitHubPages = async (branch = "dev") => {
     // Step 1: Copy project files to the new directory
     const projectDir = path.resolve(".");
     await checkoutIndexLike(projectDir, distDir);
-    copyAdditionalProjectFiles(distDir, [".env.production", ".nojekyll", "CNAME"]);
 
     console.log("Project files copied to dist directory.");
 
@@ -260,6 +259,8 @@ const publishToGitHubPages = async (branch = "dev") => {
           env: cleanEnv,
         }
       );
+      const outDir = path.join(distDir, "out");
+      copyAdditionalProjectFiles(outDir, [".nojekyll", "CNAME"]);
 
       if (buildResult.status !== 0) {
         throw new Error(`npm run build failed with code ${buildResult.status}`);
