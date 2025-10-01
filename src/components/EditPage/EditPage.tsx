@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Typography, Box, Grid } from "@mui/material";
+import { Button, Typography, Box, Grid, CircularProgress } from "@mui/material"; // Import CircularProgress
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
 import { MdxPage } from "@/types";
@@ -19,6 +19,7 @@ const EditPage = ({ page }: EditPageProps) => {
   const [content, setContent] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state for the save button
 
   // Fetch the raw content of the page using the POST API
   const fetchRawContent = async () => {
@@ -48,6 +49,7 @@ const EditPage = ({ page }: EditPageProps) => {
 
   // Save the updated raw content
   const saveContent = async () => {
+    setLoading(true); // Set loading to true when the save button is clicked
     try {
       const response = await fetch("/api/update-page", {
         method: "POST",
@@ -71,6 +73,8 @@ const EditPage = ({ page }: EditPageProps) => {
       console.error("Error updating content:", error);
       setSuccessMessage(null);
       setErrorMessage("An error occurred while updating the content.");
+    } finally {
+      setLoading(false); // Reset loading to false when the API call completes
     }
   };
 
@@ -133,7 +137,6 @@ const EditPage = ({ page }: EditPageProps) => {
                 value={content || ""}
                 extensions={[markdown()]} // Enable Markdown syntax highlighting
                 onChange={(value) => setContent(value)} // Update content state on change
-                // height="400px"
                 theme="light"
                 style={{
                   fontFamily: "monospace",
@@ -147,19 +150,16 @@ const EditPage = ({ page }: EditPageProps) => {
               size={6}
               sx={{
                 height: "100%",
-                
                 overflow: "hidden",
               }}
             >
               <Box
                 sx={{
-                  
                   backgroundColor: "#f9f9f9",
                   height: "100%",
-                  // height: "400px",
-                  justifyContent: "center", 
-                display: "flex",
-                alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
                   overflow: "hidden",
                 }}
               >
@@ -173,19 +173,22 @@ const EditPage = ({ page }: EditPageProps) => {
               </Box>
             </Grid>
           </Grid>
-          <Box sx={{ marginTop: "1rem", marginBottom: "2rem", }}>
+          <Box sx={{ marginTop: "1rem", marginBottom: "2rem" }}>
             <Button
               variant="contained"
               color="primary"
               onClick={saveContent}
+              disabled={loading} // Disable the button while loading
+              startIcon={loading && <CircularProgress size={20} />} // Add spinner
               sx={{ marginRight: "1rem" }}
             >
-              Save
+              {loading ? "Saving..." : "Save"}
             </Button>
             <Button
               variant="outlined"
               color="secondary"
               onClick={() => setIsEditing(false)}
+              disabled={loading} // Disable cancel button while saving
             >
               Cancel
             </Button>

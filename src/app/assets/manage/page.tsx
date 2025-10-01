@@ -23,13 +23,13 @@ const ManageAssetsPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [filepath, setFilepath] = useState<string>(""); // State for the filepath
   const [assets, setAssets] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null); // Track which button is loading
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch the list of assets
   const fetchAssets = async () => {
-    setLoading(true);
+    setLoading("fetch"); // Set loading for the fetch operation
     setError(null);
     try {
       const response = await fetch("/api/assets", {
@@ -50,7 +50,7 @@ const ManageAssetsPage = () => {
       console.error("Error fetching assets:", err);
       setError("An error occurred while fetching assets.");
     } finally {
-      setLoading(false);
+      setLoading(null); // Reset loading
     }
   };
 
@@ -67,7 +67,7 @@ const ManageAssetsPage = () => {
       return;
     }
 
-    setLoading(true);
+    setLoading("upload"); // Set loading for the upload operation
     setError(null);
     setMessage(null);
 
@@ -93,13 +93,13 @@ const ManageAssetsPage = () => {
       console.error("Error uploading file:", err);
       setError("An error occurred while uploading the file.");
     } finally {
-      setLoading(false);
+      setLoading(null); // Reset loading
     }
   };
 
   // Handle file deletion
   const handleDelete = async (filepath: string) => {
-    setLoading(true);
+    setLoading(filepath); // Set loading for the specific delete operation
     setError(null);
     setMessage(null);
 
@@ -123,7 +123,7 @@ const ManageAssetsPage = () => {
       console.error("Error deleting file:", err);
       setError("An error occurred while deleting the file.");
     } finally {
-      setLoading(false);
+      setLoading(null); // Reset loading
     }
   };
 
@@ -175,10 +175,11 @@ const ManageAssetsPage = () => {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={loading}
+          disabled={loading === "upload"} // Disable while uploading
+          startIcon={loading === "upload" && <CircularProgress size={20} />} // Add spinner
           sx={{ alignSelf: "flex-start", width: "200px" }} // Restrict button width
         >
-          Upload
+          {loading === "upload" ? "Uploading..." : "Upload"}
         </Button>
       </Box>
 
@@ -190,7 +191,7 @@ const ManageAssetsPage = () => {
       <Typography variant="h6" gutterBottom>
         Current Assets
       </Typography>
-      {loading ? (
+      {loading === "fetch" ? (
         <CircularProgress />
       ) : (
         <TableContainer component={Paper}>
@@ -219,8 +220,13 @@ const ManageAssetsPage = () => {
                       edge="end"
                       aria-label="delete"
                       onClick={() => handleDelete(`public/${asset}`)}
+                      disabled={loading === `public/${asset}`} // Disable while deleting
                     >
-                      <DeleteIcon />
+                      {loading === `public/${asset}` ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        <DeleteIcon />
+                      )}
                     </IconButton>
                   </TableCell>
                 </TableRow>

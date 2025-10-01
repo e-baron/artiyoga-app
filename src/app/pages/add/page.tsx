@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  CircularProgress,
+} from "@mui/material"; // Import CircularProgress
 import { useState, useRef } from "react";
 
 const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
@@ -8,6 +14,7 @@ const isLocal = process.env.NEXT_PUBLIC_NODE_ENV === "development";
 const AddPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state for the button
 
   // Ref for the form element
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -26,6 +33,7 @@ const AddPage = () => {
 
     if (isLocal) {
       // Call the server function only in development mode
+      setLoading(true); // Set loading to true when the button is clicked
       try {
         const response = await fetch("/api/create-page", {
           method: "POST",
@@ -53,6 +61,8 @@ const AddPage = () => {
           "An error occurred while creating the page. " + errorMessage
         );
         setSuccessMessage(null);
+      } finally {
+        setLoading(false); // Reset loading to false when the API call completes
       }
     } else {
       // In static export mode, just log the pagename
@@ -94,8 +104,14 @@ const AddPage = () => {
           required
           sx={{ marginBottom: "1rem" }}
         />
-        <Button type="submit" variant="contained" color="primary">
-          Create Page
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading} // Disable the button while loading
+          startIcon={loading && <CircularProgress size={20} />} // Add spinner
+        >
+          {loading ? "Creating..." : "Create Page"}
         </Button>
       </form>
     </Box>
