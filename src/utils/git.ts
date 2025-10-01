@@ -71,6 +71,10 @@ const handleGitFileCommit = async (
  * Handles uncommitted changes and switches to the "dev" branch. If the "dev" branch doesn't exist, it creates it.
  * @param author The author to use for the commit (e.g., "web-app <web-app@example.com>").
  */
+/**
+ * Handles uncommitted changes and switches to the "dev" branch. If the "dev" branch doesn't exist, it creates it.
+ * @param author The author to use for the commit (e.g., "web-app <web-app@example.com>").
+ */
 const handleUncommittedChangesAndSwitchToDev = async (
   author = "web-app <web-app@example.com>"
 ) => {
@@ -82,15 +86,20 @@ const handleUncommittedChangesAndSwitchToDev = async (
     const currentBranch = await git.currentBranch({ fs, dir: repoDir });
     if (currentBranch !== "dev") {
       // Check for uncommitted changes
-      const statusMatrix = await git.statusMatrix({ fs, dir: repoDir });
-      const hasUncommittedChanges = statusMatrix.some(
-        ([, , worktreeStatus]) => worktreeStatus !== 0
-      );
+      console.log("Checking for uncommitted changes...");
+      const FILE = 0,
+        WORKDIR = 2,
+        STAGE = 3;
 
-      if (hasUncommittedChanges) {
-        console.log("Uncommitted changes detected. Committing them...");
-        // Stage and commit all changes
-        for (const [filepath] of statusMatrix) {
+      const statusMatrix = await git.statusMatrix({ fs, dir: repoDir });
+      const uncommittedFiles = statusMatrix
+        .filter((row) => row[WORKDIR] !== row[STAGE]) // Detect files with differences between WORKDIR and STAGE
+        .map((row) => row[FILE]); // Extract file paths
+
+      if (uncommittedFiles.length > 0) {
+        console.log("Uncommitted changes detected. Staging and committing...");
+        // Stage and commit all uncommitted files
+        for (const filepath of uncommittedFiles) {
           console.log(`Staging file: ${filepath}`);
           await git.add({ fs, dir: repoDir, filepath });
         }
@@ -105,6 +114,8 @@ const handleUncommittedChangesAndSwitchToDev = async (
           },
         });
         console.log("Changes committed.");
+      } else {
+        console.log("No uncommitted changes detected.");
       }
 
       // Check if the "dev" branch exists
@@ -115,8 +126,9 @@ const handleUncommittedChangesAndSwitchToDev = async (
         await git.branch({ fs, dir: repoDir, ref: "dev" });
         console.log("'dev' branch created.");
       }
-      console.log("Switching to 'dev' branch...");
+
       // Switch to the "dev" branch
+      console.log("Switching to 'dev' branch...");
       await git.checkout({ fs, dir: repoDir, ref: "dev", nonBlocking: true });
       console.log("Switched to 'dev' branch.");
     }
