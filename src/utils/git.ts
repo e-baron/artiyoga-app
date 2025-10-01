@@ -104,7 +104,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
       }
 
       // Check if the "dev" branch exists
-      console.log("Checking if 'dev' branch exists...");  
+      console.log("Checking if 'dev' branch exists...");
       const branches = await git.listBranches({ fs, dir: repoDir });
       if (!branches.includes("dev")) {
         console.log("'dev' branch does not exist. Creating it...");
@@ -113,7 +113,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
       }
 
       // Switch to the "dev" branch
-      await git.checkout({ fs, dir: repoDir, ref: "dev" });
+      await git.checkout({ fs, dir: repoDir, ref: "dev", nonBlocking: true });
       console.log("Switched to 'dev' branch.");
     }
   } catch (error) {
