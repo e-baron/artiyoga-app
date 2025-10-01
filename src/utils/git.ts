@@ -129,7 +129,13 @@ const handleUncommittedChangesAndSwitchToDev = async (
 
       // Switch to the "dev" branch
       console.log("Switching to 'dev' branch...");
-      await git.checkout({ fs, dir: repoDir, ref: "dev", nonBlocking: true });
+      await git.checkout({
+        fs,
+        dir: repoDir,
+        ref: "dev",
+        nonBlocking: true,
+        noCheckout: true,
+      });
       console.log("Switched to 'dev' branch.");
     }
   } catch (error) {
