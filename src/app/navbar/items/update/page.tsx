@@ -13,7 +13,7 @@ import {
   TableRow,
   TextField,
   Typography,
-  CircularProgress, // Import CircularProgress
+  CircularProgress,
 } from "@mui/material";
 
 // Define the structure of a menu link
@@ -40,8 +40,7 @@ const UpdateNavbarPage = () => {
   const [menuLinks, setMenuLinks] = useState<MenuLink[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<string | null>(null); // Track which button is loading
-
+  const [loading, setLoading] = useState<string | null>(null);
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
@@ -75,7 +74,7 @@ const UpdateNavbarPage = () => {
     buttonId: string
   ) => {
     if (isLocal) {
-      setLoading(buttonId); // Set the loading state for the specific button
+      setLoading(buttonId);
       try {
         const response = await fetch("/api/update-navbar", {
           method: "POST",
@@ -102,7 +101,7 @@ const UpdateNavbarPage = () => {
         setErrorMessage("An error occurred while processing the action.");
         setSuccessMessage(null);
       } finally {
-        setLoading(null); // Reset the loading state
+        setLoading(null);
       }
     }
   };
@@ -250,7 +249,61 @@ const UpdateNavbarPage = () => {
                     </Button>
                   </form>
 
-                  {/* Delete Item Form */}
+                  {/* Add Child Item Form*/}
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      handleAction(
+                        "add-child",
+                        {
+                          parentIndex,
+                          name: formData.get("name") as string,
+                          link: formData.get("link") as string,
+                          index: 0,
+                          protected: formData.get("protected") === "on",
+                        },
+                        `add-child-${parentIndex}`
+                      );
+                      e.currentTarget.reset();
+                    }}
+                  >
+                    <TextField
+                      name="name"
+                      placeholder="Child Item Name"
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <TextField
+                      name="link"
+                      placeholder="Child Item Link"
+                      size="small"
+                      sx={{ marginRight: "0.5rem" }}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox name="protected" />}
+                      label="Protected"
+                    />
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      color="primary"
+                      disabled={loading === `add-child-${parentIndex}`} // Disable while loading
+                      startIcon={
+                        loading === `add-child-${parentIndex}` && (
+                          <CircularProgress size={20} />
+                        )
+                      }
+                      sx={{ marginRight: "0.5rem" }}
+                    >
+                      {loading === `add-child-${parentIndex}`
+                        ? "Adding..."
+                        : " Add Child Item"}
+                    </Button>
+                  </form>
+
+                  {/* Add Delete Item Form */}
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -270,7 +323,7 @@ const UpdateNavbarPage = () => {
                       type="submit"
                       variant="outlined"
                       color="secondary"
-                      disabled={loading === `delete-${parentIndex}`} // Disable while loading
+                      disabled={loading === `delete-${parentIndex}`}
                       startIcon={
                         loading === `delete-${parentIndex}` && (
                           <CircularProgress size={20} />
@@ -285,6 +338,170 @@ const UpdateNavbarPage = () => {
                   </form>
                 </TableCell>
               </TableRow>
+
+              {/* Render Submenu */}
+              {item.subMenu &&
+                item.subMenu.map((subItem, index) => (
+                  <TableRow key={`${parentIndex}-${index}`}>
+                    <TableCell sx={{ paddingLeft: "2rem" }}>
+                      {subItem.name}
+                    </TableCell>
+                    <TableCell>{subItem.link}</TableCell>
+                    <TableCell>
+                      <Checkbox checked={subItem.protected} disabled />
+                    </TableCell>
+                    <TableCell>
+                      {/* Update Form for Submenu Item */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
+                          handleAction(
+                            "edit",
+                            {
+                              parentIndex,
+                              index,
+                              name: formData.get("name") as string,
+                              link: formData.get("link") as string,
+                              protected: formData.get("protected") === "on",
+                            },
+                            `edit-${parentIndex}-${index}`
+                          );
+                        }}
+                      >
+                        <TextField
+                          name="name"
+                          defaultValue={subItem.name}
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <TextField
+                          name="link"
+                          defaultValue={subItem.link}
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              name="protected"
+                              checked={subItem.protected}
+                            />
+                          }
+                          label="Protected"
+                        />
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="primary"
+                          disabled={loading === `edit-${parentIndex}-${index}`}
+                          startIcon={
+                            loading === `edit-${parentIndex}-${index}` && (
+                              <CircularProgress size={20} />
+                            )
+                          }
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          {loading === `edit-${parentIndex}-${index}`
+                            ? "Updating..."
+                            : "Update"}
+                        </Button>
+                      </form>
+
+                      {/* Add Next Item Form */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
+                          handleAction(
+                            "add",
+                            {
+                              parentIndex: parentIndex,
+                              index: index,
+                              name: formData.get("name") as string,
+                              link: formData.get("link") as string,
+                              protected: formData.get("protected") === "on",
+                            },
+                            `add-next-${parentIndex}-${index}`
+                          );
+                          e.currentTarget.reset();
+                        }}
+                      >
+                        <TextField
+                          name="name"
+                          placeholder="Next Item Name"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <TextField
+                          name="link"
+                          placeholder="Next Item Link"
+                          size="small"
+                          sx={{ marginRight: "0.5rem" }}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox name="protected" />}
+                          label="Protected"
+                        />
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="primary"
+                          disabled={
+                            loading === `add-next-${parentIndex}-${index}`
+                          } // Disable while loading
+                          startIcon={
+                            loading === `add-next-${parentIndex}-${index}` && (
+                              <CircularProgress size={20} />
+                            )
+                          }
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          {loading === `add-next-${parentIndex}-${index}`
+                            ? "Adding..."
+                            : "Add Next Item"}
+                        </Button>
+                      </form>
+
+                      {/* Delete Submenu Item Form */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleAction(
+                            "delete",
+                            {
+                              parentIndex,
+                              index,
+                              name: subItem.name,
+                              link: subItem.link,
+                              protected: subItem.protected,
+                            },
+                            `delete-${parentIndex}-${index}`
+                          );
+                        }}
+                      >
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          color="secondary"
+                          disabled={
+                            loading === `delete-${parentIndex}-${index}`
+                          }
+                          startIcon={
+                            loading === `delete-${parentIndex}-${index}` && (
+                              <CircularProgress size={20} />
+                            )
+                          }
+                          sx={{ marginRight: "0.5rem" }}
+                        >
+                          {loading === `delete-${parentIndex}-${index}`
+                            ? "Deleting..."
+                            : "Delete Item"}
+                        </Button>
+                      </form>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </React.Fragment>
           ))}
         </TableBody>
