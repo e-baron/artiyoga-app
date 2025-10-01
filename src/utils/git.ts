@@ -94,6 +94,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
           console.log(`Staging file: ${filepath}`);
           await git.add({ fs, dir: repoDir, filepath });
         }
+        console.log("Committing changes...");
         await git.commit({
           fs,
           dir: repoDir,
@@ -103,6 +104,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
             email: author.split("<")[1]?.replace(">", ""),
           },
         });
+        console.log("Changes committed.");
       }
 
       // Check if the "dev" branch exists
