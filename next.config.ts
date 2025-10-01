@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
   env: {
     FORCE_DEV: process.env.FORCE_DEV, // available at build time (and runtime in server-side code)
   },
+  images: {
+    // Prior to use Sharp for image optimization, we disable the built-in Next.js image optimization
+    unoptimized: true,
+  },
 };
 
 export default withContentlayer(nextConfig);

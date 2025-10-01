@@ -6,6 +6,7 @@ import fs from "node:fs";
 
 let win: BrowserWindow | null = null;
 let server: ChildProcess | null = null;
+let starting = false;
 
 const PORT = process.env.PORT || "3001";
 const TIMEOUT = 60000;
@@ -13,35 +14,53 @@ const RETRY = 600;
 const FORCE_DEV = process.env.FORCE_DEV === "1";
 
 function rootDir() {
-  return app.isPackaged
-    ? path.join(process.resourcesPath, "app")
-    : path.join(__dirname, "..", "..");
+  return app.getAppPath(); // resolves to Resources/app (packaged) or project root (dev)
 }
-
-function entry() {
-  return path.join(rootDir(), ".next", "standalone", "server.js");
+function standaloneDir() {
+  return path.join(rootDir(), ".next", "standalone");
+}
+function serverEntry() {
+  return path.join(standaloneDir(), "server.js");
 }
 
 function startServer() {
-  if (server) return;
-  const e = entry();
-  if (!fs.existsSync(e)) {
-    console.error("[Electron] Missing standalone server:", e);
+  if (server || starting) return;
+  starting = true;
+
+  const entry = serverEntry();
+  const pubImg = path.join(rootDir(), "public", "images", "raphael.jpg");
+
+  console.log("[Electron] rootDir =", rootDir());
+  console.log("[Electron] standaloneDir =", standaloneDir());
+  console.log("[Electron] server.js exists =", fs.existsSync(entry));
+  console.log("[Electron] sample public image exists =", fs.existsSync(pubImg));
+
+  if (!fs.existsSync(entry)) {
+    console.error("[Electron] Missing standalone server:", entry);
+    starting = false;
     return;
   }
-  console.log("[Electron] Starting standalone Next:", e, "PORT", PORT);
-  server = spawn(process.execPath, [e], {
-    cwd: rootDir(),
+
+  server = spawn(process.execPath, [entry], {
+    cwd: standaloneDir(), // IMPORTANT
     env: {
       ...process.env,
+      ELECTRON_RUN_AS_NODE: "1",
       NODE_ENV: "production",
-      FORCE_DEV: "1", // keeps basePath cleared if built that way
+      FORCE_DEV: FORCE_DEV ? "1" : undefined,
       PORT: PORT,
     },
     stdio: "inherit",
   });
-  server.on("exit", (c) => {
-    console.log("[Electron] Next server exited:", c);
+
+  server.on("error", (err) => {
+    console.error("[Electron] Server spawn error:", err);
+    starting = false;
+    server = null;
+  });
+  server.on("exit", (code, sig) => {
+    console.log("[Electron] Next server exited:", code, sig || "");
+    starting = false;
     server = null;
   });
 }
@@ -66,14 +85,23 @@ function waitFor(url: string) {
   });
 }
 
+function attachImage404Logging(w: BrowserWindow) {
+  w.webContents.session.webRequest.onCompleted((d) => {
+    if (d.statusCode === 404 && /\/images\//.test(d.url)) {
+      console.warn("[Electron][IMG 404]", d.url);
+    }
+  });
+}
+
 async function createWindow() {
   startServer();
   const basePath = FORCE_DEV ? "" : process.env.NEXT_BASE_PATH || "";
   const url = `http://localhost:${PORT}${basePath}`;
+
   try {
     await waitFor(url);
   } catch {
-    console.warn("[Electron] Server not confirmed ready");
+    console.warn("[Electron] Server not confirmed ready:", url);
   }
 
   win = new BrowserWindow({
@@ -84,6 +112,8 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+  attachImage404Logging(win);
+
   console.log("[Electron] Loading:", url);
   try {
     await win.loadURL(url);
@@ -91,6 +121,7 @@ async function createWindow() {
     console.error("[Electron] Load failed:", (e as Error).message);
     win.loadURL("data:text/plain,Failed to load Next server.");
   }
+
   win.on("closed", () => {
     win = null;
   });

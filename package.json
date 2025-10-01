@@ -8,33 +8,38 @@
     "watch:main": "tsc -p tsconfig.main.json -w",
     "dev": "concurrently -k -r -n NEXT,MAIN,ELECTRON \"npm:next:dev\" \"npm:watch:main\" \"wait-on tcp:3001 && electron .\"",
     "build:wrapper": "tsc -p tsconfig.main.json",
-    "build:next": "FORCE_DEV=1 next build",
-    "dist": "npm run build:wrapper && electron-builder",
+    "build:next": "FORCE_DEV=1 next build && node src/utils/prepare-standalone.ts",
+     "dist": "npm run build:next && npm run build:wrapper && electron-builder",
     "start": "electron ."
   },
   "build": {
     "appId": "be.e-baron.jamsite",
     "productName": "JamSite",
-    "asar": false,                
-     "files": [
+    "asar": false,
+    "files": [
       "dist-electron/main/**",
-      "src/**",
-      "public/**",    
-      "contentlayer.config.*",
-      "next.config.*",
-      "package.json",
-      "node_modules/**",         
-      "CNAME",
-      ".nojekyll",
-      "tsconfig.json",
-      "next-env.d.ts",
-      "eslint.config.mjs",
-      ".gitignore",
-      ".git/**"
+      ".next/standalone/**",
+      "package.json"
     ],
-    "mac": { "target": ["dmg","zip"] },
-    "win": { "target": ["nsis","zip"] },
-    "linux": { "target": ["AppImage","deb","tar.gz"] }
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ]
+    }
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.4",

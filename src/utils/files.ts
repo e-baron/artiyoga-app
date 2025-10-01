@@ -160,20 +160,18 @@ const deleteDirectory = (dirPath: string): boolean => {
   return false;
 };
 
-
-
 /**
  * Copies all project files to a new directory, including `.env.production` and `.nojekyll`.
  * @param targetDir The target directory where files will be copied.
  */
 const copyProjectFiles = (targetDir: string) => {
-      // Please use the git checkout-index command to copy only tracked files
+  // Please use the git checkout-index command to copy only tracked files
   try {
     // Ensure the target directory exists
     fs.mkdirSync(targetDir, { recursive: true });
     // Use git checkout-index to copy only tracked files
     execSync(`git checkout-index --all --prefix=${targetDir}/`, {
-      stdio: "inherit", // Inherit stdio to see command output      
+      stdio: "inherit", // Inherit stdio to see command output
     });
 
     // Add `.env.production` and `.nojekyll` to the target directory
@@ -229,7 +227,17 @@ const copyAdditionalProjectFiles = (
   }
 };
 
-
+function copyDir(src: string, dst: string) {
+  if (!fs.existsSync(src)) return;
+  fs.mkdirSync(dst, { recursive: true });
+  for (const e of fs.readdirSync(src)) {
+    const s = path.join(src, e);
+    const d = path.join(dst, e);
+    const st = fs.statSync(s);
+    if (st.isDirectory()) copyDir(s, d);
+    else fs.copyFileSync(s, d);
+  }
+}
 
 export {
   createFile,
@@ -244,4 +252,5 @@ export {
   deleteDirectory,
   copyProjectFiles,
   copyAdditionalProjectFiles,
+  copyDir
 };

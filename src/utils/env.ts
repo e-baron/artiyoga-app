@@ -1,3 +1,4 @@
+
 let development: boolean | null = null;
 
 const isDev = (): boolean | null => {
