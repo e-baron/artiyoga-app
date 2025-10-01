@@ -20,16 +20,27 @@ const handleGitFileCommit = async (
 ) => {
   try {
     const repoDir = path.resolve(".");
-    const filename = filePath.split("/").pop();
+    const absoluteFilePath = path.isAbsolute(filePath)
+      ? filePath
+      : path.resolve(repoDir, filePath); // Ensure the file path is absolute
+    const filename = absoluteFilePath.split("/").pop();
     if (!filename) {
       throw new Error("Invalid file path provided.");
     }
 
     // Add the file to the index
-    await git.add({ fs, dir: repoDir, filepath: filePath });
+    await git.add({
+      fs,
+      dir: repoDir,
+      filepath: path.relative(repoDir, absoluteFilePath),
+    });
 
     // Check if there are changes to commit
-    const status = await git.status({ fs, dir: repoDir, filepath: filePath });
+    const status = await git.status({
+      fs,
+      dir: repoDir,
+      filepath: path.relative(repoDir, absoluteFilePath),
+    });
     if (status === "unmodified") {
       console.log("No changes to commit.");
       return;
