@@ -3,7 +3,6 @@ import {
   getFilePath,
   fileExists,
   listFilesInDirectory,
-  createFile,
   deleteFile,
   readFile,
   updateFile,
@@ -12,10 +11,10 @@ import {
 
 import {
   handleGitFileCommit,
+  handleGitFileDelete,
   handleUncommittedChangesAndSwitchToDev,
 } from "@/utils/git";
 import { addUnpublishedAsset } from "@/utils/config";
-import { act } from "react";
 
 export async function POST(request: Request) {
   try {
@@ -85,8 +84,9 @@ export async function POST(request: Request) {
 
       await handleUncommittedChangesAndSwitchToDev();
 
+      console.log("Deleting file:", filepath);
       deleteFile(filepath);
-      await handleGitFileCommit(filepath, "delete (asset)");
+      await handleGitFileDelete(filepath);
 
       // Update the site-config.json to add the asset to unpublishedAssets
       const siteConfigPath = getFilePath("src/config/site-config.json");
@@ -125,3 +125,5 @@ export async function POST(request: Request) {
     { status: 400 }
   );
 }
+
+

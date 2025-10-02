@@ -28,12 +28,14 @@ const handleGitFileCommit = async (
       throw new Error("Invalid file path provided.");
     }
 
-    // Add the file to the index
+    // Add the file to the index if not already added
     await git.add({
       fs,
       dir: repoDir,
       filepath: path.relative(repoDir, absoluteFilePath),
     });
+
+    console.log(`Staged file: ${filename}`);
 
     // Check if there are changes to commit
     const status = await git.status({
@@ -61,6 +63,47 @@ const handleGitFileCommit = async (
     console.error("Error handling Git operations:", error);
     throw new Error(
       `Git operation failed: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};
+
+/**
+ * Handles the staging and committing of a file deletion.
+ * @param filePath The path to the file that has been deleted.
+ * @param author The author to use for the commit.
+ */
+const handleGitFileDelete = async (
+  filePath: string,
+  author = "web-app <web-app@example.com>"
+) => {
+  try {
+    const repoDir = path.resolve(".");
+    const relativeFilePath = path.relative(repoDir, filePath);
+    const filename = path.basename(relativeFilePath);
+
+    // Use git.remove to stage the deletion.
+    // This tells Git that the file should be removed from the index.
+    await git.remove({ fs, dir: repoDir, filepath: relativeFilePath });
+    console.log(`Staged deletion of file: ${filename}`);
+
+    // Commit the staged deletion
+    await git.commit({
+      fs,
+      dir: repoDir,
+      message: `docs: delete ${filename} (auto-generated)`,
+      author: {
+        name: author.split(" <")[0],
+        email: author.split("<")[1]?.replace(">", ""),
+      },
+    });
+
+    console.log(`Committed deletion of file: ${filename}`);
+  } catch (error) {
+    console.error("Error handling Git delete operation:", error);
+    throw new Error(
+      `Git delete failed: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
@@ -348,4 +391,5 @@ export {
   mergeBranches,
   publishToGitHubPages,
   checkoutIndexLike,
+  handleGitFileDelete,
 };
