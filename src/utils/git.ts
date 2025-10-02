@@ -4,10 +4,7 @@ import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
 import fse from "fs-extra";
-import {
-  copyAdditionalProjectFiles,
-  deleteDirectory,
-} from "@/utils/files";
+import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
 
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
@@ -247,29 +244,26 @@ const mergeBranches = async (
 
 /**
  * Publishes the project to GitHub Pages using a simplified approach.
- * Instead of copying node_modules to a temp directory, we build directly 
+ * Instead of copying node_modules to a temp directory, we build directly
  * in the project directory and then copy only the output.
  */
-const publishToGitHubPages = async (
-  branch = "dev",
-  outDir = "out"
-) => {
+const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
   try {
     const outDirPath = path.resolve(outDir);
     const projectDir = path.resolve(".");
 
     // Step 1: Build the project directly in the current directory
     console.log("Building project for export...");
-    
+
     // Backup the current next.config.js
     const nextConfigPath = path.join(projectDir, "next.config.js");
     const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
     const nextConfigExportPath = path.join(projectDir, "next.config.export.js");
-    
+
     if (fs.existsSync(nextConfigPath)) {
       fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
     }
-    
+
     // Use the export config for building
     if (fs.existsSync(nextConfigExportPath)) {
       fs.copyFileSync(nextConfigExportPath, nextConfigPath);
@@ -324,7 +318,6 @@ const publishToGitHubPages = async (
 
       // Copy additional project files to the output
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
-
     } finally {
       // Restore the original next.config.js
       if (fs.existsSync(nextConfigBackupPath)) {
@@ -338,7 +331,7 @@ const publishToGitHubPages = async (
     console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) => {
       ghpages.publish(
-        path.join(outDirPath, "out"),
+        outDirPath,
         {
           branch: "gh-pages",
           message: "Auto-publish to GitHub Pages",
