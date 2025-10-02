@@ -21,11 +21,9 @@ export async function POST(request: Request) {
     const siteConfig = JSON.parse(readFile(siteConfigPath));
 
     const filePath = await resolveMdxFilePath(slug);
-    console.log("RESOLVED file path:", filePath);
 
     if (action === "read") {
       const fileContent = readFile(filePath);
-      console.log("File content read:", fileContent);
       return NextResponse.json({ code: fileContent });
     }
 

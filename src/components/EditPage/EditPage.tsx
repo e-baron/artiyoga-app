@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button, Typography, Box, Grid, CircularProgress } from "@mui/material"; // Import CircularProgress
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
@@ -8,7 +8,7 @@ import { MdxPage } from "@/types";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 import { isDev } from "@/utils/env";
 import { MdxViewer } from "../MdxContent/MdxViewer";
-import { useRouter } from "next/navigation"; // ADD
+// import { useRouter } from "next/navigation"; // ADD
 
 interface EditPageProps {
   page: MdxPage;
@@ -20,7 +20,34 @@ const EditPage = ({ page }: EditPageProps) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // Add loading state for the save button
-  const router = useRouter(); // ADD
+  // const router = useRouter();
+  useEffect(() => {
+    fetchPage();
+  }, []);
+
+  const fetchPage = async () => {
+    try {
+      const response = await fetch("/api/pages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "read",
+          slug: page._raw?.flattenedPath || "",
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setContent(data.code);
+        setErrorMessage(null);
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Failed to fetch content.");
+      }
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      setErrorMessage("An error occurred while fetching the content.");
+    }
+  };
 
   // Save the updated raw content
   const saveContent = async () => {
@@ -39,7 +66,8 @@ const EditPage = ({ page }: EditPageProps) => {
         setIsEditing(false);
         setSuccessMessage("Content updated successfully!");
         setErrorMessage(null);
-        router.refresh(); // Refresh the page to show updated content
+        await fetchPage();
+        // router.refresh(); // Refresh the page to show updated content
       } else {
         const errorData = await response.json();
         setSuccessMessage(null);
@@ -89,7 +117,7 @@ const EditPage = ({ page }: EditPageProps) => {
       {/* Render the MDX content or the raw content editor */}
       {!isEditing ? (
         page?.body?.code ? (
-          <MdxViewer content={page.body.raw} />
+          <MdxViewer content={content || page.body.raw} />
         ) : (
           <Typography variant="body2" color="textSecondary">
             No content available to display.
