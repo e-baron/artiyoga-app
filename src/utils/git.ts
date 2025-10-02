@@ -374,7 +374,7 @@ const publishToGitHubPages = async (
   }
 };
 
-//**
+/**
  * Mimics: git checkout-index -a --prefix=<targetDir>
  * This version explicitly IGNORES any paths inside node_modules to prevent
  * conflicts with the subsequent node_modules copy operation.
@@ -421,8 +421,6 @@ async function checkoutIndexLike(repoDir: string, targetDir: string) {
 
   await walkTree(tree);
 }
-
-
 
 export {
   handleGitFileCommit,
