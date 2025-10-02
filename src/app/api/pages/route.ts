@@ -61,6 +61,11 @@ export async function POST(request: Request) {
   }
 }
 
+export async function generateStaticParams() {
+  const allPages = await getAllRuntimePages();
+  return allPages; 
+}
+
 export async function GET() {
   try {
     if (!isDev()) {
