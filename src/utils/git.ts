@@ -7,11 +7,8 @@ import fse from "fs-extra";
 import {
   copyAdditionalProjectFiles,
   deleteDirectory,
-  deleteFile,
-  updateFileName,
 } from "@/utils/files";
-import { copyDir } from "@/utils/files";
-import { update } from "lodash";
+
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.

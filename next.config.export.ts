@@ -6,7 +6,7 @@ import { isDev } from "@/utils/env";
 const nextConfig: NextConfig = {
   // output: "standalone",
   output: "export",
-  basePath: isDev() ? "" : siteConfig.basePath,
+  basePath: siteConfig.basePath,
 
   experimental: {
     globalNotFound: true,
