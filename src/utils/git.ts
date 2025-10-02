@@ -4,7 +4,7 @@ import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
 import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
-
+import { isDev } from "@/utils/env";
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.

@@ -2,9 +2,8 @@ import { Frontmatter } from "@/types";
 import fs from "fs";
 import path from "path";
 import siteConfig from "@/config/site-config.json";
-import { copySync } from "fs-extra";
-import ignore from "ignore";
 import { execSync } from "child_process";
+
 
 // Function to generate frontmatter string
 const generateFrontmatter = (frontmatter: Frontmatter): string => {
