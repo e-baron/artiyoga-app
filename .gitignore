@@ -24,6 +24,7 @@
 /build
 
 /dist
+/dist-electron
 /export
 
 # misc

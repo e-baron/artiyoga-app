@@ -31,7 +31,14 @@
       "next.config.ts",
       "CNAME",
       ".nojekyll",
-      "next-env.d.ts"
+      "next-env.d.ts",
+      "README.md",
+      "eslint.config.mjs",
+      "tsconfig.main.json",
+      "package-lock.json",
+      "contentlayer.config.ts",
+      ".github/**",
+      ".vscode/**"
     ],
    "afterPack": "./src/utils/packaging-git.ts",
     "mac": {
