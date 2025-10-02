@@ -17,7 +17,6 @@ const readRuntimePage = (slug: string) => {
   const filePath = resolveRuntimeMdxPath(slug || "index");
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
-  console.log("READRUNTIME");
   return {
     _raw: { flattenedPath: slug },
     slug,

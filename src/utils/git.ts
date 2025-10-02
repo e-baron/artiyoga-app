@@ -256,11 +256,12 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     console.log("Building project for export...");
 
     // Backup the current next.config.js
-    const nextConfigPath = path.join(projectDir, "next.config.js");
+    const nextConfigPath = path.join(projectDir, "next.config.ts");
     const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
-    const nextConfigExportPath = path.join(projectDir, "next.config.export.js");
+    const nextConfigExportPath = path.join(projectDir, "next.config.export.ts");
 
     if (fs.existsSync(nextConfigPath)) {
+      console.log("Backing up current next.config.js...");
       fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
     }
 
@@ -301,21 +302,6 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       }
       console.log("Project built successfully.");
 
-      /*// Step 2: Copy only the built output to temp directory
-      deleteDirectory(tempExportDirPath);
-      console.log(`Deleted old ${tempExportDirPath} directory.`);
-
-      const outDir = path.join(projectDir, "out");
-      const tempOutDir = path.join(tempExportDirPath, "out");
-
-      if (!fs.existsSync(outDir)) {
-        throw new Error("Build output directory not found. Build may have failed.");
-      }
-
-      // Copy the built output
-      fse.copySync(outDir, tempOutDir);
-      console.log("Copied build output to temporary directory.");*/
-
       // Copy additional project files to the output
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
     } finally {
@@ -323,7 +309,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       if (fs.existsSync(nextConfigBackupPath)) {
         fs.copyFileSync(nextConfigBackupPath, nextConfigPath);
         fs.unlinkSync(nextConfigBackupPath);
-        console.log("Restored original next.config.js.");
+        console.log("Restored original next.config.ts.");
       }
     }
 
