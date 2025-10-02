@@ -67,6 +67,22 @@ export default async function copyGitToPackage(
       console.warn("[packaging-git] .github directory not found at", githubSrc);
     }
 
+    // Copy package-lock.json if it exists
+    const packageLockSrc = path.join(process.cwd(), "package-lock.json");
+    const packageLockDest = path.join(appPath, "package-lock.json");
+    if (await fs.pathExists(packageLockSrc)) {
+      console.log(
+        "[packaging-git] Copying package-lock.json to",
+        packageLockDest
+      );
+      await fs.copy(packageLockSrc, packageLockDest);
+    } else {
+      console.warn(
+        "[packaging-git] package-lock.json file not found at",
+        packageLockSrc
+      );
+    }       
+
     console.log("[packaging-git] Git files copy completed.");
   } catch (error) {
     console.error("[packaging-git] Error copying git files:", error);

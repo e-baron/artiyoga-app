@@ -38,9 +38,10 @@
       "package-lock.json",
       "contentlayer.config.ts",
       ".github/**",
-      ".vscode/**"
+      ".vscode/**",
+      "main/**"
     ],
-   "afterPack": "./src/utils/packaging-git.ts",
+    "afterPack": "./src/utils/packaging-git.ts",
     "mac": {
       "target": [
         "dmg",
