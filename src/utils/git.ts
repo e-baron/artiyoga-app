@@ -374,8 +374,10 @@ const publishToGitHubPages = async (
   }
 };
 
-/**
+//**
  * Mimics: git checkout-index -a --prefix=<targetDir>
+ * This version explicitly IGNORES any paths inside node_modules to prevent
+ * conflicts with the subsequent node_modules copy operation.
  *
  * @param repoDir  Path to the .git repository root
  * @param targetDir Destination folder to export the files into
@@ -388,6 +390,14 @@ async function checkoutIndexLike(repoDir: string, targetDir: string) {
   async function walkTree(treeEntries: git.TreeEntry[], basePath = "") {
     for (const entry of treeEntries) {
       const entryPath = path.join(basePath, entry.path);
+
+      // *** THE CRITICAL FIX ***
+      // Skip any paths that start with 'node_modules' to prevent conflicts
+      // with the subsequent fse.copySync operation
+      if (entryPath.startsWith("node_modules")) {
+        console.log(`Skipping Git-tracked path: ${entryPath}`);
+        continue;
+      }
 
       if (entry.type === "tree") {
         const { tree: childTree } = await git.readTree({
@@ -411,6 +421,8 @@ async function checkoutIndexLike(repoDir: string, targetDir: string) {
 
   await walkTree(tree);
 }
+
+
 
 export {
   handleGitFileCommit,
