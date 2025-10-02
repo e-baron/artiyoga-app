@@ -24,7 +24,14 @@
       "public/**",
       "node_modules/**",
       "package.json",
-      "src/**"
+      "src/**",
+      ".git/**",
+      ".gitignore",
+      "tsconfig.json",
+      "next.config.js",
+      "CNAME",
+      ".nojekyll",
+      "next-env.d.ts"
     ],
     "mac": {
       "target": [
