@@ -8,7 +8,8 @@ import {
   Box,
 } from "@mui/material";
 import { format, parseISO } from "date-fns";
-import { getAllRuntimePages } from "@/utils/runtime-pages";
+import { useEffect, useState } from "react";
+import { MdxPage } from "@/types";
 
 interface ContentIndexProps {
   daysToConsiderNewsOutdated?: number;
@@ -29,9 +30,18 @@ const ContentIndex = ({
   contentPagePath = "contents/",
   suppressPotentialMarkdownCodeInExcerpt = true,
 }: ContentIndexProps) => {
-  
+  const [allPages, setAllPages] = useState<MdxPage[]>([]);
 
-  const allPages = getAllRuntimePages();
+  // Fetch all pages on component mount
+  useEffect(() => {
+    const fetchPages = async () => {
+      const pages = await fetch("/api/pages");
+      const data = await pages.json();
+      setAllPages(data);
+    };
+    fetchPages();
+  }, []);
+
   let allContents = allPages.filter((page) =>
     page._raw.flattenedPath.startsWith(contentPagePath)
   );
@@ -53,7 +63,7 @@ const ContentIndex = ({
       const isPublished = newsItem.published;
       const isInCategory =
         requestedCategoriesOnly.length === 0 ||
-        requestedCategoriesOnly.includes(newsItem.category);
+        requestedCategoriesOnly.includes(newsItem.category || "none");
       const isWithinDateRange =
         diffDays <= 0 || diffDays <= daysToConsiderNewsOutdated;
 
@@ -69,7 +79,7 @@ const ContentIndex = ({
         if (
           contentItem.published &&
           (requestedCategoriesOnly.length === 0 ||
-            requestedCategoriesOnly.includes(contentItem.category))
+            requestedCategoriesOnly.includes(contentItem.category || "none"))
         )
           return (
             <Grid

@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { publish } from "gh-pages";
 
 const MDX_ROOT = path.join(process.cwd(), "src", "mdxPages");
 

@@ -13,6 +13,7 @@ import { addUnpublishedPage } from "@/utils/config";
 import { isDev } from "@/utils/env";
 import fs from "node:fs";
 import path from "node:path";
+import { getAllRuntimePages } from "@/utils/runtime-pages";
 
 export async function POST(request: Request) {
   try {
@@ -39,15 +40,6 @@ export async function POST(request: Request) {
       updateFile(siteConfigPath, JSON.stringify(updatedSiteConfig, null, 2));
       await handleGitFileCommit(siteConfigPath, "update");
 
-      if (!isDev()) {
-        // Runtime mode: just bump a version file if a watcher/poller is used
-        fs.writeFileSync(
-          path.join(process.cwd(), ".content-version.json"),
-          JSON.stringify({ version: Date.now() }, null, 2),
-          "utf8"
-        );
-      }
-
       return NextResponse.json({ message: "File updated successfully" });
     }
 
@@ -64,6 +56,28 @@ export async function POST(request: Request) {
         error:
           "An error occurred while processing the request. " + errorMessage,
       },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    if (!isDev()) {
+      return NextResponse.json(
+        { error: "This endpoint is only available in development mode." },
+        { status: 403 }
+      );
+    }
+
+    const allPages = await getAllRuntimePages();
+    return NextResponse.json(allPages || []);
+  } catch (error) {
+    console.error("Error fetching pages:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json(
+      { error: "An error occurred while fetching pages. " + errorMessage },
       { status: 500 }
     );
   }
