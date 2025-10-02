@@ -24,9 +24,6 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-// Dynamic layout to support runtime pages
-export const dynamic = "force-dynamic";
-
 const RootLayout = async ({ children }: RootLayoutProps) => {
   const siteMetaData = await getSiteMetaData();
   console.log("SITEMETADATA");
