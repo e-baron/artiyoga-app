@@ -9,57 +9,78 @@ const node_child_process_1 = require("node:child_process");
 const node_http_1 = __importDefault(require("node:http"));
 const node_fs_1 = __importDefault(require("node:fs"));
 let win = null;
-let server = null;
-let starting = false;
+let nextProc = null;
+let spawning = false;
 const PORT = process.env.PORT || "3001";
-const TIMEOUT = 60000;
-const RETRY = 600;
-const FORCE_DEV = process.env.FORCE_DEV === "1";
-function rootDir() {
-    return electron_1.app.getAppPath(); // resolves to Resources/app (packaged) or project root (dev)
+const WAIT_MS = 60000;
+const RETRY = 700;
+function projectRoot() {
+    if (electron_1.app.isPackaged) {
+        return node_path_1.default.join(process.resourcesPath, "app"); // packaged layout
+    }
+    // Running locally from dist-electron/main/main.js → go two levels up
+    let dir = node_path_1.default.resolve(__dirname, "..", "..");
+    // Walk up until we find package.json with node_modules
+    while (true) {
+        if (node_fs_1.default.existsSync(node_path_1.default.join(dir, "package.json")) &&
+            node_fs_1.default.existsSync(node_path_1.default.join(dir, "node_modules")))
+            return dir;
+        const parent = node_path_1.default.dirname(dir);
+        if (parent === dir)
+            break;
+        dir = parent;
+    }
+    // Fallback
+    return process.cwd();
 }
-function standaloneDir() {
-    return node_path_1.default.join(rootDir(), ".next", "standalone");
+function nextCliPath() {
+    return node_path_1.default.join(projectRoot(), "node_modules", "next", "dist", "bin", "next");
 }
-function serverEntry() {
-    return node_path_1.default.join(standaloneDir(), "server.js");
+function hasProdBuild() {
+    return node_fs_1.default.existsSync(node_path_1.default.join(projectRoot(), ".next", "BUILD_ID"));
 }
-function startServer() {
-    if (server || starting)
+function mode() {
+    if (electron_1.app.isPackaged)
+        return "prod";
+    if (process.env.USE_PROD === "1")
+        return "prod";
+    return hasProdBuild() && process.env.FORCE_DEV !== "1" ? "prod" : "dev";
+}
+function spawnNext() {
+    if (nextProc || spawning)
         return;
-    starting = true;
-    const entry = serverEntry();
-    const pubImg = node_path_1.default.join(rootDir(), "public", "images", "raphael.jpg");
-    console.log("[Electron] rootDir =", rootDir());
-    console.log("[Electron] standaloneDir =", standaloneDir());
-    console.log("[Electron] server.js exists =", node_fs_1.default.existsSync(entry));
-    console.log("[Electron] sample public image exists =", node_fs_1.default.existsSync(pubImg));
-    if (!node_fs_1.default.existsSync(entry)) {
-        console.error("[Electron] Missing standalone server:", entry);
-        starting = false;
+    spawning = true;
+    const root = projectRoot();
+    const cli = nextCliPath();
+    console.log("[Electron] projectRoot =", root);
+    console.log("[Electron] next CLI path =", cli);
+    if (!node_fs_1.default.existsSync(cli)) {
+        console.error("[Electron] next CLI missing:", cli);
+        spawning = false;
         return;
     }
-    server = (0, node_child_process_1.spawn)(process.execPath, [entry], {
-        cwd: standaloneDir(), // IMPORTANT
+    const m = mode();
+    const args = m === "prod" ? ["start", "-p", PORT] : ["dev", "-p", PORT];
+    console.log(`[Electron] Spawning Next (${m}) ->`, args.join(" "));
+    nextProc = (0, node_child_process_1.spawn)(process.execPath, [cli, ...args], {
+        cwd: root,
         env: {
             ...process.env,
             ELECTRON_RUN_AS_NODE: "1",
-            NODE_ENV: "production",
-            FORCE_DEV: FORCE_DEV ? "1" : undefined,
+            NODE_ENV: m === "prod" ? "production" : "development",
             PORT: PORT,
         },
         stdio: "inherit",
     });
-    server.on("error", (err) => {
-        console.error("[Electron] Server spawn error:", err);
-        starting = false;
-        server = null;
+    nextProc.on("exit", (c, s) => {
+        console.log("[Electron] Next exited:", c, s || "");
+        nextProc = null;
     });
-    server.on("exit", (code, sig) => {
-        console.log("[Electron] Next server exited:", code, sig || "");
-        starting = false;
-        server = null;
+    nextProc.on("error", (e) => {
+        console.error("[Electron] Next spawn error:", e);
+        nextProc = null;
     });
+    spawning = false;
 }
 function waitFor(url) {
     const start = Date.now();
@@ -75,7 +96,7 @@ function waitFor(url) {
                 .on("error", retry);
         };
         const retry = () => {
-            if (Date.now() - start > TIMEOUT)
+            if (Date.now() - start > WAIT_MS)
                 return reject(new Error("timeout"));
             setTimeout(attempt, RETRY);
         };
@@ -90,14 +111,13 @@ function attachImage404Logging(w) {
     });
 }
 async function createWindow() {
-    startServer();
-    const basePath = FORCE_DEV ? "" : process.env.NEXT_BASE_PATH || "";
-    const url = `http://localhost:${PORT}${basePath}`;
+    spawnNext();
+    const url = `http://localhost:${PORT}`;
     try {
         await waitFor(url);
     }
     catch {
-        console.warn("[Electron] Server not confirmed ready:", url);
+        console.warn("[Electron] Next not confirmed ready (continuing)");
     }
     win = new electron_1.BrowserWindow({
         width: 1280,
@@ -114,7 +134,7 @@ async function createWindow() {
     }
     catch (e) {
         console.error("[Electron] Load failed:", e.message);
-        win.loadURL("data:text/plain,Failed to load Next server.");
+        win.loadURL("data:text/plain,Failed to load Next application.");
     }
     win.on("closed", () => {
         win = null;
@@ -122,9 +142,9 @@ async function createWindow() {
 }
 electron_1.app.whenReady().then(createWindow);
 electron_1.app.on("window-all-closed", () => {
-    if (server) {
-        server.kill();
-        server = null;
+    if (nextProc) {
+        nextProc.kill();
+        nextProc = null;
     }
     if (process.platform !== "darwin")
         electron_1.app.quit();

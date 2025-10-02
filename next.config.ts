@@ -4,7 +4,7 @@ import siteConfig from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // output: "standalone",
   basePath: isDev() ? "" : siteConfig.basePath,
 
   experimental: {

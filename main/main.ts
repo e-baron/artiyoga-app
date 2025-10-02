@@ -5,64 +5,95 @@ import http from "node:http";
 import fs from "node:fs";
 
 let win: BrowserWindow | null = null;
-let server: ChildProcess | null = null;
-let starting = false;
+let nextProc: ChildProcess | null = null;
+let spawning = false;
 
 const PORT = process.env.PORT || "3001";
-const TIMEOUT = 60000;
-const RETRY = 600;
-const FORCE_DEV = process.env.FORCE_DEV === "1";
+const WAIT_MS = 60000;
+const RETRY = 700;
 
-function rootDir() {
-  return app.getAppPath(); // resolves to Resources/app (packaged) or project root (dev)
+function projectRoot() {
+  if (app.isPackaged) {
+    return path.join(process.resourcesPath, "app"); // packaged layout
+  }
+  // Running locally from dist-electron/main/main.js → go two levels up
+  let dir = path.resolve(__dirname, "..", "..");
+  // Walk up until we find package.json with node_modules
+  while (true) {
+    if (
+      fs.existsSync(path.join(dir, "package.json")) &&
+      fs.existsSync(path.join(dir, "node_modules"))
+    )
+      return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  // Fallback
+  return process.cwd();
 }
-function standaloneDir() {
-  return path.join(rootDir(), ".next", "standalone");
+
+function nextCliPath() {
+  return path.join(
+    projectRoot(),
+    "node_modules",
+    "next",
+    "dist",
+    "bin",
+    "next"
+  );
 }
-function serverEntry() {
-  return path.join(standaloneDir(), "server.js");
+
+function hasProdBuild() {
+  return fs.existsSync(path.join(projectRoot(), ".next", "BUILD_ID"));
 }
 
-function startServer() {
-  if (server || starting) return;
-  starting = true;
+function mode(): "dev" | "prod" {
+  if (app.isPackaged) return "prod";
+  if (process.env.USE_PROD === "1") return "prod";
+  return hasProdBuild() && process.env.FORCE_DEV !== "1" ? "prod" : "dev";
+}
 
-  const entry = serverEntry();
-  const pubImg = path.join(rootDir(), "public", "images", "raphael.jpg");
+function spawnNext() {
+  if (nextProc || spawning) return;
+  spawning = true;
 
-  console.log("[Electron] rootDir =", rootDir());
-  console.log("[Electron] standaloneDir =", standaloneDir());
-  console.log("[Electron] server.js exists =", fs.existsSync(entry));
-  console.log("[Electron] sample public image exists =", fs.existsSync(pubImg));
+  const root = projectRoot();
+  const cli = nextCliPath();
 
-  if (!fs.existsSync(entry)) {
-    console.error("[Electron] Missing standalone server:", entry);
-    starting = false;
+  console.log("[Electron] projectRoot =", root);
+  console.log("[Electron] next CLI path =", cli);
+
+  if (!fs.existsSync(cli)) {
+    console.error("[Electron] next CLI missing:", cli);
+    spawning = false;
     return;
   }
 
-  server = spawn(process.execPath, [entry], {
-    cwd: standaloneDir(), // IMPORTANT
+  const m = mode();
+  const args = m === "prod" ? ["start", "-p", PORT] : ["dev", "-p", PORT];
+  console.log(`[Electron] Spawning Next (${m}) ->`, args.join(" "));
+
+  nextProc = spawn(process.execPath, [cli, ...args], {
+    cwd: root,
     env: {
       ...process.env,
       ELECTRON_RUN_AS_NODE: "1",
-      NODE_ENV: "production",
-      FORCE_DEV: FORCE_DEV ? "1" : undefined,
+      NODE_ENV: m === "prod" ? "production" : "development",
       PORT: PORT,
     },
     stdio: "inherit",
   });
 
-  server.on("error", (err) => {
-    console.error("[Electron] Server spawn error:", err);
-    starting = false;
-    server = null;
+  nextProc.on("exit", (c, s) => {
+    console.log("[Electron] Next exited:", c, s || "");
+    nextProc = null;
   });
-  server.on("exit", (code, sig) => {
-    console.log("[Electron] Next server exited:", code, sig || "");
-    starting = false;
-    server = null;
+  nextProc.on("error", (e) => {
+    console.error("[Electron] Next spawn error:", e);
+    nextProc = null;
   });
+  spawning = false;
 }
 
 function waitFor(url: string) {
@@ -78,7 +109,7 @@ function waitFor(url: string) {
         .on("error", retry);
     };
     const retry = () => {
-      if (Date.now() - start > TIMEOUT) return reject(new Error("timeout"));
+      if (Date.now() - start > WAIT_MS) return reject(new Error("timeout"));
       setTimeout(attempt, RETRY);
     };
     attempt();
@@ -94,14 +125,12 @@ function attachImage404Logging(w: BrowserWindow) {
 }
 
 async function createWindow() {
-  startServer();
-  const basePath = FORCE_DEV ? "" : process.env.NEXT_BASE_PATH || "";
-  const url = `http://localhost:${PORT}${basePath}`;
-
+  spawnNext();
+  const url = `http://localhost:${PORT}`;
   try {
     await waitFor(url);
   } catch {
-    console.warn("[Electron] Server not confirmed ready:", url);
+    console.warn("[Electron] Next not confirmed ready (continuing)");
   }
 
   win = new BrowserWindow({
@@ -119,7 +148,7 @@ async function createWindow() {
     await win.loadURL(url);
   } catch (e) {
     console.error("[Electron] Load failed:", (e as Error).message);
-    win.loadURL("data:text/plain,Failed to load Next server.");
+    win.loadURL("data:text/plain,Failed to load Next application.");
   }
 
   win.on("closed", () => {
@@ -128,13 +157,15 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow);
+
 app.on("window-all-closed", () => {
-  if (server) {
-    server.kill();
-    server = null;
+  if (nextProc) {
+    nextProc.kill();
+    nextProc = null;
   }
   if (process.platform !== "darwin") app.quit();
 });
+
 app.on("activate", () => {
   if (!win) createWindow();
 });
