@@ -56,6 +56,18 @@ export default async function copyGitToPackage(
         gitignoreSrc
       );
     }
+
+    // Copy .github directory if it exists
+    const githubSrc = path.join(process.cwd(), ".github");
+    const githubDest = path.join(appPath, ".github");
+    if (await fs.pathExists(githubSrc)) {
+      console.log("[packaging-git] Copying .github to", githubDest);
+      await fs.copy(githubSrc, githubDest);
+    } else {
+      console.warn("[packaging-git] .github directory not found at", githubSrc);
+    }
+
+    console.log("[packaging-git] Git files copy completed.");
   } catch (error) {
     console.error("[packaging-git] Error copying git files:", error);
     throw error;
