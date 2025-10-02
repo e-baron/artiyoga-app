@@ -28,11 +28,12 @@
       ".git/**",
       ".gitignore",
       "tsconfig.json",
-      "next.config.js",
+      "next.config.ts",
       "CNAME",
       ".nojekyll",
       "next-env.d.ts"
     ],
+   "afterPack": "./src/utils/packaging-git.ts",
     "mac": {
       "target": [
         "dmg",
