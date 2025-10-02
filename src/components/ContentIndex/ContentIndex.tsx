@@ -35,9 +35,17 @@ const ContentIndex = ({
   // Fetch all pages on component mount
   useEffect(() => {
     const fetchPages = async () => {
-      const pages = await fetch("/api/pages");
-      const data = await pages.json();
-      setAllPages(data);
+      try {
+        const resp = await fetch("/api/pages");
+        if (!resp.ok) {
+          console.error("Failed to fetch pages:", resp.statusText);
+          return;
+        }
+        const data = await resp.json();
+        setAllPages(data);
+      } catch (error) {
+        console.error("Error fetching pages:", error);
+      }
     };
     fetchPages();
   }, []);
@@ -52,6 +60,8 @@ const ContentIndex = ({
     if (!a.date) return 1;
     return parseISO(b.date).getTime() - parseISO(a.date).getTime();
   });
+
+  console.log("All contents after sorting:", allContents);
 
   // Filter news by date if daysToConsiderNewsOutdated is not set to -1
   if (daysToConsiderNewsOutdated !== -1) {

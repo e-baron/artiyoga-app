@@ -30,7 +30,7 @@ const readRuntimePage = (slug: string) => {
       code: content,
     },
     date: data.date || null,
-    published: data.published ?? false,
+    published: data.published ?? true,
     category: data.category ?? "none",
 
     ...data,

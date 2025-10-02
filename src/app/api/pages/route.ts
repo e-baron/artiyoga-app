@@ -11,8 +11,6 @@ import {
 } from "@/utils/git";
 import { addUnpublishedPage } from "@/utils/config";
 import { isDev } from "@/utils/env";
-import fs from "node:fs";
-import path from "node:path";
 import { getAllRuntimePages } from "@/utils/runtime-pages";
 
 export async function POST(request: Request) {
