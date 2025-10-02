@@ -8,50 +8,48 @@ let win: BrowserWindow | null = null;
 let nextProc: ChildProcess | null = null;
 let spawning = false;
 
-const PORT = process.env.PORT || "3001";
+const PORT = String(process.env.PORT || 3001);
 const WAIT_MS = 60000;
 const RETRY = 700;
 
-function projectRoot() {
+function projectRoot(): string {
   if (app.isPackaged) {
-    return path.join(process.resourcesPath, "app"); // packaged layout
+    return app.getAppPath();
   }
-  // Running locally from dist-electron/main/main.js → go two levels up
-  let dir = path.resolve(__dirname, "..", "..");
-  // Walk up until we find package.json with node_modules
-  while (true) {
-    if (
-      fs.existsSync(path.join(dir, "package.json")) &&
-      fs.existsSync(path.join(dir, "node_modules"))
-    )
-      return dir;
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  // Fallback
-  return process.cwd();
+  return path.resolve(__dirname, "..", "..");
 }
 
-function nextCliPath() {
-  return path.join(
-    projectRoot(),
-    "node_modules",
-    "next",
-    "dist",
-    "bin",
-    "next"
-  );
+function nextCliPath(root: string) {
+  return path.join(root, "node_modules", "next", "dist", "bin", "next");
 }
 
-function hasProdBuild() {
-  return fs.existsSync(path.join(projectRoot(), ".next", "BUILD_ID"));
+function hasProdBuild(root: string) {
+  return fs.existsSync(path.join(root, ".next", "BUILD_ID"));
 }
 
-function mode(): "dev" | "prod" {
+function mode(root: string): "dev" | "prod" {
   if (app.isPackaged) return "prod";
   if (process.env.USE_PROD === "1") return "prod";
-  return hasProdBuild() && process.env.FORCE_DEV !== "1" ? "prod" : "dev";
+  return hasProdBuild(root) ? "prod" : "dev";
+}
+
+async function fallbackProgrammatic(root: string) {
+  try {
+    console.log("[Electron] Fallback: starting Next programmatically");
+    const nextModule = await import(path.join(root, "node_modules", "next"));
+    const next = nextModule.default || nextModule;
+    const nextApp = next({ dev: false, dir: root, port: Number(PORT) });
+    await nextApp.prepare();
+    const handler = nextApp.getRequestHandler();
+    const httpModule = await import("node:http");
+    httpModule
+      .createServer((req, res) => handler(req, res))
+      .listen(PORT, () =>
+        console.log("[Electron] Programmatic Next listening on", PORT)
+      );
+  } catch (e) {
+    console.error("[Electron] Programmatic fallback failed:", e);
+  }
 }
 
 function spawnNext() {
@@ -59,20 +57,32 @@ function spawnNext() {
   spawning = true;
 
   const root = projectRoot();
-  const cli = nextCliPath();
+  const cli = nextCliPath(root);
 
+  console.log("[Electron] packaged =", app.isPackaged);
   console.log("[Electron] projectRoot =", root);
-  console.log("[Electron] next CLI path =", cli);
+  console.log("[Electron] in asar =", root.includes(".asar"));
+  console.log("[Electron] next CLI exists =", fs.existsSync(cli));
+  console.log("[Electron] .next BUILD_ID =", hasProdBuild(root));
+  console.log(
+    "[Electron] public exists =",
+    fs.existsSync(path.join(root, "public"))
+  );
+  console.log(
+    "[Electron] .contentlayer exists =",
+    fs.existsSync(path.join(root, ".contentlayer"))
+  );
 
   if (!fs.existsSync(cli)) {
-    console.error("[Electron] next CLI missing:", cli);
+    console.error("[Electron] next CLI missing; using fallback.");
     spawning = false;
+    void fallbackProgrammatic(root);
     return;
   }
 
-  const m = mode();
+  const m = mode(root);
   const args = m === "prod" ? ["start", "-p", PORT] : ["dev", "-p", PORT];
-  console.log(`[Electron] Spawning Next (${m}) ->`, args.join(" "));
+  console.log(`[Electron] Spawning Next (${m})`, args.join(" "));
 
   nextProc = spawn(process.execPath, [cli, ...args], {
     cwd: root,
@@ -80,19 +90,20 @@ function spawnNext() {
       ...process.env,
       ELECTRON_RUN_AS_NODE: "1",
       NODE_ENV: m === "prod" ? "production" : "development",
-      PORT: PORT,
+      PORT,
     },
     stdio: "inherit",
   });
 
   nextProc.on("exit", (c, s) => {
-    console.log("[Electron] Next exited:", c, s || "");
+    console.log("[Electron] Next exited", c, s || "");
     nextProc = null;
   });
   nextProc.on("error", (e) => {
-    console.error("[Electron] Next spawn error:", e);
+    console.error("[Electron] Next spawn error", e);
     nextProc = null;
   });
+
   spawning = false;
 }
 
@@ -116,21 +127,13 @@ function waitFor(url: string) {
   });
 }
 
-function attachImage404Logging(w: BrowserWindow) {
-  w.webContents.session.webRequest.onCompleted((d) => {
-    if (d.statusCode === 404 && /\/images\//.test(d.url)) {
-      console.warn("[Electron][IMG 404]", d.url);
-    }
-  });
-}
-
 async function createWindow() {
   spawnNext();
   const url = `http://localhost:${PORT}`;
   try {
     await waitFor(url);
   } catch {
-    console.warn("[Electron] Next not confirmed ready (continuing)");
+    console.warn("[Electron] Next not confirmed ready:", url);
   }
 
   win = new BrowserWindow({
@@ -141,14 +144,13 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
-  attachImage404Logging(win);
 
-  console.log("[Electron] Loading:", url);
+  console.log("[Electron] Loading URL:", url);
   try {
     await win.loadURL(url);
   } catch (e) {
-    console.error("[Electron] Load failed:", (e as Error).message);
-    win.loadURL("data:text/plain,Failed to load Next application.");
+    console.error("[Electron] loadURL failed:", (e as Error).message);
+    win.loadURL("data:text/plain,Failed to load Next server (see console).");
   }
 
   win.on("closed", () => {
@@ -157,7 +159,6 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow);
-
 app.on("window-all-closed", () => {
   if (nextProc) {
     nextProc.kill();
@@ -165,7 +166,6 @@ app.on("window-all-closed", () => {
   }
   if (process.platform !== "darwin") app.quit();
 });
-
 app.on("activate", () => {
   if (!win) createWindow();
 });
