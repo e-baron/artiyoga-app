@@ -6,12 +6,6 @@ import Image from "@/components/Image/Image";
 import EditPage from "@/components/EditPage/EditPage";
 import { readRuntimePage, getAllRuntimePages } from "@/utils/runtime-pages";
 
-// export const dynamic = "force-dynamic";
-
-/*export async function generateStaticParams() {
-  return [];
-}*/
-
 export async function generateStaticParams() {
   const allPages = await getAllRuntimePages();
   const allParams = allPages.map((page) => ({

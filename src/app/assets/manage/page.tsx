@@ -32,7 +32,7 @@ const ManageAssetsPage = () => {
     setLoading("fetch"); // Set loading for the fetch operation
     setError(null);
     try {
-      const response = await fetch("/api/assets", {
+      const response = await fetch("/api/assets/manage", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const ManageAssetsPage = () => {
       formData.append("action", "create");
       formData.append("filepath", filepath); // Use the filepath provided in the form
 
-      const response = await fetch("/api/assets", {
+      const response = await fetch("/api/assets/manage", {
         method: "POST",
         body: formData,
       });
@@ -104,7 +104,7 @@ const ManageAssetsPage = () => {
     setMessage(null);
 
     try {
-      const response = await fetch("/api/assets", {
+      const response = await fetch("/api/assets/manage", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

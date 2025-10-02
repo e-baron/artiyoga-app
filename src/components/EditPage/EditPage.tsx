@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Typography, Box, Grid, CircularProgress } from "@mui/material"; // Import CircularProgress
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
@@ -8,7 +8,6 @@ import { MdxPage } from "@/types";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 import { isDev } from "@/utils/env";
 import { MdxViewer } from "../MdxContent/MdxViewer";
-// import { useRouter } from "next/navigation"; // ADD
 
 interface EditPageProps {
   page: MdxPage;
@@ -20,13 +19,14 @@ const EditPage = ({ page }: EditPageProps) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // Add loading state for the save button
-  // const router = useRouter();
+
   useEffect(() => {
     fetchPage();
   }, []);
 
   const fetchPage = async () => {
     try {
+      if (!isDev()) return;
       const response = await fetch("/api/pages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
