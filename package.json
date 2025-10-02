@@ -8,7 +8,8 @@
     "watch:main": "tsc -p tsconfig.main.json -w",
     "dev": "concurrently -k -r -n NEXT,MAIN,ELECTRON \"npm:next:dev\" \"npm:watch:main\" \"wait-on tcp:3001 && electron .\"",
     "build:wrapper": "tsc -p tsconfig.main.json",
-    "build:next": "FORCE_DEV=1 next build",
+    "build:next": "next build",
+    "build:next:export": "NEXT_PUBLIC_NODE_ENV=production next build",
     "build:next:standalone": "USE_PROD=1 FORCE_DEV=1 next build && node src/utils/prepare-standalone.ts",
     "dist": "npm run build:next && npm run build:wrapper && electron-builder",
     "start": "USE_PROD=1 electron ."

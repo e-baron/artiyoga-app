@@ -1,12 +1,3 @@
-
-let development: boolean | null = null;
-
-const isDev = (): boolean | null => {
-  if (development === null) {
-    development =
-      process.env.NODE_ENV === "development" || process.env.FORCE_DEV === "1";
-  }
-  return development;
-};
+const isDev = (): boolean => process.env.NEXT_PUBLIC_NODE_ENV !== "production";
 
 export { isDev };
