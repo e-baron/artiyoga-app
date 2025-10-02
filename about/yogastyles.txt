@@ -1,20 +1,31 @@
 1:"$Sreact.fragment"
-3:I[9766,[],""]
-4:I[98924,[],""]
-6:I[24431,[],"OutletBoundary"]
-8:I[15278,[],"AsyncMetadataOutlet"]
-a:I[24431,[],"ViewportBoundary"]
-c:I[24431,[],"MetadataBoundary"]
-d:"$Sreact.suspense"
-f:I[57150,[],""]
-:HL["/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","style"]
-:HL["/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","style"]
-:HL["/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","style"]
-0:{"P":null,"b":"b810EXKO_wKWnp787P0sd","p":"/artiyoga-app","c":["","about","yogastyles"],"i":false,"f":[[["",{"children":[["slug","about/yogastyles","oc"],{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],"$L2"]}],{"children":[["slug","about/yogastyles","oc"],["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L5",[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L6",null,{"children":["$L7",["$","$L8",null,{"promise":"$@9"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$La",null,{"children":"$Lb"}],null],["$","$Lc",null,{"children":["$","div",null,{"hidden":true,"children":["$","$d",null,{"fallback":null,"children":"$Le"}]}]}]]}],false]],"m":"$undefined","G":["$f",[]],"s":false,"S":true}
-10:I[3295,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","88","static/chunks/88-521fe336afa02aa7.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-4a0afb679ab814e0.js"],"default"]
-11:I[97282,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","88","static/chunks/88-521fe336afa02aa7.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-4a0afb679ab814e0.js"],"default"]
-12:I[75640,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","88","static/chunks/88-521fe336afa02aa7.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-4a0afb679ab814e0.js"],"default"]
-13:Tf46,
+2:I[17989,[],"ClientSegmentRoot"]
+3:I[97795,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-55ef6df122e24fe8.js","177","static/chunks/app/layout-076180f72613957f.js"],"default"]
+4:I[9766,[],""]
+5:I[98924,[],""]
+8:I[24431,[],"OutletBoundary"]
+a:I[15278,[],"AsyncMetadataOutlet"]
+c:I[24431,[],"ViewportBoundary"]
+e:I[24431,[],"MetadataBoundary"]
+f:"$Sreact.suspense"
+11:I[57150,[],""]
+:HL["/_next/static/css/da034cfabc50a536.css","style"]
+:HL["/_next/static/css/de37bfec4db3b948.css","style"]
+:HL["/_next/static/css/ae4ed9c503fd1e33.css","style"]
+0:{"P":null,"b":"8cGDkXLkf9s7omSFg2HB-","p":"","c":["","about","yogastyles"],"i":false,"f":[[["",{"children":[["slug","about/yogastyles","oc"],{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/da034cfabc50a536.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/_next/static/css/de37bfec4db3b948.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L2",null,{"Component":"$3","slots":{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]},"params":{},"promise":"$@6"}]]}],{"children":[["slug","about/yogastyles","oc"],["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/ae4ed9c503fd1e33.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L8",null,{"children":["$L9",["$","$La",null,{"promise":"$@b"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Lc",null,{"children":"$Ld"}],null],["$","$Le",null,{"children":["$","div",null,{"hidden":true,"children":["$","$f",null,{"fallback":null,"children":"$L10"}]}]}]]}],false]],"m":"$undefined","G":["$11",[]],"s":false,"S":true}
+6:"$0:f:0:1:1:props:children:1:props:params"
+12:I[3295,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-9b88fd41526cfccd.js"],"default"]
+13:I[97282,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-9b88fd41526cfccd.js"],"default"]
+14:I[50413,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-9b88fd41526cfccd.js"],"default"]
+15:T1011,---
+title: Yogastijlen
+description: Yogastijlen aangeboden door Kati op 1500 Halle
+autoMargin: false
+date: 2023-05-11
+featuredImage: /images/yogastyles/zachteyoga.jpg
+footerImage: /images/footer.jpg
+---
+
 <Section autoMargin={false}>  
   <ContentWithBackground src="/images/yogastyles/zachteyoga.jpg" height="50vh">
 
@@ -98,29 +109,92 @@ Kati
     </Content>
 
 
-</Section>14:T1690,var Component=(()=>{var k=Object.create;var l=Object.defineProperty;var j=Object.getOwnPropertyDescriptor;var p=Object.getOwnPropertyNames;var f=Object.getPrototypeOf,v=Object.prototype.hasOwnProperty;var w=(i,n)=>()=>(n||i((n={exports:{}}).exports,n),n.exports),b=(i,n)=>{for(var t in n)l(i,t,{get:n[t],enumerable:!0})},s=(i,n,t,r)=>{if(n&&typeof n=="object"||typeof n=="function")for(let a of p(n))!v.call(i,a)&&a!==t&&l(i,a,{get:()=>n[a],enumerable:!(r=j(n,a))||r.enumerable});return i};var y=(i,n,t)=>(t=i!=null?k(f(i)):{},s(n||!i||!i.__esModule?l(t,"default",{value:i,enumerable:!0}):t,i)),z=i=>s(l({},"__esModule",{value:!0}),i);var c=w((H,h)=>{h.exports=_jsx_runtime});var C={};b(C,{default:()=>u,frontmatter:()=>M});var e=y(c()),M={title:"Yogastijlen",description:"Yogastijlen aangeboden door Kati op 1500 Halle",autoMargin:!1,date:"2023-05-11",featuredImage:"/images/yogastyles/zachteyoga.jpg",footerImage:"/images/footer.jpg"};function m(i){let n={br:"br",h3:"h3",p:"p",...i.components},{Content:t,ContentWithBackground:r,Image:a,Section:g,SectionFooter:d}=n;return t||o("Content",!0),r||o("ContentWithBackground",!0),a||o("Image",!0),g||o("Section",!0),d||o("SectionFooter",!0),(0,e.jsxs)(e.Fragment,{children:[(0,e.jsx)(g,{autoMargin:!1,children:(0,e.jsx)(r,{src:"/images/yogastyles/zachteyoga.jpg",height:"50vh",children:(0,e.jsx)(d,{light:!0,children:(0,e.jsx)(n.p,{children:"Yogastijlen"})})})}),`
-`,(0,e.jsxs)(g,{autoMargin:!1,children:[(0,e.jsxs)(t,{autoMargin:!0,children:[(0,e.jsx)(n.h3,{children:"Hatha Yoga"}),(0,e.jsxs)(n.p,{children:["Be a warrior of light",(0,e.jsx)(n.br,{}),`
-`,"Be a warrior of love",(0,e.jsx)(n.br,{}),`
-`,"Be a peaceful warrior",(0,e.jsx)(n.br,{}),`
-`,"Hoe kan een krijger liefdevol, licht en vredig zijn? Hoe kunnen we de energie van de zon en de maan, de actie met inactie, het doen met rust combineren? De krijger durft naar binnen te gaan. Met de tools van hatha yoga en een snuifje qigong brengen we onze geest terug bij ons lichaam. Balans wordt hersteld door alle oefeningen, ademtechnieken en lichaamshoudingen die we met focus, liefde en acceptatie beoefenen.",(0,e.jsx)(n.br,{}),`
-`,"Wees een vredige krijger vol licht en liefde. Ken jezelf. Wees jezelf."]})]}),(0,e.jsx)(t,{height:"50vh",children:(0,e.jsx)(a,{src:"/images/yogastyles/hatayoga.jpg",noContainer:!0})}),(0,e.jsxs)(t,{autoMargin:!0,children:[(0,e.jsx)(n.h3,{children:"Zachte Yoga"}),(0,e.jsxs)(n.p,{children:["Be an artist each moment",(0,e.jsx)(n.br,{}),`
-`,`In de zachte yoga oefenen we meer op energie niveau dan fysiek. We nemen gemakkelijke yoga houdingen aan, maken rustige bewegingen die onze circulatie stimuleren zonder ons systeem te belasten. Het tempo is traag zodat we de ruimte krijgen om diep in onszelf te duiken.
-Elke bewuste ademhaling, elke zachte beweging is kunst. Op elk moment van je leven kan je een kunstenaar zijn en spelen met je oneindige mogelijkheden.`]})]}),(0,e.jsx)(t,{height:"50vh",children:(0,e.jsx)(a,{src:"/images/yogastyles/styles.jpg",noContainer:!0})}),(0,e.jsxs)(t,{autoMargin:!0,children:[(0,e.jsx)(n.h3,{children:"Rustgevende Avond Yoga"}),(0,e.jsxs)(n.p,{children:["The art of letting go & refreshing",(0,e.jsx)(n.br,{}),`
-`,"Kunnen we rust, stilte en zachtheid vinden in elke lichaamshouding, in elke ademhaling en in elke situatie? Zijn we bereid om te vertragen en onze geest te laten rusten, gedachten, overtuigingen los te laten? En glimlachen?",(0,e.jsx)(n.br,{}),`
-`,"Diepgaande, voedende avond yoga toont ons de weg. De weg naar binnen, naar die plek in ons waar stilte heerst en herbronning mogelijk is."]})]}),(0,e.jsx)(t,{height:"50vh",children:(0,e.jsx)(a,{src:"/images/yogastyles/rustgevendeavondyoga.jpg",noContainer:!0})}),(0,e.jsxs)(t,{autoMargin:!0,children:[(0,e.jsx)(n.h3,{children:"Qi-gong en Meditatie"}),(0,e.jsx)(n.p,{children:`See clearly.
-Hier wordt een omgeving gecre\xEBerd waarin we in contact kunnen komen met onze diepere spirituele dimensie. Het is een plek waar we kunnen landen in ons lichaam en heel worden. We krijgen de gelegenheid om diep naar binnen te kijken en helder te zien. Met zachte oefeningen die ons losmaken, energie geven en de ademhaling ondersteunen, komen we thuis bij onszelf. Daarnaast verkennen we samen onze innerlijke wereld door middel van verschillende meditatietechnieken. Met langzame bewegingen, stilte, ademhaling, klank, mantra en stapmeditatie brengen we onszelf naar onze essentie.`})]}),(0,e.jsx)(t,{height:"50vh",children:(0,e.jsx)(a,{src:"/images/yogastyles/qigong-meditatie.jpg",noContainer:!0})}),(0,e.jsxs)(t,{autoMargin:!0,children:[(0,e.jsx)(n.h3,{children:"VrouwenYoga & Cirkel"}),(0,e.jsx)(n.p,{children:"Verwacht vloeiende yoga en qi-gong oefeningen, dansende bewegingen, rustgevende houdingen, meditaties, ademtechnieken, mudra's (handposities) en verbondenheid in onze vrouwencirkel."}),(0,e.jsx)(n.p,{children:`Hier luisteren we met een open hart, accepteren en ondersteunen elkaar volledig.
-Ontdek hoe je jouw vrouwelijke lichaam in harmonie met je levensfase, de seizoenen, maandelijkse cycli en de maan kunt verzorgen.`}),(0,e.jsx)(n.p,{children:`Jij bent al een stralende vrouw, perfect zoals je bent. Wil je je vrouwelijke lichaam en geest beter leren kennen, creatiever worden, in je kracht staan en meer stralen?
+</Section>16:Tf46,
+<Section autoMargin={false}>  
+  <ContentWithBackground src="/images/yogastyles/zachteyoga.jpg" height="50vh">
+
+  <SectionFooter light>
+      Yogastijlen
+    </SectionFooter>
+  </ContentWithBackground>
+  
+</Section>
+
+<Section autoMargin={false}>  
+      <Content autoMargin>
+     ### Hatha Yoga
+      Be a warrior of light  
+      Be a warrior of love  
+      Be a peaceful warrior  
+      Hoe kan een krijger liefdevol, licht en vredig zijn? Hoe kunnen we de energie van de zon en de maan, de actie met inactie, het doen met rust combineren? De krijger durft naar binnen te gaan. Met de tools van hatha yoga en een snuifje qigong brengen we onze geest terug bij ons lichaam. Balans wordt hersteld door alle oefeningen, ademtechnieken en lichaamshoudingen die we met focus, liefde en acceptatie beoefenen.   
+Wees een vredige krijger vol licht en liefde. Ken jezelf. Wees jezelf. 
+
+    </Content>
+    <Content height="50vh">
+      <Image src="/images/yogastyles/hatayoga.jpg" noContainer/>
+    </Content>
+
+
+    
+
+    <Content autoMargin>
+     ### Zachte Yoga
+      Be an artist each moment  
+      In de zachte yoga oefenen we meer op energie niveau dan fysiek. We nemen gemakkelijke yoga houdingen aan, maken rustige bewegingen die onze circulatie stimuleren zonder ons systeem te belasten. Het tempo is traag zodat we de ruimte krijgen om diep in onszelf te duiken. 
+Elke bewuste ademhaling, elke zachte beweging is kunst. Op elk moment van je leven kan je een kunstenaar zijn en spelen met je oneindige mogelijkheden. 
+    </Content>
+
+    <Content height="50vh">
+      <Image src="/images/yogastyles/styles.jpg" noContainer/>
+    </Content>
+
+     <Content autoMargin>
+     ### Rustgevende Avond Yoga
+      The art of letting go & refreshing  
+Kunnen we rust, stilte en zachtheid vinden in elke lichaamshouding, in elke ademhaling en in elke situatie? Zijn we bereid om te vertragen en onze geest te laten rusten, gedachten, overtuigingen los te laten? En glimlachen?  
+Diepgaande, voedende avond yoga toont ons de weg. De weg naar binnen, naar die plek in ons waar stilte heerst en herbronning mogelijk is. 
+
+
+    </Content>
+    <Content height="50vh">
+      <Image src="/images/yogastyles/rustgevendeavondyoga.jpg" noContainer/>
+    </Content>
+
+
+    <Content autoMargin>
+     ### Qi-gong en Meditatie
+      See clearly. 
+Hier wordt een omgeving gecreëerd waarin we in contact kunnen komen met onze diepere spirituele dimensie. Het is een plek waar we kunnen landen in ons lichaam en heel worden. We krijgen de gelegenheid om diep naar binnen te kijken en helder te zien. Met zachte oefeningen die ons losmaken, energie geven en de ademhaling ondersteunen, komen we thuis bij onszelf. Daarnaast verkennen we samen onze innerlijke wereld door middel van verschillende meditatietechnieken. Met langzame bewegingen, stilte, ademhaling, klank, mantra en stapmeditatie brengen we onszelf naar onze essentie.
+
+    </Content>
+
+
+    <Content height="50vh">
+      <Image src="/images/yogastyles/qigong-meditatie.jpg" noContainer />
+    </Content>
+
+     <Content autoMargin>
+     ### VrouwenYoga & Cirkel
+      Verwacht vloeiende yoga en qi-gong oefeningen, dansende bewegingen, rustgevende houdingen, meditaties, ademtechnieken, mudra's (handposities) en verbondenheid in onze vrouwencirkel.
+
+Hier luisteren we met een open hart, accepteren en ondersteunen elkaar volledig.
+Ontdek hoe je jouw vrouwelijke lichaam in harmonie met je levensfase, de seizoenen, maandelijkse cycli en de maan kunt verzorgen.
+
+Jij bent al een stralende vrouw, perfect zoals je bent. Wil je je vrouwelijke lichaam en geest beter leren kennen, creatiever worden, in je kracht staan en meer stralen?
 Wees welkom in onze cirkel, ongeacht leeftijd en voorkennis, elke maand op vrijdagavond.
 Namaste,
-Kati`})]}),(0,e.jsx)(t,{height:"50vh",children:(0,e.jsx)(a,{src:"/images/yogastyles/circle.jpg",noContainer:!0})})]})]})}function u(i={}){let{wrapper:n}=i.components||{};return n?(0,e.jsx)(n,{...i,children:(0,e.jsx)(m,{...i})}):m(i)}function o(i,n){throw new Error("Expected "+(n?"component":"object")+" `"+i+"` to be defined: you likely forgot to import, pass, or provide it.")}return z(C);})();
-;return Component;5:["$","$L10",null,{"container":true,"children":["$","$L10",null,{"sx":{"display":"flex","justifyContent":"center","width":"100%"},"children":["$","$L11",null,{"className":"mdx-page-layout","sx":{"padding":0,"margin":0,"width":"100%"},"children":[false,["$","$L12",null,{"page":{"title":"Yogastijlen","description":"Yogastijlen aangeboden door Kati op 1500 Halle","date":"2023-05-11","autoMargin":false,"footerImage":"/images/footer.jpg","featuredImage":"/images/yogastyles/zachteyoga.jpg","autoCropPage":true,"category":"none","autoFeatureImageAndText":false,"published":true,"body":{"raw":"$13","code":"$14"},"_id":"about/yogastyles.mdx","_raw":{"sourceFilePath":"about/yogastyles.mdx","sourceFileName":"yogastyles.mdx","sourceFileDir":"about","contentType":"mdx","flattenedPath":"about/yogastyles"},"type":"Page"}}]]}]}]}]
-15:I[31078,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-129576b133c2d6ab.js","177","static/chunks/app/layout-cb8593366cc9a15f.js"],"default"]
-16:I[59590,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-129576b133c2d6ab.js","177","static/chunks/app/layout-cb8593366cc9a15f.js"],"ClientThemeProvider"]
-17:I[68623,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-129576b133c2d6ab.js","177","static/chunks/app/layout-cb8593366cc9a15f.js"],"default"]
-18:I[53110,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-129576b133c2d6ab.js","177","static/chunks/app/layout-cb8593366cc9a15f.js"],"default"]
-19:I[5042,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-129576b133c2d6ab.js","177","static/chunks/app/layout-cb8593366cc9a15f.js"],"default"]
-2:["$","$L15",null,{"children":["$","$L16",null,{"children":["$","html",null,{"children":[["$","head",null,{"children":[["$","title",null,{"children":"artiYoga"}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/artiyoga-app/favicon.svg"}]]}],["$","$L11",null,{"component":"body","sx":{"display":"flex","flexDirection":"column","minHeight":"100vh","margin":0,"padding":0},"children":[["$","header",null,{"children":["$","$L17",null,{"siteMetaData":{"version":"","title":"artiYoga","description":"siteDescription","url":"https://www.artiyoga.com","youtubeUrl":"https://www.youtube.com/channel/UCl_6cWf7A0yPr2GPW4uJ7lw","facebookUrl":"https://www.facebook.com/baroni.kati","instagramUrl":"https://www.instagram.com/baroni.kati/","authorEmail":"baroni.kati@gmail.com","extraBackgroundText":"Content by Kati | Web design by e-baron","defaultImage":"/images/lessons/priveyoga.jpg","basePath":"/artiyoga-app","menuLinks":[{"name":"Yoga & Qigong","link":"","subMenu":[{"name":"Groepslessen","link":"/lessons/groups"},{"name":"VrouwenYoga Cirkel","link":"/lessons/women"},{"name":"Privé Lessen","link":"/lessons/personal"},{"name":"Online Lessen","link":"/lessons/video"}]},{"name":"Reiki","link":"","subMenu":[{"name":"Introductie","link":"/reiki/intro"},{"name":"Reiki-cursus 1","link":"/reiki/level1"},{"name":"Reiki-cursus 2","link":"/reiki/level2"},{"name":"Reiki-cursus 3","link":"/reiki/level3"},{"name":"Reiki workshops","link":"/reiki/workshops"},{"name":"Reiki 1 op 1","link":"/reiki/1to1"}]},{"name":"Coaching","link":"/coaching"},{"name":"Events","link":"/events"},{"name":"Blog","link":"/blog"},{"name":"About","link":"","subMenu":[{"name":"Kati","link":"/about/kati"},{"name":"Yogastijlen","link":"/about/yogastyles"}]},{"name":"Contact","link":"/contact"},{"name":"Admin","link":"","protected":true,"subMenu":[{"name":"Add page","link":"/pages/add","protected":true},{"name":"Manage assets","link":"/assets/manage","protected":true},{"name":"Update navbar","link":"/navbar/items/update","protected":true},{"name":"Publish","link":"/publish","protected":true}]},{"name":"Test","link":"/test","protected":true},{"name":"Designer","link":"/designer","protected":true}]}}]}],["$","$L11",null,{"sx":{"padding":0,"margin":0,"wordWrap":"break-word","flex":1},"className":"app-layout-box","children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L18",null,{}],["$","$L19",null,{"siteMetaData":"$2:props:children:props:children:props:children:1:props:children:0:props:children:props:siteMetaData"}]]}]]}]}]}]
-b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-7:null
-9:{"metadata":[["$","title","0",{"children":"Yogastijlen"}],["$","meta","1",{"name":"description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","2",{"property":"og:title","content":"Yogastijlen"}],["$","meta","3",{"property":"og:description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","4",{"property":"og:url","content":"https://www.artiyoga.com/about/yogastyles"}],["$","meta","5",{"property":"og:site_name","content":"artiYoga"}],["$","meta","6",{"property":"og:locale","content":"nl_BE"}],["$","meta","7",{"property":"og:image","content":"https://www.artiyoga.com/images/yogastyles/zachteyoga.jpg"}],["$","meta","8",{"property":"og:image:width","content":"800"}],["$","meta","9",{"property":"og:image:height","content":"600"}],["$","meta","10",{"property":"og:image:alt","content":"Yogastijlen"}],["$","meta","11",{"property":"og:type","content":"website"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"Yogastijlen"}],["$","meta","14",{"name":"twitter:description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","15",{"name":"twitter:image","content":"https://www.artiyoga.com/images/yogastyles/zachteyoga.jpg"}]],"error":null,"digest":"$undefined"}
-e:"$9:metadata"
+Kati
+
+
+
+    </Content>
+    <Content height="50vh">
+      <Image src="/images/yogastyles/circle.jpg" noContainer/>
+    </Content>
+
+
+</Section>7:["$","$L12",null,{"container":true,"children":["$","$L12",null,{"sx":{"display":"flex","justifyContent":"center","width":"100%"},"children":["$","$L13",null,{"className":"mdx-page-layout","sx":{"padding":0,"margin":0,"width":"100%"},"children":[false,["$","$L14",null,{"page":{"_raw":{"flattenedPath":"about/yogastyles"},"slug":"about/yogastyles","title":"Yogastijlen","description":"Yogastijlen aangeboden door Kati op 1500 Halle","featuredImage":"/images/yogastyles/zachteyoga.jpg","autoMargin":false,"autoFeatureImageAndText":false,"body":{"raw":"$15","code":"$16"},"date":"$D2023-05-11T00:00:00.000Z","footerImage":"/images/footer.jpg"}}]]}]}]}]
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+9:null
+b:{"metadata":[["$","title","0",{"children":"Yogastijlen"}],["$","meta","1",{"name":"description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","2",{"property":"og:title","content":"Yogastijlen"}],["$","meta","3",{"property":"og:description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","4",{"property":"og:url","content":"https://www.artiyoga.com/about/yogastyles"}],["$","meta","5",{"property":"og:site_name","content":"artiYoga"}],["$","meta","6",{"property":"og:locale","content":"nl_BE"}],["$","meta","7",{"property":"og:image","content":"https://www.artiyoga.com/images/yogastyles/zachteyoga.jpg"}],["$","meta","8",{"property":"og:image:width","content":"800"}],["$","meta","9",{"property":"og:image:height","content":"600"}],["$","meta","10",{"property":"og:image:alt","content":"Yogastijlen"}],["$","meta","11",{"property":"og:type","content":"website"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"Yogastijlen"}],["$","meta","14",{"name":"twitter:description","content":"Yogastijlen aangeboden door Kati op 1500 Halle"}],["$","meta","15",{"name":"twitter:image","content":"https://www.artiyoga.com/images/yogastyles/zachteyoga.jpg"}]],"error":null,"digest":"$undefined"}
+10:"$b:metadata"
