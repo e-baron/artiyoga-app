@@ -1,3 +1,5 @@
+"use client";
+
 import "./code-block.css";
 import "prism-themes/themes/prism-vsc-dark-plus.css"; // Import Prism CSS
 import { Box } from "@mui/material";
@@ -8,35 +10,51 @@ import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThem
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
 import { SiteMetaData } from "@/types";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { useEffect, useState } from "react";
+import siteConfig from "@/config/site-config.json";
 
-async function getSiteMetaData(): Promise<SiteMetaData & { __version: string }> {
-  const cfgPath = path.join(process.cwd(), "src/config/site-config.json");
-  const file = await fs.readFile(cfgPath, "utf-8");
-  const stat = await fs.stat(cfgPath);
-  const json = JSON.parse(file);
-  console.log("GOTMETADATA");
-  return { ...json, __version: String(stat.mtimeMs) };
-}
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-const RootLayout = async ({ children }: RootLayoutProps) => {
-  const siteMetaData = await getSiteMetaData();
-  console.log("SITEMETADATA");
-
-  const basePath = siteMetaData.basePath ?? "";
+const RootLayout =  ({ children }: RootLayoutProps) => {
+  const [siteMetaData, setSiteMetaData] = useState<SiteMetaData>(siteConfig);
+  const basePath = siteConfig.basePath || "";
   const faviconUrl = `${basePath}/favicon.svg`;
+  
+  useEffect(() => {
+      fetchSiteMetaData();
+    }, []);
+
+    const fetchSiteMetaData = async () => {
+      try {
+        const response = await fetch("/api/site-metadata", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "read",
+            
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setSiteMetaData(data);
+        } else {
+          const errorData = await response.json();
+          console.error("Error fetching site metadata:", errorData.message || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error fetching content:", error);
+      }
+    };
 
   return (
     <AppRouterCacheProvider>
       <ClientThemeProvider>
         <html>
           <head>
-            <title>{siteMetaData.title}</title>
+            <title>{siteMetaData?.title}</title>
             <link rel="icon" type="image/svg+xml" href={faviconUrl} />
           </head>
           <Box

@@ -93,7 +93,7 @@ const UpdateNavbarPage = () => {
             setMenuLinks(data.updatedMenuLinks);
           }
 
-          router.refresh();
+          router.refresh(); // Will force the layout to reload the config
         } else {
           const error = await response.json();
           setErrorMessage(error.message);
