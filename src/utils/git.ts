@@ -252,10 +252,10 @@ const mergeBranches = async (
  */
 const publishToGitHubPages = async (
   branch = "dev",
-  tempExportDir = "export"
+  outDir = "out"
 ) => {
   try {
-    const tempExportDirPath = path.resolve(tempExportDir);
+    const outDirPath = path.resolve(outDir);
     const projectDir = path.resolve(".");
 
     // Step 1: Build the project directly in the current directory
@@ -307,7 +307,7 @@ const publishToGitHubPages = async (
       }
       console.log("Project built successfully.");
 
-      // Step 2: Copy only the built output to temp directory
+      /*// Step 2: Copy only the built output to temp directory
       deleteDirectory(tempExportDirPath);
       console.log(`Deleted old ${tempExportDirPath} directory.`);
 
@@ -320,10 +320,10 @@ const publishToGitHubPages = async (
 
       // Copy the built output
       fse.copySync(outDir, tempOutDir);
-      console.log("Copied build output to temporary directory.");
+      console.log("Copied build output to temporary directory.");*/
 
       // Copy additional project files to the output
-      copyAdditionalProjectFiles(tempOutDir, [".nojekyll", "CNAME"]);
+      copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
 
     } finally {
       // Restore the original next.config.js
@@ -338,7 +338,7 @@ const publishToGitHubPages = async (
     console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) => {
       ghpages.publish(
-        path.join(tempExportDirPath, "out"),
+        path.join(outDirPath, "out"),
         {
           branch: "gh-pages",
           message: "Auto-publish to GitHub Pages",
