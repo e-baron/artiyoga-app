@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import {
   getFilePath,
   readFile,
-  resolveMdxFilePath,
   updateFile,
 } from "@/utils/files";
 import {

@@ -4,7 +4,6 @@ import path from "path";
 import siteConfig from "@/config/site-config.json";
 import { execSync } from "child_process";
 
-
 // Function to generate frontmatter string
 const generateFrontmatter = (frontmatter: Frontmatter): string => {
   // Use default title and description from site-config if no frontmatter is provided
@@ -238,6 +237,14 @@ function copyDir(src: string, dst: string) {
   }
 }
 
+const updateFileName = (oldPath: string, newPath: string) => {
+  if (fs.existsSync(oldPath)) {
+    fs.renameSync(oldPath, newPath);
+    return true;
+  }
+  return false;
+};
+
 export {
   createFile,
   createFileFromBlob,
@@ -251,5 +258,6 @@ export {
   deleteDirectory,
   copyProjectFiles,
   copyAdditionalProjectFiles,
-  copyDir
+  copyDir,
+  updateFileName,
 };

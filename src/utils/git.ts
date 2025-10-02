@@ -3,8 +3,14 @@ import ghpages from "gh-pages";
 import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
-import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
-import { isDev } from "@/utils/env";
+import {
+  copyAdditionalProjectFiles,
+  deleteDirectory,
+  deleteFile,
+  updateFileName,
+} from "@/utils/files";
+import { copyDir } from "@/utils/files";
+import { update } from "lodash";
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
@@ -243,30 +249,38 @@ const mergeBranches = async (
 
 /**
  * Publishes the project to GitHub Pages.
+ * We need a temporary directory to export the current state of the repository,
+ * build the project there, and then publish the built files to GitHub Pages.
+ * The reason is that we don't want to mess with the current working next server instance.
+ *
+ * @param tempExportDir Temporary directory to export the repository (default: "export").
  * @param branch The branch to publish (default: "dev").
  */
-const publishToGitHubPages = async (branch = "dev") => {
+const publishToGitHubPages = async (
+  branch = "dev",
+  tempExportDir = "export"
+) => {
   try {
-    const distDir = path.resolve("export");
+    const tempExportDirPath = path.resolve(tempExportDir);
 
-    deleteDirectory(distDir);
-    console.log("Old dist directory deleted.");
+    deleteDirectory(tempExportDirPath);
+    console.log(`Deleted old ${tempExportDirPath} directory.`);
 
     // Step 1: Copy project files to the new directory
     const projectDir = path.resolve(".");
-    await checkoutIndexLike(projectDir, distDir);
+    await checkoutIndexLike(projectDir, tempExportDirPath);
 
-    console.log("Project files copied to dist directory.");
+    console.log(`Exported repository to ${tempExportDirPath}.`);
 
     // Step 2: Build the project
     try {
       console.log("Starting build process...");
       const cleanEnv: NodeJS.ProcessEnv = {
         ...process.env, // Inherit the current environment
-        PWD: distDir, // Set PWD to the dist directory
-        INIT_CWD: distDir, // Set INIT_CWD to the dist directory
-        npm_config_local_prefix: distDir, // Set npm's local prefix to the dist directory
-        npm_package_json: path.join(distDir, "package.json"), // Point to the correct package.json
+        PWD: tempExportDirPath, // Set PWD to the dist directory
+        INIT_CWD: tempExportDirPath, // Set INIT_CWD to the dist directory
+        npm_config_local_prefix: tempExportDirPath, // Set npm's local prefix to the dist directory
+        npm_package_json: path.join(tempExportDirPath, "package.json"), // Point to the correct package.json
         NODE_ENV: "production", // Explicitly set NODE_ENV to production
         TURBOPACK: undefined, // Remove Turbopack flag for production builds
         npm_lifecycle_event: undefined, // Remove lifecycle event
@@ -276,39 +290,47 @@ const publishToGitHubPages = async (branch = "dev") => {
 
       console.log("Environment for build:", cleanEnv);
 
-      // Install dependencies
-      const installResult = spawnSync(
-        "sh",
-        ["-c", `cd ${distDir} && npm install`],
-        {
-          stdio: "inherit",
-          env: cleanEnv,
-        }
+      console.log("Copying node_modules to temporary directory...");
+      copyDir(
+        path.join(projectDir, "node_modules"),
+        path.join(tempExportDirPath, "node_modules")
       );
+      console.log("node_modules copied.");
 
-      if (installResult.status !== 0) {
-        throw new Error(`npm install failed with code ${installResult.status}`);
-      }
-
-      console.log("Dependencies installed in dist directory.");
-
-      // Run the build command
-      const buildResult = spawnSync(
-        "sh",
-        ["-c", `cd ${distDir} && npm run build:next`],
-        {
-          stdio: "inherit",
-          env: cleanEnv,
-        }
-      );
-      const outDir = path.join(distDir, "out");
+      const outDir = path.join(tempExportDirPath, "out");
       copyAdditionalProjectFiles(outDir, [".nojekyll", "CNAME"]);
 
-      if (buildResult.status !== 0) {
-        throw new Error(`npm run build failed with code ${buildResult.status}`);
-      }
+      // Remove the useless next.config.js in the temp directory
+      const nextConfigPath = path.join(tempExportDirPath, "next.config.js");
+      deleteFile(nextConfigPath);
+      console.log("Removed next.config.js from temporary directory.");
+      // Rename the next.config.export.js to next.config.js
+      updateFileName(
+        path.join(tempExportDirPath, "next.config.export.js"),
+        nextConfigPath
+      );
+      console.log("Renamed next.config.export.js to next.config.js.");
 
-      console.log("Project built successfully in dist directory.");
+      // Define the path to the `next` executable within the temp directory
+      const nextExecutablePath = path.join(
+        tempExportDirPath,
+        "node_modules",
+        ".bin",
+        "next"
+      );
+
+      // Run the build command directly using the `next` executable
+      console.log("Running next build...");
+      const buildResult = spawnSync(nextExecutablePath, ["build"], {
+        cwd: tempExportDirPath,
+        stdio: "inherit",
+        env: cleanEnv,
+      });
+
+      if (buildResult.status !== 0) {
+        throw new Error(`next build failed with code ${buildResult.status}`);
+      }
+      console.log("Project built successfully.");
     } catch (error) {
       throw new Error(
         `Build process failed: ${
@@ -321,7 +343,7 @@ const publishToGitHubPages = async (branch = "dev") => {
     console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) => {
       ghpages.publish(
-        path.join(distDir, "out"),
+        path.join(tempExportDirPath, "out"),
         {
           branch: "gh-pages",
           message: "Auto-publish to GitHub Pages",
