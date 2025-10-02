@@ -1,6 +1,7 @@
 import { Frontmatter } from "@/types";
 import fs from "fs";
 import path from "path";
+import fse from "fs-extra";
 import siteConfig from "@/config/site-config.json";
 import { execSync } from "child_process";
 
@@ -225,15 +226,25 @@ const copyAdditionalProjectFiles = (
   }
 };
 
-function copyDir(src: string, dst: string) {
-  if (!fs.existsSync(src)) return;
-  fs.mkdirSync(dst, { recursive: true });
-  for (const e of fs.readdirSync(src)) {
-    const s = path.join(src, e);
-    const d = path.join(dst, e);
-    const st = fs.statSync(s);
-    if (st.isDirectory()) copyDir(s, d);
-    else fs.copyFileSync(s, d);
+/**
+ * Copies files and directories from the source to the destination.
+ * @param src The source directory.
+ * @param dst The destination directory.
+ * @param dereference If true, symlinks are followed. Defaults to false.
+ * If false, symlinks are copied as symlinks (recommended for node_modules).
+ * @returns void
+ */
+function copyDir(src: string, dst: string, dereference = false) {
+  // Check if the source exists and is a directory
+  if (!fs.existsSync(src) || !fs.statSync(src).isDirectory()) {
+    console.warn(`Source path ${src} is not a valid directory. Skipping copy.`);
+    return;
+  }
+  try {
+    fse.copySync(src, dst, { dereference });
+  } catch (error) {
+    console.error(`Failed to copy directory from ${src} to ${dst}.`, error);
+    throw error; // Re-throw the error to stop the process
   }
 }
 

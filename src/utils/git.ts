@@ -3,6 +3,7 @@ import ghpages from "gh-pages";
 import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
+import fse from "fs-extra";
 import {
   copyAdditionalProjectFiles,
   deleteDirectory,
@@ -262,17 +263,16 @@ const publishToGitHubPages = async (
 ) => {
   try {
     const tempExportDirPath = path.resolve(tempExportDir);
+    const projectDir = path.resolve(".");
 
     deleteDirectory(tempExportDirPath);
     console.log(`Deleted old ${tempExportDirPath} directory.`);
 
-    // Step 1: Copy project files to the new directory
-    const projectDir = path.resolve(".");
+    // Copy project files to the new directory
     await checkoutIndexLike(projectDir, tempExportDirPath);
 
     console.log(`Exported repository to ${tempExportDirPath}.`);
 
-    // Step 2: Build the project
     try {
       console.log("Starting build process...");
       const cleanEnv: NodeJS.ProcessEnv = {
@@ -285,17 +285,22 @@ const publishToGitHubPages = async (
         TURBOPACK: undefined, // Remove Turbopack flag for production builds
         npm_lifecycle_event: undefined, // Remove lifecycle event
         npm_lifecycle_script: undefined, // Remove lifecycle script
+        NEXT_PUBLIC_NODE_ENV: "production", // Ensure this is set for Next.js
         _: undefined, // Remove reference to the parent `next` binary
       };
 
-      console.log("Environment for build:", cleanEnv);
+      const sourceNodeModules = path.join(projectDir, "node_modules");
+      const destNodeModules = path.join(tempExportDirPath, "node_modules");
 
+      // A. Forcefully remove any 'node_modules' file OR directory created by git checkout.
+      // This guarantees a clean slate.
+      console.log(`Ensuring destination for node_modules is clean...`);
+      fse.removeSync(destNodeModules);
+
+      // B. Now, copy the real node_modules directory.
       console.log("Copying node_modules to temporary directory...");
-      copyDir(
-        path.join(projectDir, "node_modules"),
-        path.join(tempExportDirPath, "node_modules")
-      );
-      console.log("node_modules copied.");
+      fse.copySync(sourceNodeModules, destNodeModules, { dereference: false });
+      console.log("node_modules copied successfully.");
 
       const outDir = path.join(tempExportDirPath, "out");
       copyAdditionalProjectFiles(outDir, [".nojekyll", "CNAME"]);
