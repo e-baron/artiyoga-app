@@ -5,10 +5,10 @@ import { Button, Typography, Box, Grid, CircularProgress } from "@mui/material";
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
 import { MdxPage } from "@/types";
-import MdxContent from "@/components/MdxContent/MdxContent";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 import { isDev } from "@/utils/env";
 import { MdxViewer } from "../MdxContent/MdxViewer";
+import { useRouter } from "next/navigation"; // ADD
 
 interface EditPageProps {
   page: MdxPage;
@@ -16,36 +16,11 @@ interface EditPageProps {
 
 const EditPage = ({ page }: EditPageProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState<string | null>(null);
+  const [content, setContent] = useState<string | null>(page.body?.raw || "");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // Add loading state for the save button
-
-  // Fetch the raw content of the page using the POST API
-  const fetchRawContent = async () => {
-    try {
-      const response = await fetch("/api/update-page", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "read",
-          slug: page._raw?.flattenedPath || "",
-        }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setContent(data.code); // Assuming the API returns the raw content in `data.code`
-        setIsEditing(true);
-        setErrorMessage(null);
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Failed to fetch content.");
-      }
-    } catch (error) {
-      console.error("Error fetching raw content:", error);
-      setErrorMessage("An error occurred while fetching the content.");
-    }
-  };
+  const router = useRouter(); // ADD
 
   // Save the updated raw content
   const saveContent = async () => {
@@ -64,6 +39,7 @@ const EditPage = ({ page }: EditPageProps) => {
         setIsEditing(false);
         setSuccessMessage("Content updated successfully!");
         setErrorMessage(null);
+        router.refresh(); // Refresh the page to show updated content
       } else {
         const errorData = await response.json();
         setSuccessMessage(null);
@@ -85,7 +61,7 @@ const EditPage = ({ page }: EditPageProps) => {
         <Button
           variant="outlined"
           color="primary"
-          onClick={fetchRawContent}
+          onClick={() => setIsEditing(true)}
           sx={{ margin: "1rem" }}
         >
           Edit Page

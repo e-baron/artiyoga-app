@@ -4,12 +4,21 @@ import Content from "@/components/Content/Content";
 import Section from "@/components/Section/Section";
 import Image from "@/components/Image/Image";
 import EditPage from "@/components/EditPage/EditPage";
-import { readRuntimePage } from "@/utils/runtime-pages";
+import { readRuntimePage, getAllRuntimePages } from "@/utils/runtime-pages";
 
 // export const dynamic = "force-dynamic";
 
-export async function generateStaticParams() {
+/*export async function generateStaticParams() {
   return [];
+}*/
+
+export async function generateStaticParams() {
+  const allPages = await getAllRuntimePages();
+  const allParams = allPages.map((page) => ({
+    slug: page._raw.flattenedPath.split("/"),
+  }));
+  allParams.push({ slug: [] });
+  return allParams;
 }
 
 interface generatedMetadataProps {
