@@ -16,6 +16,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { isDev } from "@/utils/env";
+import { useRouter } from "next/navigation";
 
 // Define the structure of a menu link
 interface MenuLink {
@@ -40,6 +41,7 @@ const UpdateNavbarPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
+  const router = useRouter();
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
@@ -90,6 +92,8 @@ const UpdateNavbarPage = () => {
           if (data.updatedMenuLinks) {
             setMenuLinks(data.updatedMenuLinks);
           }
+
+          router.refresh();
         } else {
           const error = await response.json();
           setErrorMessage(error.message);

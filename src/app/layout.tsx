@@ -8,19 +8,28 @@ import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThem
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
 import { SiteMetaData } from "@/types";
-// import siteMetaData from "@/config/site-config.json";
+import fs from "node:fs/promises";
+import path from "node:path";
 
-const getSiteMetaData = async (): Promise<SiteMetaData> => {
-  const siteMetaData = await import("@/config/site-config.json");
-  return siteMetaData.default as SiteMetaData ;
-};
+async function getSiteMetaData(): Promise<SiteMetaData & { __version: string }> {
+  const cfgPath = path.join(process.cwd(), "src/config/site-config.json");
+  const file = await fs.readFile(cfgPath, "utf-8");
+  const stat = await fs.stat(cfgPath);
+  const json = JSON.parse(file);
+  console.log("GOTMETADATA");
+  return { ...json, __version: String(stat.mtimeMs) };
+}
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+// Dynamic layout to support runtime pages
+export const dynamic = "force-dynamic";
+
 const RootLayout = async ({ children }: RootLayoutProps) => {
   const siteMetaData = await getSiteMetaData();
+  console.log("SITEMETADATA");
 
   const basePath = siteMetaData.basePath ?? "";
   const faviconUrl = `${basePath}/favicon.svg`;
