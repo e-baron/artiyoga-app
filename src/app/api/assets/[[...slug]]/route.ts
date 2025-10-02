@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import path from "node:path";
 import mime from "mime-types";
+import { getAllRuntimeAssets } from "@/utils/runtime-pages";
+
+export async function generateStaticParams() {
+  const allAssets = getAllRuntimeAssets();
+  return allAssets.map((filepath) => ({ slug: filepath.split("/") })); // Split the filepath into segments for the slug
+}
 
 export async function GET(
   request: Request,

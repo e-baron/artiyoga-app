@@ -82,4 +82,25 @@ const getAllRuntimePages = () => {
   return pages;
 };
 
-export { readRuntimePage, getAllRuntimePages };
+const getAllRuntimeAssets = () => {
+  const assetsDir = path.join(process.cwd(), "public");
+  if (!fs.existsSync(assetsDir)) return [];
+  const walkAssets = (dir: string, prefix = ""): string[] => {
+    let files: string[] = [];
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files = files.concat(
+          walkAssets(fullPath, path.join(prefix, entry.name))
+        );
+      } else if (entry.isFile()) {
+        files.push(path.join(prefix, entry.name).replace(/\\/g, "/"));
+      }
+    }
+    return files;
+  };
+  return walkAssets(assetsDir);
+};
+
+export { readRuntimePage, getAllRuntimePages, getAllRuntimeAssets };
