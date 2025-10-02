@@ -16,7 +16,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { isDev } from "@/utils/env";
-import { useRouter } from "next/navigation";
+import { useSiteMetadata } from "@/contexts/sitemetadata"; // IMPORT THE HOOK
 
 // Define the structure of a menu link
 interface MenuLink {
@@ -41,7 +41,7 @@ const UpdateNavbarPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
-  const router = useRouter();
+  const { siteMetaData, refetchSiteMetaData } = useSiteMetadata(); // USE THE HOOK
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
@@ -93,7 +93,9 @@ const UpdateNavbarPage = () => {
             setMenuLinks(data.updatedMenuLinks);
           }
 
-          router.refresh(); // Will force the layout to reload the config
+          console.log("REFRESHING");
+          //router.refresh(); // Will force the layout to reload the config
+          await refetchSiteMetaData();
         } else {
           const error = await response.json();
           setErrorMessage(error.message);
