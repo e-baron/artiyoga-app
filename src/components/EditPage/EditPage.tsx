@@ -8,6 +8,7 @@ import { MdxPage } from "@/types";
 import MdxContent from "@/components/MdxContent/MdxContent";
 import { MdxPreview } from "@/components/MdxContent/MdxPreview";
 import { isDev } from "@/utils/env";
+import { MdxViewer } from "../MdxContent/MdxViewer";
 
 interface EditPageProps {
   page: MdxPage;
@@ -112,7 +113,7 @@ const EditPage = ({ page }: EditPageProps) => {
       {/* Render the MDX content or the raw content editor */}
       {!isEditing ? (
         page?.body?.code ? (
-          <MdxContent code={page.body.code} />
+          <MdxViewer content={page.body.raw} />
         ) : (
           <Typography variant="body2" color="textSecondary">
             No content available to display.

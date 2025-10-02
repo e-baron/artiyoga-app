@@ -1,56 +1,52 @@
-import { allPages } from "contentlayer/generated";
 import { Box, Grid } from "@mui/material";
 import siteMetaData from "@/config/site-config.json";
 import Content from "@/components/Content/Content";
 import Section from "@/components/Section/Section";
 import Image from "@/components/Image/Image";
 import EditPage from "@/components/EditPage/EditPage";
+import { readRuntimePage } from "@/utils/runtime-pages";
 
-const generateStaticParams = async () => {
-  const allParams = allPages.map((page) => ({
-    slug: page._raw.flattenedPath.split("/"),
-  }));
-  allParams.push({ slug: [] });
-  return allParams;
-};
+export const dynamic = "force-dynamic";
+
+export async function generateStaticParams() {
+  return [];
+}
 
 interface generatedMetadataProps {
   params: Promise<{ slug: string[] }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const generateMetadata = async ({ params }: generatedMetadataProps) => {
-  const resolvedParams = await params;
-
-  const slug =
-    !resolvedParams || !resolvedParams.slug
-      ? ""
-      : resolvedParams.slug.join("/");
-
-  const page =
-    allPages.find((page) => page._raw.flattenedPath === slug) ||
-    allPages.find((page) => page._raw.flattenedPath === "");
-
-  if (!page) {
-    return { title: "Not found", description: "Page not found" };
+export async function generateMetadata({ params }: generatedMetadataProps) {
+  const resolved = await params;
+  const slug = !resolved?.slug ? "" : resolved.slug.join("/");
+  let page;
+  try {
+    page = readRuntimePage(slug || "index");
+  } catch {
+    try {
+      page = readRuntimePage("index");
+    } catch {
+      return { title: "Not found", description: "Page not found" };
+    }
   }
   return {
-    title: page!.title ?? siteMetaData.title,
-    description: page!.description ?? siteMetaData.description,
+    title: page.title || siteMetaData.title,
+    description: page.description || siteMetaData.description,
     url: `${siteMetaData.url}/${slug}`,
     openGraph: {
-      title: page!.title ?? siteMetaData.title,
-      description: page!.description ?? siteMetaData.description,
+      title: page.title || siteMetaData.title,
+      description: page.description || siteMetaData.description,
       url: `${siteMetaData.url}/${slug}`,
       siteName: siteMetaData.title,
       images: [
         {
           url: `${siteMetaData.url}${
-            page?.featuredImage ? page.featuredImage : siteMetaData.defaultImage
+            page.featuredImage ? page.featuredImage : siteMetaData.defaultImage
           }`,
           width: 800,
           height: 600,
-          alt: page!.title ?? siteMetaData.title,
+          alt: page.title || siteMetaData.title,
         },
       ],
       locale: "nl_BE",
@@ -58,77 +54,63 @@ const generateMetadata = async ({ params }: generatedMetadataProps) => {
     },
     twitter: {
       card: "summary_large_image",
-      title: page!.title ?? siteMetaData.title,
-      description: page!.description ?? siteMetaData.description,
+      title: page.title || siteMetaData.title,
+      description: page.description || siteMetaData.description,
       images: [
         `${siteMetaData.url}${
-          page?.featuredImage ? page.featuredImage : siteMetaData.defaultImage
+          page.featuredImage ? page.featuredImage : siteMetaData.defaultImage
         }`,
       ],
     },
     metadataBase: new URL(siteMetaData.url),
   };
-};
+}
 
 interface MdxPageLayoutProps {
   params: Promise<{ slug: string[] }>;
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MdxPageLayout = async ({ params }: MdxPageLayoutProps) => {
-  const resolvedParams = await params;
+export default async function MdxPageLayout({ params }: MdxPageLayoutProps) {
+  const resolved = await params;
+  const slug = !resolved?.slug ? "" : resolved.slug.join("/");
+  let page;
+  try {
+    page = readRuntimePage(slug || "index");
+  } catch {
+    return (
+      <div style={{ padding: "2rem" }}>
+        Page not found: {slug || "(index)"}.
+      </div>
+    );
+  }
 
-  const slug =
-    !resolvedParams || !resolvedParams.slug
-      ? "" // this is the index page
-      : resolvedParams.slug.join("/");
-
-  const page = allPages.find((page) => page._raw.flattenedPath === slug);
-
-  const autoMargin = page?.autoMargin ?? true;
+  const autoMargin = page.autoMargin ?? true;
 
   return (
     <Grid container>
-      {/* Middle column */}
-      <Grid
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
+      <Grid sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
         <Box
           className="mdx-page-layout"
-          sx={{
-            padding: autoMargin ? "1rem" : 0,
-            margin: 0,
-            width: "100%",
-          }}
+          sx={{ padding: autoMargin ? "1rem" : 0, margin: 0, width: "100%" }}
         >
-          {page?.autoFeatureImageAndText && (
+          {page.autoFeatureImageAndText && (
             <Section autoMargin={false}>
               <Content height="50vh" fullwidth>
                 <Image
-                  src={page?.featuredImage ?? siteMetaData?.defaultImage ?? ""}
+                  src={page.featuredImage ?? siteMetaData?.defaultImage ?? ""}
                   noContainer
-                  alt={page?.title ?? "Featured image"}
+                  alt={page.title ?? "Featured image"}
                 />
               </Content>
-
               <Content fullwidth>
-                <h3>{page?.title}</h3>
+                <h3>{page.title}</h3>
               </Content>
             </Section>
           )}
-
-          {/* Pass the entire page object to the EditPage component */}
-          <EditPage page={page!} />
+          <EditPage page={page} />
         </Box>
       </Grid>
     </Grid>
   );
-};
-
-export { generateMetadata, generateStaticParams };
-
-export default MdxPageLayout;
+}
