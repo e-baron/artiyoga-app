@@ -9,7 +9,7 @@ import Image from "@/components/Image/Image";
 import Carousel from "@/components/Carousel/Carousel";
 import Content from "@/components/Content/Content";
 import ContentWithBackground from "@/components/Content/ContentWithBackground";
-import ContextIndex from "@/components/ContentIndex/ContentIndex";
+import ContentIndex from "@/components/ContentIndex/ContentIndex";
 import Section from "@/components/Section/Section";
 import * as Symbols from "@/components/Symbols/Symbols";
 import SectionFooter from "@/components/Section/SectionFooter";
@@ -28,7 +28,7 @@ const shortcodes = {
   Carousel,
   Content,
   ContentWithBackground,
-  ContextIndex,
+  ContextIndex: ContentIndex,
   Section,
   SectionFooter,
   Schedule,

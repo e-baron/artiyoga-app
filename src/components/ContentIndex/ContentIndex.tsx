@@ -1,5 +1,3 @@
-import { allPages } from "contentlayer/generated";
-
 import Link from "next/link";
 import {
   Grid,
@@ -10,8 +8,9 @@ import {
   Box,
 } from "@mui/material";
 import { format, parseISO } from "date-fns";
+import { getAllRuntimePages } from "@/utils/runtime-pages";
 
-interface ContextIndexProps {
+interface ContentIndexProps {
   daysToConsiderNewsOutdated?: number;
   requestedCategoriesOnly?: string[];
   contentPagePath?: string;
@@ -24,18 +23,21 @@ interface ContextIndexProps {
  * @returns The rendered ContextIndex component.
  */
 
-const ContextIndex = ({
+const ContentIndex = ({
   daysToConsiderNewsOutdated = -1,
   requestedCategoriesOnly = [],
   contentPagePath = "contents/",
   suppressPotentialMarkdownCodeInExcerpt = true,
-}: ContextIndexProps) => {
-  let contents = allPages.filter((mdxPage) =>
-    mdxPage._raw?.sourceFilePath.includes(contentPagePath)
+}: ContentIndexProps) => {
+  
+
+  const allPages = getAllRuntimePages();
+  let allContents = allPages.filter((page) =>
+    page._raw.flattenedPath.startsWith(contentPagePath)
   );
 
   // Sort news by date
-  contents.sort((a, b) => {
+  allContents.sort((a, b) => {
     if (!b.date) return -1;
     if (!a.date) return 1;
     return parseISO(b.date).getTime() - parseISO(a.date).getTime();
@@ -44,7 +46,7 @@ const ContextIndex = ({
   // Filter news by date if daysToConsiderNewsOutdated is not set to -1
   if (daysToConsiderNewsOutdated !== -1) {
     const now = new Date();
-    contents = contents.filter((newsItem) => {
+    allContents = allContents.filter((newsItem) => {
       const diffDays = newsItem.date
         ? daysBetween(parseISO(newsItem.date), now)
         : 0;
@@ -59,11 +61,11 @@ const ContextIndex = ({
     });
   }
 
-  if (!contents || contents.length === 0) return null;
+  if (!allContents || allContents.length === 0) return null;
 
   return (
     <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
-      {contents.map((contentItem, index) => {
+      {allContents.map((contentItem, index) => {
         if (
           contentItem.published &&
           (requestedCategoriesOnly.length === 0 ||
@@ -166,4 +168,4 @@ function daysBetween(startDate: Date, endDate: Date): number {
   );
 }
 
-export default ContextIndex;
+export default ContentIndex;
