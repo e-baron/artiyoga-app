@@ -249,13 +249,9 @@ const mergeBranches = async (
 };
 
 /**
- * Publishes the project to GitHub Pages.
- * We need a temporary directory to export the current state of the repository,
- * build the project there, and then publish the built files to GitHub Pages.
- * The reason is that we don't want to mess with the current working next server instance.
- *
- * @param tempExportDir Temporary directory to export the repository (default: "export").
- * @param branch The branch to publish (default: "dev").
+ * Publishes the project to GitHub Pages using a simplified approach.
+ * Instead of copying node_modules to a temp directory, we build directly 
+ * in the project directory and then copy only the output.
  */
 const publishToGitHubPages = async (
   branch = "dev",
@@ -265,69 +261,46 @@ const publishToGitHubPages = async (
     const tempExportDirPath = path.resolve(tempExportDir);
     const projectDir = path.resolve(".");
 
-    deleteDirectory(tempExportDirPath);
-    console.log(`Deleted old ${tempExportDirPath} directory.`);
-
-    // Copy project files to the new directory
-    await checkoutIndexLike(projectDir, tempExportDirPath);
-
-    console.log(`Exported repository to ${tempExportDirPath}.`);
+    // Step 1: Build the project directly in the current directory
+    console.log("Building project for export...");
+    
+    // Backup the current next.config.js
+    const nextConfigPath = path.join(projectDir, "next.config.js");
+    const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
+    const nextConfigExportPath = path.join(projectDir, "next.config.export.js");
+    
+    if (fs.existsSync(nextConfigPath)) {
+      fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
+    }
+    
+    // Use the export config for building
+    if (fs.existsSync(nextConfigExportPath)) {
+      fs.copyFileSync(nextConfigExportPath, nextConfigPath);
+      console.log("Switched to export configuration.");
+    }
 
     try {
-      console.log("Starting build process...");
       const cleanEnv: NodeJS.ProcessEnv = {
-        ...process.env, // Inherit the current environment
-        PWD: tempExportDirPath, // Set PWD to the dist directory
-        INIT_CWD: tempExportDirPath, // Set INIT_CWD to the dist directory
-        npm_config_local_prefix: tempExportDirPath, // Set npm's local prefix to the dist directory
-        npm_package_json: path.join(tempExportDirPath, "package.json"), // Point to the correct package.json
-        NODE_ENV: "production", // Explicitly set NODE_ENV to production
-        TURBOPACK: undefined, // Remove Turbopack flag for production builds
-        npm_lifecycle_event: undefined, // Remove lifecycle event
-        npm_lifecycle_script: undefined, // Remove lifecycle script
-        NEXT_PUBLIC_NODE_ENV: "production", // Ensure this is set for Next.js
-        _: undefined, // Remove reference to the parent `next` binary
+        ...process.env,
+        NODE_ENV: "production",
+        NEXT_PUBLIC_NODE_ENV: "production",
+        TURBOPACK: undefined,
+        npm_lifecycle_event: undefined,
+        npm_lifecycle_script: undefined,
+        _: undefined,
       };
 
-      const sourceNodeModules = path.join(projectDir, "node_modules");
-      const destNodeModules = path.join(tempExportDirPath, "node_modules");
-
-      // A. Forcefully remove any 'node_modules' file OR directory created by git checkout.
-      // This guarantees a clean slate.
-      console.log(`Ensuring destination for node_modules is clean...`);
-      fse.removeSync(destNodeModules);
-
-      // B. Now, copy the real node_modules directory.
-      console.log("Copying node_modules to temporary directory...");
-      fse.copySync(sourceNodeModules, destNodeModules, { dereference: false });
-      console.log("node_modules copied successfully.");
-
-      const outDir = path.join(tempExportDirPath, "out");
-      copyAdditionalProjectFiles(outDir, [".nojekyll", "CNAME"]);
-
-      // Remove the useless next.config.js in the temp directory
-      const nextConfigPath = path.join(tempExportDirPath, "next.config.js");
-      deleteFile(nextConfigPath);
-      console.log("Removed next.config.js from temporary directory.");
-      // Rename the next.config.export.js to next.config.js
-      updateFileName(
-        path.join(tempExportDirPath, "next.config.export.js"),
-        nextConfigPath
-      );
-      console.log("Renamed next.config.export.js to next.config.js.");
-
-      // Define the path to the `next` executable within the temp directory
+      // Build using the current node_modules (no copying needed)
       const nextExecutablePath = path.join(
-        tempExportDirPath,
+        projectDir,
         "node_modules",
         ".bin",
         "next"
       );
 
-      // Run the build command directly using the `next` executable
       console.log("Running next build...");
       const buildResult = spawnSync(nextExecutablePath, ["build"], {
-        cwd: tempExportDirPath,
+        cwd: projectDir,
         stdio: "inherit",
         env: cleanEnv,
       });
@@ -336,12 +309,32 @@ const publishToGitHubPages = async (
         throw new Error(`next build failed with code ${buildResult.status}`);
       }
       console.log("Project built successfully.");
-    } catch (error) {
-      throw new Error(
-        `Build process failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+
+      // Step 2: Copy only the built output to temp directory
+      deleteDirectory(tempExportDirPath);
+      console.log(`Deleted old ${tempExportDirPath} directory.`);
+
+      const outDir = path.join(projectDir, "out");
+      const tempOutDir = path.join(tempExportDirPath, "out");
+
+      if (!fs.existsSync(outDir)) {
+        throw new Error("Build output directory not found. Build may have failed.");
+      }
+
+      // Copy the built output
+      fse.copySync(outDir, tempOutDir);
+      console.log("Copied build output to temporary directory.");
+
+      // Copy additional project files to the output
+      copyAdditionalProjectFiles(tempOutDir, [".nojekyll", "CNAME"]);
+
+    } finally {
+      // Restore the original next.config.js
+      if (fs.existsSync(nextConfigBackupPath)) {
+        fs.copyFileSync(nextConfigBackupPath, nextConfigPath);
+        fs.unlinkSync(nextConfigBackupPath);
+        console.log("Restored original next.config.js.");
+      }
     }
 
     // Step 3: Publish to GitHub Pages
