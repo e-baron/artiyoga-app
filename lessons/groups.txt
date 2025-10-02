@@ -1,0 +1,221 @@
+1:"$Sreact.fragment"
+2:I[17989,[],"ClientSegmentRoot"]
+3:I[97795,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-55ef6df122e24fe8.js","177","static/chunks/app/layout-d45d4c3546caeaef.js"],"default"]
+4:I[9766,[],""]
+5:I[98924,[],""]
+8:I[24431,[],"OutletBoundary"]
+a:I[15278,[],"AsyncMetadataOutlet"]
+c:I[24431,[],"ViewportBoundary"]
+e:I[24431,[],"MetadataBoundary"]
+f:"$Sreact.suspense"
+11:I[57150,[],""]
+:HL["/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","style"]
+:HL["/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","style"]
+:HL["/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","style"]
+0:{"P":null,"b":"8QLfKStJvAXmIMBVXbWem","p":"/artiyoga-app","c":["","lessons","groups"],"i":false,"f":[[["",{"children":[["slug","lessons/groups","oc"],{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L2",null,{"Component":"$3","slots":{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]},"params":{},"promise":"$@6"}]]}],{"children":[["slug","lessons/groups","oc"],["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L8",null,{"children":["$L9",["$","$La",null,{"promise":"$@b"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Lc",null,{"children":"$Ld"}],null],["$","$Le",null,{"children":["$","div",null,{"hidden":true,"children":["$","$f",null,{"fallback":null,"children":"$L10"}]}]}]]}],false]],"m":"$undefined","G":["$11",[]],"s":false,"S":true}
+6:"$0:f:0:1:1:props:children:1:props:params"
+12:I[3295,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+13:I[97282,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+14:I[50413,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+15:Tfc3,---
+autoMargin: false
+featuredImage: /images/lessons/groeplessen.jpg
+footerImage: /images/footer.jpg
+title: Yoga & Qigonglessen in groep in Halle
+description : Yoga & Qigonglessen in groep in Halle met Kati
+---
+<Section autoMargin={false}>
+  <ContentWithBackground src="/images/lessons/groeplessen.jpg"  height="50vh">
+    <SectionFooter light>
+      <blockquote>
+        <p>Be a Meditator, an Artist and a Warrior</p>
+      </blockquote>          
+    </SectionFooter>
+  </ContentWithBackground>
+
+  <Content fullwidth autoMargin>
+      <h3>Van harte welkom in deze groepjes</h3>
+     <Schedule
+      columns={[
+        {
+          header: "Woensdag",
+          sessions: [
+            {
+              title: "Hatha Yoga - Be a warrior of light",
+              time: "09:00-10:15",
+            },
+            {
+              title: "Zachte Yoga – Be an artist each moment",
+              time: "10:30-11:45",
+            },
+            {
+              title: "Hatha Yoga – Be a peaceful warrior",
+              time: "18:00-19:15",
+            },
+            {
+              title: "Avondyoga – The art of letting go & refreshing",
+              time: "19:30-20:45",
+            },
+          ],
+        },
+        {
+          header: "Donderdag",
+          sessions: [
+            {
+              title: "Hatha Yoga – Be a warrior of love",
+              time: "09:00-10:15",
+            },
+            {
+              title: "Qi-gong & Meditatie – See clearly",
+              time: "10:30-11:45",
+            },
+          ],
+        },
+      ]}
+    />
+  </Content>
+  <Content fullwidth autoMargin>
+    Wees een yogi, een kunstenaar en een krijger. [HIER](/about/yogastyles) kan je meer lezen over het verschil tussen hatha yoga, zachte yoga, qi-gongmeditatie en avondyoga.
+
+    Kan je moelijk kiezen of is er maar een moment dat past?  
+    Wees gerust: in alle yoga- en meditatiesessies worden de verschillende kwaliteiten van je wezen versterkt, bovendien zijn de sessies altijd aangepast aan de behoeften van de deelnemers.
+  </Content>
+
+  <Content fullwidth autoMargin>
+     ### Abonnement
+     |  | |
+    | :---: | --- |
+    |<CalendarIcon/>| <ul> <li> Woensdagochtend : 17/9, 24/9, 1/10, 8/10, 15/10, 22/10, 12/11, 19/11, 26/11, 3/12</li> <li> Woensdagavond : 17/9, 24/9, 1/10, 8/10, 15/10, 22/10, 12/11, 19/11, 26/11, 3/12</li> <li> Donderdagochtend : 18/9, 25/9, 2/10, 9/10, 16/10, 23/10, 13/11, 20/11, 27/11, 4/12</li> </ul> |
+    | <LocationIcon/> | Alle wekelijkse oefensessies (ook op woensdagavond) gaan door in CC ‘t VONDEL Joseph Possozplein 40, 1500 Halle – ZAAL 5 op de 1ste verdieping  | 
+    | <MoneyIcon/> | 120€ | 
+    |<ToolIcon/>|Meebrengen: mat, deken, comfortabele kledij|
+    | <ThemeIcon/> | Het thema van deze reeks is **Herfstadem – wortelen en loslaten** | 
+    | <BellIcon/> | <ul><li>Je kan je plaats reserveren door storting van het inschrijvingsgeld op BE05 0689 1011 7075 op naam van Baroni Kati. Zet je naam en je groep in de communicatie aub. Merci. Of stuur eerst een mail en betaal cash. </li><li>In het abonnement is een wekelijkse opname inbegrepen, voor zou je afwezig zijn (kortere abonnementen zijn dus niet beschikbaar).</li> <li>Het abonnement is geldig tot aan het einde van de reeks. </li> <li>Terugstorting/lesverplaatsing naar volgende reeks is niet mogelijk.</li> </ul> | 
+
+  </Content>  
+
+   <Content fullwidth autoMargin>
+     <h3>Proefsessie</h3>
+     |  | |
+    | :---: | --- |
+    | <MoneyIcon/> | 12€ | 
+    | <BellIcon/> | Nieuwe leden, welkom! Stuur me éérst een mail om te checken of er plaats is. | 
+
+  </Content>  
+
+  <Content fullwidth autoMargin>
+     <h3>Losse sessie</h3>
+     |  | |
+    | :---: | --- |
+    | <MoneyIcon/> | 15€ | 
+    | <BellIcon/> | Stuur me éérst een mail om te checken of er plaats is. | 
+
+  </Content>  
+
+  <Content fullwidth autoMargin>
+    ### Vrouwenyoga Cirkel
+    Een keer per maand op vrijdagavond is er een Vrouwenyoga Cirkel.  
+  Klik [HIER](/lessons/women) voor meer info en data.
+  </Content>  
+   
+</Section>
+16:Tef0,<Section autoMargin={false}>
+  <ContentWithBackground src="/images/lessons/groeplessen.jpg"  height="50vh">
+    <SectionFooter light>
+      <blockquote>
+        <p>Be a Meditator, an Artist and a Warrior</p>
+      </blockquote>          
+    </SectionFooter>
+  </ContentWithBackground>
+
+  <Content fullwidth autoMargin>
+      <h3>Van harte welkom in deze groepjes</h3>
+     <Schedule
+      columns={[
+        {
+          header: "Woensdag",
+          sessions: [
+            {
+              title: "Hatha Yoga - Be a warrior of light",
+              time: "09:00-10:15",
+            },
+            {
+              title: "Zachte Yoga – Be an artist each moment",
+              time: "10:30-11:45",
+            },
+            {
+              title: "Hatha Yoga – Be a peaceful warrior",
+              time: "18:00-19:15",
+            },
+            {
+              title: "Avondyoga – The art of letting go & refreshing",
+              time: "19:30-20:45",
+            },
+          ],
+        },
+        {
+          header: "Donderdag",
+          sessions: [
+            {
+              title: "Hatha Yoga – Be a warrior of love",
+              time: "09:00-10:15",
+            },
+            {
+              title: "Qi-gong & Meditatie – See clearly",
+              time: "10:30-11:45",
+            },
+          ],
+        },
+      ]}
+    />
+  </Content>
+  <Content fullwidth autoMargin>
+    Wees een yogi, een kunstenaar en een krijger. [HIER](/about/yogastyles) kan je meer lezen over het verschil tussen hatha yoga, zachte yoga, qi-gongmeditatie en avondyoga.
+
+    Kan je moelijk kiezen of is er maar een moment dat past?  
+    Wees gerust: in alle yoga- en meditatiesessies worden de verschillende kwaliteiten van je wezen versterkt, bovendien zijn de sessies altijd aangepast aan de behoeften van de deelnemers.
+  </Content>
+
+  <Content fullwidth autoMargin>
+     ### Abonnement
+     |  | |
+    | :---: | --- |
+    |<CalendarIcon/>| <ul> <li> Woensdagochtend : 17/9, 24/9, 1/10, 8/10, 15/10, 22/10, 12/11, 19/11, 26/11, 3/12</li> <li> Woensdagavond : 17/9, 24/9, 1/10, 8/10, 15/10, 22/10, 12/11, 19/11, 26/11, 3/12</li> <li> Donderdagochtend : 18/9, 25/9, 2/10, 9/10, 16/10, 23/10, 13/11, 20/11, 27/11, 4/12</li> </ul> |
+    | <LocationIcon/> | Alle wekelijkse oefensessies (ook op woensdagavond) gaan door in CC ‘t VONDEL Joseph Possozplein 40, 1500 Halle – ZAAL 5 op de 1ste verdieping  | 
+    | <MoneyIcon/> | 120€ | 
+    |<ToolIcon/>|Meebrengen: mat, deken, comfortabele kledij|
+    | <ThemeIcon/> | Het thema van deze reeks is **Herfstadem – wortelen en loslaten** | 
+    | <BellIcon/> | <ul><li>Je kan je plaats reserveren door storting van het inschrijvingsgeld op BE05 0689 1011 7075 op naam van Baroni Kati. Zet je naam en je groep in de communicatie aub. Merci. Of stuur eerst een mail en betaal cash. </li><li>In het abonnement is een wekelijkse opname inbegrepen, voor zou je afwezig zijn (kortere abonnementen zijn dus niet beschikbaar).</li> <li>Het abonnement is geldig tot aan het einde van de reeks. </li> <li>Terugstorting/lesverplaatsing naar volgende reeks is niet mogelijk.</li> </ul> | 
+
+  </Content>  
+
+   <Content fullwidth autoMargin>
+     <h3>Proefsessie</h3>
+     |  | |
+    | :---: | --- |
+    | <MoneyIcon/> | 12€ | 
+    | <BellIcon/> | Nieuwe leden, welkom! Stuur me éérst een mail om te checken of er plaats is. | 
+
+  </Content>  
+
+  <Content fullwidth autoMargin>
+     <h3>Losse sessie</h3>
+     |  | |
+    | :---: | --- |
+    | <MoneyIcon/> | 15€ | 
+    | <BellIcon/> | Stuur me éérst een mail om te checken of er plaats is. | 
+
+  </Content>  
+
+  <Content fullwidth autoMargin>
+    ### Vrouwenyoga Cirkel
+    Een keer per maand op vrijdagavond is er een Vrouwenyoga Cirkel.  
+  Klik [HIER](/lessons/women) voor meer info en data.
+  </Content>  
+   
+</Section>
+7:["$","$L12",null,{"container":true,"children":["$","$L12",null,{"sx":{"display":"flex","justifyContent":"center","width":"100%"},"children":["$","$L13",null,{"className":"mdx-page-layout","sx":{"padding":0,"margin":0,"width":"100%"},"children":[false,["$","$L14",null,{"page":{"_raw":{"flattenedPath":"lessons/groups"},"slug":"lessons/groups","title":"Yoga & Qigonglessen in groep in Halle","description":"Yoga & Qigonglessen in groep in Halle met Kati","featuredImage":"/images/lessons/groeplessen.jpg","autoMargin":false,"autoFeatureImageAndText":false,"body":{"raw":"$15","code":"$16"},"footerImage":"/images/footer.jpg"}}]]}]}]}]
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+9:null
+b:{"metadata":[["$","title","0",{"children":"Yoga & Qigonglessen in groep in Halle"}],["$","meta","1",{"name":"description","content":"Yoga & Qigonglessen in groep in Halle met Kati"}],["$","meta","2",{"property":"og:title","content":"Yoga & Qigonglessen in groep in Halle"}],["$","meta","3",{"property":"og:description","content":"Yoga & Qigonglessen in groep in Halle met Kati"}],["$","meta","4",{"property":"og:url","content":"https://www.artiyoga.com/lessons/groups"}],["$","meta","5",{"property":"og:site_name","content":"artiYoga"}],["$","meta","6",{"property":"og:locale","content":"nl_BE"}],["$","meta","7",{"property":"og:image","content":"https://www.artiyoga.com/images/lessons/groeplessen.jpg"}],["$","meta","8",{"property":"og:image:width","content":"800"}],["$","meta","9",{"property":"og:image:height","content":"600"}],["$","meta","10",{"property":"og:image:alt","content":"Yoga & Qigonglessen in groep in Halle"}],["$","meta","11",{"property":"og:type","content":"website"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"Yoga & Qigonglessen in groep in Halle"}],["$","meta","14",{"name":"twitter:description","content":"Yoga & Qigonglessen in groep in Halle met Kati"}],["$","meta","15",{"name":"twitter:image","content":"https://www.artiyoga.com/images/lessons/groeplessen.jpg"}]],"error":null,"digest":"$undefined"}
+10:"$b:metadata"

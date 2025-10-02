@@ -1,0 +1,241 @@
+1:"$Sreact.fragment"
+2:I[17989,[],"ClientSegmentRoot"]
+3:I[97795,["352","static/chunks/352-73c7d1f9eee2bb07.js","971","static/chunks/971-2186ef86d42c1049.js","292","static/chunks/292-dcd77583dd474cd0.js","896","static/chunks/896-55ef6df122e24fe8.js","177","static/chunks/app/layout-d45d4c3546caeaef.js"],"default"]
+4:I[9766,[],""]
+5:I[98924,[],""]
+8:I[24431,[],"OutletBoundary"]
+a:I[15278,[],"AsyncMetadataOutlet"]
+c:I[24431,[],"ViewportBoundary"]
+e:I[24431,[],"MetadataBoundary"]
+f:"$Sreact.suspense"
+11:I[57150,[],""]
+:HL["/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","style"]
+:HL["/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","style"]
+:HL["/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","style"]
+0:{"P":null,"b":"8QLfKStJvAXmIMBVXbWem","p":"/artiyoga-app","c":["","coaching"],"i":false,"f":[[["",{"children":[["slug","coaching","oc"],{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/e9ca1a5cf2bbbdbc.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/3a4b3bc19feb8549.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L2",null,{"Component":"$3","slots":{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]},"params":{},"promise":"$@6"}]]}],{"children":[["slug","coaching","oc"],["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",[["$","link","0",{"rel":"stylesheet","href":"/artiyoga-app/_next/static/css/ae4ed9c503fd1e33.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L8",null,{"children":["$L9",["$","$La",null,{"promise":"$@b"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Lc",null,{"children":"$Ld"}],null],["$","$Le",null,{"children":["$","div",null,{"hidden":true,"children":["$","$f",null,{"fallback":null,"children":"$L10"}]}]}]]}],false]],"m":"$undefined","G":["$11",[]],"s":false,"S":true}
+6:"$0:f:0:1:1:props:children:1:props:params"
+12:I[3295,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+13:I[97282,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+14:I[50413,["323","static/chunks/25b8c134-c821d8b07d943a3d.js","897","static/chunks/71d5b6fe-d7df3ca389a3d142.js","79","static/chunks/363642f4-c38bdecb67092cf8.js","352","static/chunks/352-73c7d1f9eee2bb07.js","292","static/chunks/292-dcd77583dd474cd0.js","836","static/chunks/836-b2bf178c41ce0589.js","340","static/chunks/app/%5B%5B...slug%5D%5D/page-f49465e490bd4a13.js"],"default"]
+15:T14b9,---
+title: Outdoor life coaching
+description: Outdoor life coaching in 1500 Halle met Kati Baroni
+autoMargin: false
+featuredImage: /images/coaching/coaching1.jpg
+footerImage: /images/footer.jpg
+---
+<Section autoMargin={false}>  
+  <ContentWithBackground src="/images/coaching/coaching1.jpg" height="50vh">
+ {/*  <SectionFooter className="">
+      Outdoor life coaching
+    </SectionFooter> */}
+  </ContentWithBackground>
+  
+
+      <Content autoMargin>
+
+     ### Outdoor Life Coaching
+
+      Stel je voor dat je in de natuur wandelt terwijl iemand oordeelloos, open, vol vertrouwen en liefdevol op je let.  
+Je kunt alle lasten van je af laten glijden, ontspannen, je emoties laten stromen, volledig jezelf zijn en contact maken met je diepste verlangens en hulpbronnen.
+
+Tijdens de outdoor coaching weerspiegelt niet alleen de coach, maar ook de natuur als medecoach je innerlijke wereld. De bomen, planten, dieren en lichten begeleiden je op je pad. Wat ze voor jou betekenen en symboliseren is volledig persoonlijk, omdat ze spreken tot je diepste innerlijke zelf in een ontspannen toestand.
+
+Ze versterken, ondersteunen en moedigen je aan om nog meer jezelf te zijn.
+Ze helpen je antwoorden te vinden op je vragen, vooruit te komen vanuit stagnatie, los te laten wat niet meer helpt,
+je talenten te (her)ontdekken en te ontwikkelen.
+
+De combinatie van natuur en life coaching is een effectieve methode om:
+- jezelf (lichaam, geest, emoties) beter te leren kennen en reguleren
+- uit je hoofd te komen, te ontspannen en betere keuzes te maken
+- te begrijpen wat je belemmert in moeilijke levenssituaties 
+- de nodige (kleine) stappen te zetten voor persoonlijke, professionele en relationele groei 
+- te voelen hoe je het beste uit jezelf en je omgeving kunt halen in goede tijden
+- je levenskwaliteit te verbeteren door (zelf)bewustzijn, belichaamd en bezield te leven 
+
+</Content>
+
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching2.jpg" noContainer/>
+    </Content>
+
+
+    
+
+    <Content autoMargin>
+
+     ### Voor wie?    
+
+Outdoor coaching is geschikt voor jou als : 
+- je gelooft in de kracht van je innerlijke wijsheid (zelfs als die momenteel wordt overschaduwd door belemmerende gewoonten en overtuigingen)
+- je staat open voor verandering: een lichtere/gezonde/krachtige/liefdevolle versie van jezelf te omarmen
+- je bent bereid energie in jezelf te investeren om jezelf helder te zien
+- je wil in harmonie te ademen met de natuur, of de zon schijnt, of het nu regent of waait
+- je wil je levensmissie volgen vol enthousiasme, vertrouwen en met gemak
+</Content>
+
+<Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching3.jpg" noContainer/>
+    </Content>
+
+     <Content autoMargin>
+     ### Door wie?
+      
+Ik kijk ernaar uit om je te begeleiden op je pad, als een bosfee die in jou gelooft. Ik ben als de helper in een sprookje, die je niet vertelt wat je moet doen, maar je de tools geeft – de betoverende vragen van outdoor life coaching – die je dichter bij jezelf brengen, bij de diepste lagen van jezelf, waar altijd antwoorden zijn.
+Naast de natuur zal ik degene zijn die zich volledig op jou richt. Soms zal ik je spiegelen, soms zal ik je confronteren.
+
+Ik zal je open vragen stellen en naar je luisteren met oprechte nieuwsgierigheid.
+Omdat ik zelf al tientallen jaren het pad van zelfinzicht bewandel met yoga, meditatie, therapie, bewust dromen, vanuit het hart communiceren, life coaching en andere methoden, ben ik gepassioneerd geraakt door persoonlijke groei.
+
+In de loop der jaren heb ik mijn vermogen ontwikkeld om mensen onbevooroordeeld, open en rustig te kunnen beluisteren.
+
+Ik streef naar de zuiverste aanwezigheid, die heelt, verheft en transformeert.
+In de zomer van 2023 heb ik de Outdoor Life Coach Training gevolgd, wat me extra tools heeft gegeven om anderen te begeleiden.
+
+  |  | |
+| :---: | --- |
+|<ThemeIcon/>| We beginnen met een korte meditatieve wandeling om ons hoofd leeg te maken, onze zintuigen en ons hart te activeren. |
+| <LocationIcon/> | De sessies vinden plaats in de regio van Halle. Indien nodig kan ik naar jouw woonplaats komen of kunnen we een locatie tussen onze woonplaatsen vinden. | 
+| <MoneyIcon/> | 60€ / 75 minuten <br/> 75€ / 90 minuten | 
+| <BellIcon/> | Voel je vrij om je aan te melden via de [Contact Pagina](/contact). <br/> Tijdens een kort intakegesprek zullen we bepalen of ik de juiste reisgenoot voor jou ben.| 
+
+
+    </Content>
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching4.jpg" noContainer />
+    </Content>
+    
+     <Content autoMargin>
+     ### Zo binnen, zo buiten
+      Wandelend in het bos. 
+werd ik gegrepen door het samenspel van licht en schaduw. 
+dat de diepten binnen in mij weerspiegelde  
+De natuur, een meesterlijke leraar, onthulde haar wijsheid door mijn hart.
+
+ 
+Ik groet de wijsheid in jou  
+Kati Baroni
+
+
+
+
+    </Content>
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching5.jpg" noContainer/>
+    </Content>
+  
+
+  <Content autoMargin fullwidth>
+     <h3>Getuigenissen</h3>       
+     <Carousel ContentWithBackgroundImageName="" folderNameWithMdxFiles="coaching-testimonial"/>   
+  </Content>
+</Section>16:T13f3,<Section autoMargin={false}>  
+  <ContentWithBackground src="/images/coaching/coaching1.jpg" height="50vh">
+ {/*  <SectionFooter className="">
+      Outdoor life coaching
+    </SectionFooter> */}
+  </ContentWithBackground>
+  
+
+      <Content autoMargin>
+
+     ### Outdoor Life Coaching
+
+      Stel je voor dat je in de natuur wandelt terwijl iemand oordeelloos, open, vol vertrouwen en liefdevol op je let.  
+Je kunt alle lasten van je af laten glijden, ontspannen, je emoties laten stromen, volledig jezelf zijn en contact maken met je diepste verlangens en hulpbronnen.
+
+Tijdens de outdoor coaching weerspiegelt niet alleen de coach, maar ook de natuur als medecoach je innerlijke wereld. De bomen, planten, dieren en lichten begeleiden je op je pad. Wat ze voor jou betekenen en symboliseren is volledig persoonlijk, omdat ze spreken tot je diepste innerlijke zelf in een ontspannen toestand.
+
+Ze versterken, ondersteunen en moedigen je aan om nog meer jezelf te zijn.
+Ze helpen je antwoorden te vinden op je vragen, vooruit te komen vanuit stagnatie, los te laten wat niet meer helpt,
+je talenten te (her)ontdekken en te ontwikkelen.
+
+De combinatie van natuur en life coaching is een effectieve methode om:
+- jezelf (lichaam, geest, emoties) beter te leren kennen en reguleren
+- uit je hoofd te komen, te ontspannen en betere keuzes te maken
+- te begrijpen wat je belemmert in moeilijke levenssituaties 
+- de nodige (kleine) stappen te zetten voor persoonlijke, professionele en relationele groei 
+- te voelen hoe je het beste uit jezelf en je omgeving kunt halen in goede tijden
+- je levenskwaliteit te verbeteren door (zelf)bewustzijn, belichaamd en bezield te leven 
+
+</Content>
+
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching2.jpg" noContainer/>
+    </Content>
+
+
+    
+
+    <Content autoMargin>
+
+     ### Voor wie?    
+
+Outdoor coaching is geschikt voor jou als : 
+- je gelooft in de kracht van je innerlijke wijsheid (zelfs als die momenteel wordt overschaduwd door belemmerende gewoonten en overtuigingen)
+- je staat open voor verandering: een lichtere/gezonde/krachtige/liefdevolle versie van jezelf te omarmen
+- je bent bereid energie in jezelf te investeren om jezelf helder te zien
+- je wil in harmonie te ademen met de natuur, of de zon schijnt, of het nu regent of waait
+- je wil je levensmissie volgen vol enthousiasme, vertrouwen en met gemak
+</Content>
+
+<Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching3.jpg" noContainer/>
+    </Content>
+
+     <Content autoMargin>
+     ### Door wie?
+      
+Ik kijk ernaar uit om je te begeleiden op je pad, als een bosfee die in jou gelooft. Ik ben als de helper in een sprookje, die je niet vertelt wat je moet doen, maar je de tools geeft – de betoverende vragen van outdoor life coaching – die je dichter bij jezelf brengen, bij de diepste lagen van jezelf, waar altijd antwoorden zijn.
+Naast de natuur zal ik degene zijn die zich volledig op jou richt. Soms zal ik je spiegelen, soms zal ik je confronteren.
+
+Ik zal je open vragen stellen en naar je luisteren met oprechte nieuwsgierigheid.
+Omdat ik zelf al tientallen jaren het pad van zelfinzicht bewandel met yoga, meditatie, therapie, bewust dromen, vanuit het hart communiceren, life coaching en andere methoden, ben ik gepassioneerd geraakt door persoonlijke groei.
+
+In de loop der jaren heb ik mijn vermogen ontwikkeld om mensen onbevooroordeeld, open en rustig te kunnen beluisteren.
+
+Ik streef naar de zuiverste aanwezigheid, die heelt, verheft en transformeert.
+In de zomer van 2023 heb ik de Outdoor Life Coach Training gevolgd, wat me extra tools heeft gegeven om anderen te begeleiden.
+
+  |  | |
+| :---: | --- |
+|<ThemeIcon/>| We beginnen met een korte meditatieve wandeling om ons hoofd leeg te maken, onze zintuigen en ons hart te activeren. |
+| <LocationIcon/> | De sessies vinden plaats in de regio van Halle. Indien nodig kan ik naar jouw woonplaats komen of kunnen we een locatie tussen onze woonplaatsen vinden. | 
+| <MoneyIcon/> | 60€ / 75 minuten <br/> 75€ / 90 minuten | 
+| <BellIcon/> | Voel je vrij om je aan te melden via de [Contact Pagina](/contact). <br/> Tijdens een kort intakegesprek zullen we bepalen of ik de juiste reisgenoot voor jou ben.| 
+
+
+    </Content>
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching4.jpg" noContainer />
+    </Content>
+    
+     <Content autoMargin>
+     ### Zo binnen, zo buiten
+      Wandelend in het bos. 
+werd ik gegrepen door het samenspel van licht en schaduw. 
+dat de diepten binnen in mij weerspiegelde  
+De natuur, een meesterlijke leraar, onthulde haar wijsheid door mijn hart.
+
+ 
+Ik groet de wijsheid in jou  
+Kati Baroni
+
+
+
+
+    </Content>
+    <Content height="50vh" style={{marginTop: '1rem'}}>
+      <Image src="/images/coaching/coaching5.jpg" noContainer/>
+    </Content>
+  
+
+  <Content autoMargin fullwidth>
+     <h3>Getuigenissen</h3>       
+     <Carousel ContentWithBackgroundImageName="" folderNameWithMdxFiles="coaching-testimonial"/>   
+  </Content>
+</Section>7:["$","$L12",null,{"container":true,"children":["$","$L12",null,{"sx":{"display":"flex","justifyContent":"center","width":"100%"},"children":["$","$L13",null,{"className":"mdx-page-layout","sx":{"padding":0,"margin":0,"width":"100%"},"children":[false,["$","$L14",null,{"page":{"_raw":{"flattenedPath":"coaching"},"slug":"coaching","title":"Outdoor life coaching","description":"Outdoor life coaching in 1500 Halle met Kati Baroni","featuredImage":"/images/coaching/coaching1.jpg","autoMargin":false,"autoFeatureImageAndText":false,"body":{"raw":"$15","code":"$16"},"footerImage":"/images/footer.jpg"}}]]}]}]}]
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+9:null
+b:{"metadata":[["$","title","0",{"children":"Outdoor life coaching"}],["$","meta","1",{"name":"description","content":"Outdoor life coaching in 1500 Halle met Kati Baroni"}],["$","meta","2",{"property":"og:title","content":"Outdoor life coaching"}],["$","meta","3",{"property":"og:description","content":"Outdoor life coaching in 1500 Halle met Kati Baroni"}],["$","meta","4",{"property":"og:url","content":"https://www.artiyoga.com/coaching"}],["$","meta","5",{"property":"og:site_name","content":"artiYoga"}],["$","meta","6",{"property":"og:locale","content":"nl_BE"}],["$","meta","7",{"property":"og:image","content":"https://www.artiyoga.com/images/coaching/coaching1.jpg"}],["$","meta","8",{"property":"og:image:width","content":"800"}],["$","meta","9",{"property":"og:image:height","content":"600"}],["$","meta","10",{"property":"og:image:alt","content":"Outdoor life coaching"}],["$","meta","11",{"property":"og:type","content":"website"}],["$","meta","12",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","13",{"name":"twitter:title","content":"Outdoor life coaching"}],["$","meta","14",{"name":"twitter:description","content":"Outdoor life coaching in 1500 Halle met Kati Baroni"}],["$","meta","15",{"name":"twitter:image","content":"https://www.artiyoga.com/images/coaching/coaching1.jpg"}]],"error":null,"digest":"$undefined"}
+10:"$b:metadata"
