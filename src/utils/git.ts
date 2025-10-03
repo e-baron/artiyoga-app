@@ -244,8 +244,6 @@ const mergeBranches = async (
 
 /**
  * Publishes the project to GitHub Pages using a simplified approach.
- * Instead of copying node_modules to a temp directory, we build directly
- * in the project directory and then copy only the output.
  */
 const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
   try {
@@ -282,7 +280,14 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         _: undefined,
       };
 
-      // Build using the current node_modules (no copying needed)
+      // Try multiple approaches to find and run next build
+      let buildResult: {
+        stdout: Buffer | null;
+        stderr: Buffer | null;
+        status: number | null;
+      };
+
+      // Approach 1: Try local node_modules
       const nextExecutablePath = path.join(
         projectDir,
         "node_modules",
@@ -290,20 +295,48 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         "next"
       );
 
-      console.log("Running next build...");
-      const buildResult = spawnSync(nextExecutablePath, ["build"], {
-        cwd: projectDir,
-        stdio: "inherit",
-        env: cleanEnv,
-      });
+      if (fs.existsSync(nextExecutablePath)) {
+        console.log("Using local next executable...");
+        buildResult = spawnSync(nextExecutablePath, ["build"], {
+          cwd: projectDir,
+          stdio: "pipe", // Changed from "inherit" to capture output
+          env: cleanEnv,
+        });
+      } else {
+        // Approach 2: Try npm script which should work regardless of environment
+        console.log(
+          "Local next not found, trying npm run build:next:export..."
+        );
+        buildResult = spawnSync("npm", ["run", "build:next:export"], {
+          cwd: projectDir,
+          stdio: "pipe",
+          env: cleanEnv,
+        });
+      }
+
+      // Log the output for debugging
+      if (buildResult.stdout) {
+        console.log("Build stdout:", buildResult.stdout.toString());
+      }
+      if (buildResult.stderr) {
+        console.log("Build stderr:", buildResult.stderr.toString());
+      }
 
       if (buildResult.status !== 0) {
-        throw new Error(`next build failed with code ${buildResult.status}`);
+        const errorMsg = `Build failed with code ${
+          buildResult.status
+        }. Error: ${buildResult.stderr?.toString() || "Unknown error"}`;
+        console.error(errorMsg);
+        throw new Error(errorMsg);
       }
+
       console.log("Project built successfully.");
 
       // Copy additional project files to the output
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
+    } catch (error) {
+      console.error("Error building project:", error);
+      throw error;
     } finally {
       // Restore the original next.config.js
       if (fs.existsSync(nextConfigBackupPath)) {
@@ -315,24 +348,29 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
 
     // Step 3: Publish to GitHub Pages
     console.log("Publishing to GitHub Pages...");
-    await new Promise<void>((resolve, reject) => {
-      ghpages.publish(
-        outDirPath,
-        {
-          branch: "gh-pages",
-          message: "Auto-publish to GitHub Pages",
-        },
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
+    try {
+      await new Promise<void>((resolve, reject) => {
+        ghpages.publish(
+          outDirPath,
+          {
+            branch: "gh-pages",
+            message: "Auto-publish to GitHub Pages",
+          },
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
           }
-        }
-      );
-    });
+        );
+      });
 
-    console.log("Successfully published to GitHub Pages!");
+      console.log("Successfully published to GitHub Pages!");
+    } catch (error) {
+      console.error("Error during gh-pages publish:", error);
+      throw error;
+    }
   } catch (error) {
     console.error("Error publishing to GitHub Pages:", error);
     throw new Error(

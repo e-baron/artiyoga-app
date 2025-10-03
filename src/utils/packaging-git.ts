@@ -81,11 +81,52 @@ export default async function copyGitToPackage(
         "[packaging-git] package-lock.json file not found at",
         packageLockSrc
       );
-    }       
+    }
 
     console.log("[packaging-git] Git files copy completed.");
   } catch (error) {
     console.error("[packaging-git] Error copying git files:", error);
     throw error;
+  }
+
+  // Find the package.json in the packaged app
+  let packageJsonPath: string;
+
+  if (packager.platform.name === "mac") {
+    packageJsonPath = path.join(
+      appOutDir,
+      `${packager.appInfo.productFilename}.app`,
+      "Contents",
+      "Resources",
+      "app",
+      "package.json"
+    );
+  } else if (packager.platform.name === "windows") {
+    packageJsonPath = path.join(appOutDir, "resources", "app", "package.json");
+  } else {
+    // Linux
+    packageJsonPath = path.join(appOutDir, "resources", "app", "package.json");
+  }
+
+  if (fs.existsSync(packageJsonPath)) {
+    console.log("Updating package.json in packaged app...");
+
+    // Read the current package.json
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+
+    // Add the missing script
+    if (!packageJson.scripts) {
+      packageJson.scripts = {};
+    }
+
+    packageJson.scripts["build:next:export"] =
+      "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data && next build";
+
+    // Write the updated package.json back
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+    console.log("Updated package.json with build:next:export script");
+  } else {
+    console.warn("Could not find package.json at:", packageJsonPath);
   }
 }
