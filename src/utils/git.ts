@@ -271,29 +271,45 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       };
 
       // Add this before committing:
-  console.log("Generating static data...");
-  const genScript = path.join(projectDir, "src", "utils", "generate-static-data.runtime.mjs");
-  if (fs.existsSync(genScript)) {
-    const genResult = spawnSync("node", ["--experimental-modules", genScript], {
-      cwd: projectDir,
-      stdio: "pipe",
-      env: cleanEnv,
-    });
-    if (genResult.stdout) console.log(genResult.stdout.toString());
-    if (genResult.stderr) console.error(genResult.stderr.toString());
-    if (genResult.status !== 0) throw new Error("Static data generation failed");
-    
-    // Stage the generated files
-    console.log("Staging generated files...");
-    
-    await handleGitFileCommit("src/data/static-data.ts", "update");
-    await handleGitFileCommit("public/static-contents.json", "update");
-    console.log("Generated static files staged.");
+      console.log("Generating static data...");
+      const genScript = path.join(
+        projectDir,
+        "src",
+        "utils",
+        "generate-static-data.runtime.mjs"
+      );
+      if (fs.existsSync(genScript)) {
+        const genResult = spawnSync(
+          "node",
+          ["--experimental-modules", genScript],
+          {
+            cwd: projectDir,
+            stdio: "pipe",
+            env: cleanEnv,
+          }
+        );
+        if (genResult.stdout) console.log(genResult.stdout.toString());
+        if (genResult.stderr) console.error(genResult.stderr.toString());
+        if (genResult.status !== 0)
+          throw new Error("Static data generation failed");
 
+        // Stage the generated files
+        console.log("Staging generated files...");
 
-  } else {
-    console.warn("Generator script not found:", genScript);
-  }
+        try {
+          await handleGitFileCommit("src/data/static-data.ts", "update");
+        } catch (e) {
+          console.log("static-data.ts: no changes to stage");
+        }
+        try {
+          await handleGitFileCommit("public/static-contents.json", "update");
+        } catch (e) {
+          console.log("static-contents.json: no changes to stage");
+        }
+        console.log("Generated static files processed.");
+      } else {
+        console.warn("Generator script not found:", genScript);
+      }
 
       // Build
       let buildResult;

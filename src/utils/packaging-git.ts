@@ -103,12 +103,7 @@ export default async function copyGitToPackage(
 
   pkg.scripts = { ...(pkg.scripts || {}) };
   pkg.scripts["build:next:export"] =
-    "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data:runtime && next build";
-  // Ensure generate-static-data script is present inside packaged app if needed
-  if (!pkg.scripts["generate-static-data:runtime"]) {
-    pkg.scripts["generate-static-data:runtime"] =
-      "node --experimental-modules ./src/utils/generate-static-data.runtime.mjs";
-  }
+    "NEXT_PUBLIC_NODE_ENV=production next build";
 
   await writeFile(packageJsonPath, JSON.stringify(pkg, null, 2), "utf8");
   console.log("Updated package.json with build:next:export script.");
