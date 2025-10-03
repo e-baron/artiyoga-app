@@ -12,7 +12,8 @@
     "build:next:export": "NEXT_PUBLIC_NODE_ENV=production NEXT_PUBLIC_GITHUB_PAGES_BUILD=true next build",
     "build:next:standalone": "USE_PROD=1 FORCE_DEV=1 next build && node src/utils/prepare-standalone.ts",
     "dist": "npm run build:next && npm run build:wrapper && electron-builder",
-    "start": "USE_PROD=1 electron ."  },
+    "start": "USE_PROD=1 electron ."
+  },
   "build": {
     "appId": "be.e-baron.jamsite",
     "productName": "JamSite",
@@ -88,7 +89,7 @@
     "lodash": "^4.17.21",
     "material-symbols": "^0.35.0",
     "mime-types": "^3.0.1",
-    "next": "15.4.2",
+    "next": "^15.5.4",
     "next-contentlayer2": "^0.5.8",
     "plantuml-encoder": "^1.4.0",
     "prism-react-renderer": "^2.4.1",
