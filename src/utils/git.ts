@@ -249,21 +249,15 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
   try {
     const outDirPath = path.resolve(outDir);
     const projectDir = path.resolve(".");
-
-    // Step 1: Build the project directly in the current directory
     console.log("Building project for export...");
 
-    // Backup the current next.config.js
     const nextConfigPath = path.join(projectDir, "next.config.ts");
     const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
     const nextConfigExportPath = path.join(projectDir, "next.config.export.ts");
 
     if (fs.existsSync(nextConfigPath)) {
-      console.log("Backing up current next.config.js...");
       fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
     }
-
-    // Use the export config for building
     if (fs.existsSync(nextConfigExportPath)) {
       fs.copyFileSync(nextConfigExportPath, nextConfigPath);
       console.log("Switched to export configuration.");
@@ -274,71 +268,69 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         ...process.env,
         NODE_ENV: "production",
         NEXT_PUBLIC_NODE_ENV: "production",
-        TURBOPACK: undefined,
-        npm_lifecycle_event: undefined,
-        npm_lifecycle_script: undefined,
-        _: undefined,
       };
 
-      // Try multiple approaches to find and run next build
-      let buildResult: {
-        stdout: Buffer | null;
-        stderr: Buffer | null;
-        status: number | null;
-      };
+      // Run runtime generator (JS) first
+      const genScript = path.join(
+        projectDir,
+        "src",
+        "utils",
+        "generate-static-data.runtime.mjs"
+      );
+      if (fs.existsSync(genScript)) {
+        console.log("Running runtime static data generator...");
+        const genResult = spawnSync("node", [genScript], {
+          cwd: projectDir,
+          stdio: "pipe",
+          env: cleanEnv,
+        });
+        if (genResult.stdout) console.log(genResult.stdout.toString());
+        if (genResult.stderr) console.log(genResult.stderr.toString());
+        if (genResult.status !== 0) {
+          throw new Error(
+            `Static data generation failed (status ${genResult.status})`
+          );
+        }
+      } else {
+        console.warn("Runtime generator script not found:", genScript);
+      }
 
-      // Approach 1: Try local node_modules
+      // Build
+      let buildResult;
       const nextExecutablePath = path.join(
         projectDir,
         "node_modules",
         ".bin",
         "next"
       );
-
       if (fs.existsSync(nextExecutablePath)) {
         console.log("Using local next executable...");
         buildResult = spawnSync(nextExecutablePath, ["build"], {
           cwd: projectDir,
-          stdio: "pipe", // Changed from "inherit" to capture output
+          stdio: "pipe",
           env: cleanEnv,
         });
       } else {
-        // Approach 2: Try npm script which should work regardless of environment
-        console.log(
-          "Local next not found, trying npm run build:next:export..."
-        );
-        buildResult = spawnSync("npm", ["run", "build:next:export"], {
+        console.log("Local next not found, running npm run build...");
+        buildResult = spawnSync("npm", ["run", "build"], {
           cwd: projectDir,
           stdio: "pipe",
           env: cleanEnv,
         });
       }
 
-      // Log the output for debugging
-      if (buildResult.stdout) {
+      if (buildResult.stdout)
         console.log("Build stdout:", buildResult.stdout.toString());
-      }
-      if (buildResult.stderr) {
+      if (buildResult.stderr)
         console.log("Build stderr:", buildResult.stderr.toString());
-      }
 
       if (buildResult.status !== 0) {
-        const errorMsg = `Build failed with code ${
-          buildResult.status
-        }. Error: ${buildResult.stderr?.toString() || "Unknown error"}`;
-        console.error(errorMsg);
-        throw new Error(errorMsg);
+        throw new Error(`Build failed (status ${buildResult.status})`);
       }
 
       console.log("Project built successfully.");
-
-      // Copy additional project files to the output
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
-    } catch (error) {
-      console.error("Error building project:", error);
-      throw error;
     } finally {
-      // Restore the original next.config.js
       if (fs.existsSync(nextConfigBackupPath)) {
         fs.copyFileSync(nextConfigBackupPath, nextConfigPath);
         fs.unlinkSync(nextConfigBackupPath);
@@ -346,31 +338,15 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       }
     }
 
-    // Step 3: Publish to GitHub Pages
     console.log("Publishing to GitHub Pages...");
-    try {
-      await new Promise<void>((resolve, reject) => {
-        ghpages.publish(
-          outDirPath,
-          {
-            branch: "gh-pages",
-            message: "Auto-publish to GitHub Pages",
-          },
-          (err) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          }
-        );
-      });
-
-      console.log("Successfully published to GitHub Pages!");
-    } catch (error) {
-      console.error("Error during gh-pages publish:", error);
-      throw error;
-    }
+    await new Promise<void>((resolve, reject) =>
+      ghpages.publish(
+        outDirPath,
+        { branch: "gh-pages", message: "Auto-publish to GitHub Pages" },
+        (err) => (err ? reject(err) : resolve())
+      )
+    );
+    console.log("Successfully published to GitHub Pages!");
   } catch (error) {
     console.error("Error publishing to GitHub Pages:", error);
     throw new Error(

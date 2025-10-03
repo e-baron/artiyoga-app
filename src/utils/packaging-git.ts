@@ -1,16 +1,12 @@
-import * as fs from "fs-extra";
-import * as fsSync from "fs";
+import fsExtra from "fs-extra";
+import { readFile, writeFile } from "fs/promises";
 import * as path from "path";
 
 interface PackagingContext {
   appOutDir: string;
   packager: {
-    platform: {
-      name: string;
-    };
-    appInfo: {
-      productFilename: string;
-    };
+    platform: { name: string };
+    appInfo: { productFilename: string };
   };
 }
 
@@ -29,8 +25,6 @@ export default async function copyGitToPackage(
       "Resources",
       "app"
     );
-  } else if (platform === "win") {
-    appPath = path.join(appOutDir, "resources", "app");
   } else {
     appPath = path.join(appOutDir, "resources", "app");
   }
@@ -39,61 +33,40 @@ export default async function copyGitToPackage(
   const gitDest = path.join(appPath, ".git");
   const gitignoreSrc = path.join(process.cwd(), ".gitignore");
   const gitignoreDest = path.join(appPath, ".gitignore");
+  const githubSrc = path.join(process.cwd(), ".github");
+  const githubDest = path.join(appPath, ".github");
+  const packageLockSrc = path.join(process.cwd(), "package-lock.json");
+  const packageLockDest = path.join(appPath, "package-lock.json");
 
   try {
-    if (await fs.pathExists(gitSrc)) {
+    if (await fsExtra.pathExists(gitSrc)) {
       console.log("[packaging-git] Copying .git to", gitDest);
-      await fs.copy(gitSrc, gitDest);
-    } else {
-      console.warn("[packaging-git] .git directory not found at", gitSrc);
+      await fsExtra.copy(gitSrc, gitDest);
     }
-
-    if (await fs.pathExists(gitignoreSrc)) {
+    if (await fsExtra.pathExists(gitignoreSrc)) {
       console.log("[packaging-git] Copying .gitignore to", gitignoreDest);
-      await fs.copy(gitignoreSrc, gitignoreDest);
-    } else {
-      console.warn(
-        "[packaging-git] .gitignore file not found at",
-        gitignoreSrc
-      );
+      await fsExtra.copy(gitignoreSrc, gitignoreDest);
     }
-
-    // Copy .github directory if it exists
-    const githubSrc = path.join(process.cwd(), ".github");
-    const githubDest = path.join(appPath, ".github");
-    if (await fs.pathExists(githubSrc)) {
+    if (await fsExtra.pathExists(githubSrc)) {
       console.log("[packaging-git] Copying .github to", githubDest);
-      await fs.copy(githubSrc, githubDest);
-    } else {
-      console.warn("[packaging-git] .github directory not found at", githubSrc);
+      await fsExtra.copy(githubSrc, githubDest);
     }
-
-    // Copy package-lock.json if it exists
-    const packageLockSrc = path.join(process.cwd(), "package-lock.json");
-    const packageLockDest = path.join(appPath, "package-lock.json");
-    if (await fs.pathExists(packageLockSrc)) {
+    if (await fsExtra.pathExists(packageLockSrc)) {
       console.log(
         "[packaging-git] Copying package-lock.json to",
         packageLockDest
       );
-      await fs.copy(packageLockSrc, packageLockDest);
-    } else {
-      console.warn(
-        "[packaging-git] package-lock.json file not found at",
-        packageLockSrc
-      );
+      await fsExtra.copy(packageLockSrc, packageLockDest);
     }
-
     console.log("[packaging-git] Git files copy completed.");
-  } catch (error) {
-    console.error("[packaging-git] Error copying git files:", error);
-    throw error;
+  } catch (e) {
+    console.error("[packaging-git] Error copying git files:", e);
+    throw e;
   }
 
-  // Find the package.json in the packaged app
+  // Determine packaged app package.json path
   let packageJsonPath: string;
-
-  if (packager.platform.name === "mac") {
+  if (platform === "mac") {
     packageJsonPath = path.join(
       appOutDir,
       `${packager.appInfo.productFilename}.app`,
@@ -102,34 +75,41 @@ export default async function copyGitToPackage(
       "app",
       "package.json"
     );
-  } else if (packager.platform.name === "windows") {
-    packageJsonPath = path.join(appOutDir, "resources", "app", "package.json");
   } else {
-    // Linux
     packageJsonPath = path.join(appOutDir, "resources", "app", "package.json");
   }
 
-  // Use fs.pathExists instead of fs.existsSync
-  if (await fs.pathExists(packageJsonPath)) {
-    console.log("Updating package.json in packaged app...");
-
-    // Read the current package.json using regular fs
-    const packageJsonContent = await fs.readFile(packageJsonPath, "utf8");
-    const packageJson = JSON.parse(packageJsonContent);
-
-    // Add the missing script
-    if (!packageJson.scripts) {
-      packageJson.scripts = {};
-    }
-
-    packageJson.scripts["build:next:export"] =
-      "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data && next build";
-
-    // Write the updated package.json back
-    await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
-
-    console.log("Updated package.json with build:next:export script");
-  } else {
-    console.warn("Could not find package.json at:", packageJsonPath);
+  if (!(await fsExtra.pathExists(packageJsonPath))) {
+    console.warn("package.json not found in packaged app:", packageJsonPath);
+    return;
   }
+
+  console.log("Updating package.json in packaged app...");
+
+  // Read + modify + write manually (avoid fs-extra JSON helpers)
+  const raw = await readFile(packageJsonPath, "utf8");
+  interface PackageJson {
+    scripts?: Record<string, string>;
+    [key: string]: unknown; // Allow additional properties
+  }
+
+  let pkg: PackageJson;
+  try {
+    pkg = JSON.parse(raw);
+  } catch (e) {
+    console.error("Failed to parse packaged package.json:", e);
+    return;
+  }
+
+  pkg.scripts = { ...(pkg.scripts || {}) };
+  pkg.scripts["build:next:export"] =
+    "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data:runtime && next build";
+  // Ensure generate-static-data script is present inside packaged app if needed
+  if (!pkg.scripts["generate-static-data:runtime"]) {
+    pkg.scripts["generate-static-data:runtime"] =
+      "node --experimental-modules ./src/utils/generate-static-data.runtime.mjs";
+  }
+
+  await writeFile(packageJsonPath, JSON.stringify(pkg, null, 2), "utf8");
+  console.log("Updated package.json with build:next:export script.");
 }
