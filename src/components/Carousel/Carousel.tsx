@@ -23,9 +23,13 @@ const Carousel = ({
   const theme = useTheme();
   const allPages = staticData.getAllPages();
 
-  const testimonials = allPages.filter((mdxPage) =>
-    mdxPage._raw.flattenedPath.includes(folderNameWithMdxFiles)
-  );
+  const testimonials = allPages.filter((mdxPage) => {
+    // Check if _raw exists before accessing
+    if (!mdxPage._raw) return false;
+
+    // Safe access with optional chaining
+    return mdxPage._raw?.flattenedPath?.includes(folderNameWithMdxFiles);
+  });
 
   if (!testimonials || testimonials.length === 0) return null;
 

@@ -17,9 +17,15 @@ interface SiteMetadataContextType {
   refetchSiteMetaData: () => Promise<void>;
 }
 
-const SiteMetadataContext = createContext<SiteMetadataContextType | undefined>(
-  undefined
-);
+// Default values when context is not available
+const defaultSiteMetadata = {
+  // Add your default values here
+  siteMetaData: config as SiteMetaData | null,
+  refetchSiteMetaData: async () => {},
+};
+
+const SiteMetadataContext = createContext(defaultSiteMetadata);
+
 
 export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   const [siteMetaData, setSiteMetaData] = useState<SiteMetaData | null>(
@@ -58,20 +64,13 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useSiteMetadata = () => {
+export function useSiteMetadata() {
+  // Check if we're in a browser environment before using the context
   const context = useContext(SiteMetadataContext);
 
-  // During SSR/static export, context might be undefined
-  // Return fallback data instead of throwing
-  if (context === undefined) {
-    console.warn("SiteMetadataProvider not found, using fallback config");
-    return {
-      siteMetaData: config as SiteMetaData,
-      refetchSiteMetaData: async () => {
-        console.warn("refetchSiteMetaData called outside provider context");
-      },
-    };
+  if (typeof window === 'undefined') {
+    return defaultSiteMetadata;
   }
 
   return context;
-};
+}
