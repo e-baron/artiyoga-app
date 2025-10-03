@@ -14,6 +14,7 @@ import { MdxPage } from "@/types";
 import { useEffect, useState } from "react";
 import { isDev } from "@/utils/env";
 import { getAllContents } from "@/data/static-data";
+import siteConfig from "@/config/site-config.json";
 
 
 interface ContentIndexProps {
@@ -37,6 +38,9 @@ const ContentIndex = ({
   const [allPages, setAllPages] = useState<MdxPage[]>([]);
   const [loading, setLoading] = useState(true); // Start with loading true
   const [error, setError] = useState<string | null>(null);
+
+  const basePath = isDev() ? "" : siteConfig.basePath;
+  
 
   useEffect(() => {
     fetchPages();
@@ -163,7 +167,7 @@ const ContentIndex = ({
               >
                 <Box
                   component="img"
-                  src={contentItem.featuredImage || "/placeholder-image.jpg"} // Add fallback
+                  src={`${basePath}/${contentItem.featuredImage || "/placeholder-image.jpg"}`.replace("//", "/")}
                   alt={contentItem.title || "Content image"}
                   sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
