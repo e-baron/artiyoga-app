@@ -20,16 +20,15 @@ interface SiteMetadataContextType {
 // Default values when context is not available
 const defaultSiteMetadata = {
   // Add your default values here
-  siteMetaData: config as SiteMetaData | null,
+  siteMetaData: (config as SiteMetaData) ?? {},
   refetchSiteMetaData: async () => {},
 };
 
 const SiteMetadataContext = createContext(defaultSiteMetadata);
 
-
 export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
-  const [siteMetaData, setSiteMetaData] = useState<SiteMetaData | null>(
-    config as SiteMetaData
+  const [siteMetaData, setSiteMetaData] = useState<SiteMetaData>(
+    config as SiteMetaData ?? {}
   );
 
   const refetchSiteMetaData = useCallback(async () => {
@@ -68,9 +67,7 @@ export function useSiteMetadata() {
   // Check if we're in a browser environment before using the context
   const context = useContext(SiteMetadataContext);
 
-  if (typeof window === 'undefined') {
-    return defaultSiteMetadata;
-  }
+  if (!context) return defaultSiteMetadata;
 
   return context;
 }
