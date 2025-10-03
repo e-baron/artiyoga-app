@@ -9,7 +9,8 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
-import { SiteMetadataProvider, useSiteMetadata } from "@/contexts/sitemetadata";
+import { useSiteMetadata } from "@/contexts/sitemetadata";
+import ClientProviders from "@/contexts/ClientProviders";
 
 // This component consumes the context and renders the layout
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
@@ -58,9 +59,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <AppRouterCacheProvider>
       <ClientThemeProvider>
-        <SiteMetadataProvider>
+        <ClientProviders>
           <MainLayout>{children}</MainLayout>
-        </SiteMetadataProvider>
+        </ClientProviders>
       </ClientThemeProvider>
     </AppRouterCacheProvider>
   );
