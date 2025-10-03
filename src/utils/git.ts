@@ -270,30 +270,30 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         NEXT_PUBLIC_NODE_ENV: "production",
       };
 
-      // Run runtime generator (JS) first
-      const genScript = path.join(
-        projectDir,
-        "src",
-        "utils",
-        "generate-static-data.runtime.mjs"
-      );
-      if (fs.existsSync(genScript)) {
-        console.log("Running runtime static data generator...");
-        const genResult = spawnSync("node", [genScript], {
-          cwd: projectDir,
-          stdio: "pipe",
-          env: cleanEnv,
-        });
-        if (genResult.stdout) console.log(genResult.stdout.toString());
-        if (genResult.stderr) console.log(genResult.stderr.toString());
-        if (genResult.status !== 0) {
-          throw new Error(
-            `Static data generation failed (status ${genResult.status})`
-          );
-        }
-      } else {
-        console.warn("Runtime generator script not found:", genScript);
-      }
+      // Add this before committing:
+  console.log("Generating static data...");
+  const genScript = path.join(projectDir, "src", "utils", "generate-static-data.runtime.mjs");
+  if (fs.existsSync(genScript)) {
+    const genResult = spawnSync("node", ["--experimental-modules", genScript], {
+      cwd: projectDir,
+      stdio: "pipe",
+      env: cleanEnv,
+    });
+    if (genResult.stdout) console.log(genResult.stdout.toString());
+    if (genResult.stderr) console.error(genResult.stderr.toString());
+    if (genResult.status !== 0) throw new Error("Static data generation failed");
+    
+    // Stage the generated files
+    console.log("Staging generated files...");
+    
+    await handleGitFileCommit("src/data/static-data.ts", "update");
+    await handleGitFileCommit("public/static-contents.json", "update");
+    console.log("Generated static files staged.");
+
+
+  } else {
+    console.warn("Generator script not found:", genScript);
+  }
 
       // Build
       let buildResult;
