@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Grid,
@@ -7,9 +9,10 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { format, parseISO } from "date-fns";
-import { useEffect, useState } from "react";
+import { format, parseISO, isValid } from "date-fns";
 import { MdxPage } from "@/types";
+import { useEffect, useState } from "react";
+import { isDev } from "@/utils/env";
 
 interface ContentIndexProps {
   daysToConsiderNewsOutdated?: number;
@@ -19,11 +22,10 @@ interface ContentIndexProps {
 }
 
 /**
- * ContextIndex component displays a list of context-related articles.
- * @param param0 - Props for the ContextIndex component.
- * @returns The rendered ContextIndex component.
+ * ContentIndex client component displays a list of content-related articles.
+ * @param props - Props for the ContentIndex component.
+ * @returns The rendered ContentIndex component.
  */
-
 const ContentIndex = ({
   daysToConsiderNewsOutdated = -1,
   requestedCategoriesOnly = [],
@@ -31,121 +33,197 @@ const ContentIndex = ({
   suppressPotentialMarkdownCodeInExcerpt = true,
 }: ContentIndexProps) => {
   const [allPages, setAllPages] = useState<MdxPage[]>([]);
+  const [loading, setLoading] = useState(true); // Start with loading true
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch all pages on component mount
   useEffect(() => {
-    const fetchPages = async () => {
-      try {
-        const resp = await fetch("/api/pages");
-        if (!resp.ok) {
-          console.error("Failed to fetch pages:", resp.statusText);
-          return;
-        }
-        const data = await resp.json();
-        setAllPages(data);
-      } catch (error) {
-        console.error("Error fetching pages:", error);
-      }
-    };
     fetchPages();
-  }, []);
+  }, []); // Remove the condition, always fetch on mount
 
-  let allContents = allPages.filter((page) =>
-    page._raw.flattenedPath.startsWith(contentPagePath)
-  );
+  const fetchPages = async () => {
+    setLoading(true);
+    setError(null);
 
-  // Sort news by date
-  allContents.sort((a, b) => {
-    if (!b.date) return -1;
-    if (!a.date) return 1;
-    return parseISO(b.date).getTime() - parseISO(a.date).getTime();
-  });
+    try {
+      if (!isDev()) {
+        // Production: fetch from static JSON file
+        console.log("Fetching from static JSON file...");
+        const response = await fetch("/data/pages.json");
 
-  console.log("All contents after sorting:", allContents);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch static data: ${response.status}`);
+        }
 
-  // Filter news by date if daysToConsiderNewsOutdated is not set to -1
-  if (daysToConsiderNewsOutdated !== -1) {
-    const now = new Date();
-    allContents = allContents.filter((newsItem) => {
-      const diffDays = newsItem.date
-        ? daysBetween(parseISO(newsItem.date), now)
-        : 0;
-      const isPublished = newsItem.published;
-      const isInCategory =
-        requestedCategoriesOnly.length === 0 ||
-        requestedCategoriesOnly.includes(newsItem.category || "none");
-      const isWithinDateRange =
-        diffDays <= 0 || diffDays <= daysToConsiderNewsOutdated;
+        const pages = await response.json();
+        setAllPages(pages);
+      } else {
+        // Development: fetch from API
+        console.log("Fetching from API...");
+        const response = await fetch("/api/pages");
 
-      return isPublished && isInCategory && isWithinDateRange;
-    });
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setAllPages(data.pages || data); // Handle both response formats
+      }
+    } catch (error) {
+      console.error("Error fetching pages:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to load content."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Typography>Loading content...</Typography>;
   }
 
-  if (!allContents || allContents.length === 0) return null;
+  if (error) {
+    return (
+      <Typography variant="body2" color="error">
+        {error}
+      </Typography>
+    );
+  }
+
+  if (allPages.length === 0) {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center">
+        No content available.
+      </Typography>
+    );
+  }
 
   return (
     <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
-      {allContents.map((contentItem, index) => {
-        if (
-          contentItem.published &&
-          (requestedCategoriesOnly.length === 0 ||
-            requestedCategoriesOnly.includes(contentItem.category || "none"))
+      {allPages
+        .filter(
+          (page) => page._raw?.flattenedPath?.startsWith(contentPagePath) // Add safe navigation
         )
-          return (
-            <Grid
-              size={{ xs: 12, sm: 6, xl: 4 }}
-              key={index}
-              sx={{ display: "flex" }}
+        .sort((a, b) => {
+          const dateA = safeParseDate(a.date);
+          const dateB = safeParseDate(b.date);
+
+          // Handle null dates (put them at the end)
+          if (!dateB && !dateA) return 0;
+          if (!dateB) return -1;
+          if (!dateA) return 1;
+
+          return dateB.getTime() - dateA.getTime();
+        })
+        .filter((contentItem) => {
+          if (daysToConsiderNewsOutdated === -1) {
+            // No date filtering, just check published status and category
+            return (
+              contentItem.published &&
+              (requestedCategoriesOnly.length === 0 ||
+                requestedCategoriesOnly.includes(
+                  contentItem.category || "none"
+                ))
+            );
+          }
+
+          const now = new Date();
+          const parsedDate = safeParseDate(contentItem.date);
+          const diffDays = parsedDate ? daysBetween(parsedDate, now) : 0;
+          const isPublished = contentItem.published;
+          const isInCategory =
+            requestedCategoriesOnly.length === 0 ||
+            requestedCategoriesOnly.includes(contentItem.category || "none");
+          const isWithinDateRange =
+            diffDays <= 0 || diffDays <= daysToConsiderNewsOutdated;
+
+          return isPublished && isInCategory && isWithinDateRange;
+        })
+        .map((contentItem, index) => (
+          <Grid
+            size={{ xs: 12, sm: 6, xl: 4 }}
+            key={`${contentItem._raw?.flattenedPath}-${index}`} // Add safe navigation
+            sx={{ display: "flex" }}
+          >
+            <Card
+              sx={{
+                borderRadius: "0.5rem",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+              }}
             >
-              <Card
-                sx={{
-                  borderRadius: "0.5rem",
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  flex: 1, // Ensures all cards stretch to the same height
-                }}
+              <CardMedia
+                component={Link}
+                href={contentItem._raw?.flattenedPath || "#"} // Add fallback
+                sx={{ height: 200 }}
               >
-                <CardMedia
-                  component={Link}
-                  href={contentItem._raw.flattenedPath}
-                  sx={{ height: 200 }}
-                >
-                  <Box
-                    component="img"
-                    src={contentItem.featuredImage}
-                    alt={contentItem.title}
-                    sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </CardMedia>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="h6" align="center" gutterBottom>
-                    {contentItem.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {excerpt(
-                      contentItem.body.raw,
-                      100,
-                      suppressPotentialMarkdownCodeInExcerpt
-                    )}
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    {contentItem.date
-                      ? format(parseISO(contentItem.date), "dd/MM/yyyy")
-                      : ""}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          );
-      })}
+                <Box
+                  component="img"
+                  src={contentItem.featuredImage || "/placeholder-image.jpg"} // Add fallback
+                  alt={contentItem.title || "Content image"}
+                  sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </CardMedia>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {contentItem.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  {excerpt(
+                    contentItem.body?.raw || "",
+                    100,
+                    suppressPotentialMarkdownCodeInExcerpt
+                  )}
+                </Typography>
+                <Typography variant="caption" color="textSecondary">
+                  {(() => {
+                    const parsedDate = safeParseDate(contentItem.date);
+                    return parsedDate ? format(parsedDate, "dd/MM/yyyy") : "";
+                  })()}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
     </Grid>
   );
 };
+
+// ... (keep all your helper functions as they are)
+
+/**
+ * Helper function to safely parse a date
+ */
+function safeParseDate(
+  dateValue: string | number | Date | null | undefined
+): Date | null {
+  if (!dateValue) return null;
+
+  // If it's already a Date object, return it
+  if (dateValue instanceof Date) {
+    return isValid(dateValue) ? dateValue : null;
+  }
+
+  // If it's a string, try to parse it
+  if (typeof dateValue === "string") {
+    try {
+      const parsed = parseISO(dateValue);
+      return isValid(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // If it's a number (timestamp), convert it
+  if (typeof dateValue === "number") {
+    const date = new Date(dateValue);
+    return isValid(date) ? date : null;
+  }
+
+  return null;
+}
 
 function excerpt(text: string, length = 100, suppressMarkdown = false): string {
   if (!text) return "";

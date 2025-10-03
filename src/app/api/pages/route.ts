@@ -66,12 +66,6 @@ export async function generateStaticParams() {
 
 export async function GET() {
   try {
-    if (!isDev()) {
-      return NextResponse.json(
-        { error: "This endpoint is only available in development mode." },
-        { status: 403 }
-      );
-    }
 
     const allPages = await getAllRuntimePages();
     return NextResponse.json(allPages || []);

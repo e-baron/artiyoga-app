@@ -9,10 +9,11 @@
     "dev": "concurrently -k -r -n NEXT,MAIN,ELECTRON \"npm:next:dev\" \"npm:watch:main\" \"wait-on tcp:3001 && electron .\"",
     "build:wrapper": "tsc -p tsconfig.main.json",
     "build:next": "next build",
-    "build:next:export": "NEXT_PUBLIC_NODE_ENV=production next build",
+    "build:next:export": "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data && next build",
     "build:next:standalone": "USE_PROD=1 FORCE_DEV=1 next build && node src/utils/prepare-standalone.ts",
     "dist": "npm run build:next && npm run build:wrapper && electron-builder",
-    "start": "USE_PROD=1 electron ."
+    "start": "USE_PROD=1 electron .",
+    "generate-static-data": "ts-node --project tsconfig.scripts.json src/utils/generate-static-data.ts"
   },
   "build": {
     "appId": "be.e-baron.jamsite",
@@ -101,6 +102,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "simple-git": "^3.28.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {

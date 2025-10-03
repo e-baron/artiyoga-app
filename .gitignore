@@ -23,6 +23,8 @@
 # production
 /build
 
+/public/data
+
 /dist
 /dist-electron
 /export
