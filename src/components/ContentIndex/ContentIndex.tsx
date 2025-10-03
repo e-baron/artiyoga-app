@@ -13,7 +13,8 @@ import { format, parseISO, isValid } from "date-fns";
 import { MdxPage } from "@/types";
 import { useEffect, useState } from "react";
 import { isDev } from "@/utils/env";
-import { get } from "lodash";
+import { getAllContents } from "@/data/static-data";
+
 
 interface ContentIndexProps {
   daysToConsiderNewsOutdated?: number;
@@ -50,7 +51,8 @@ const ContentIndex = ({
         // Production: fetch from static JSON file
         console.log("Fetching from static content...");
         try {
-          const { getAllContents } = await import("@/data/static-data");
+          
+          console.log("Using static content data.");
           setAllPages(getAllContents());
         } catch (error) {
           console.error("Error loading static content:", error);
