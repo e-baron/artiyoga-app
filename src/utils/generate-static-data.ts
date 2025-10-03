@@ -1,23 +1,24 @@
-import { getAllRuntimePages } from "./runtime-pages";
-import fs from "fs";
-import path from "path";
+import { MdxPage } from "@/types";
+import { getAllRuntimePages } from "@/utils/runtime-pages";
 
-async function generateStaticData() {
-  const pages = await getAllRuntimePages();
+let cachedPages: MdxPage[] | null = null;
+let cachedContents: MdxPage[] | null = null;
 
-  // Create public/data directory if it doesn't exist
-  const dataDir = path.join(process.cwd(), "public", "data");
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+const getAllPages = async () => {
+  if (!cachedPages) {
+    cachedPages = await getAllRuntimePages();
   }
+  return cachedPages;
+};
 
-  // Write pages data to JSON file
-  fs.writeFileSync(
-    path.join(dataDir, "pages.json"),
-    JSON.stringify(pages, null, 2)
-  );
+const getAllContents = async () => {
+  if (!cachedContents) {
+    const pages = await getAllPages();
+    cachedContents = pages.filter((page) =>
+      page._raw?.flattenedPath?.startsWith("contents/")
+    );
+  }
+  return cachedContents;
+};
 
-  console.log("Static data generated successfully");
-}
-
-generateStaticData().catch(console.error);
+export { getAllPages, getAllContents };
