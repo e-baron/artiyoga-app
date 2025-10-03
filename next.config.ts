@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import siteConfig from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
+import path from 'path';
+
 
 const nextConfig: NextConfig = {
   // output: "standalone",
