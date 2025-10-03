@@ -1,4 +1,5 @@
 // Auto-generated - do not edit
+/* eslint-disable */
 const pages = [
   {
     "_raw": {
@@ -87,8 +88,8 @@ const pages = [
     "autoMargin": false,
     "autoFeatureImageAndText": false,
     "body": {
-      "raw": "---\nnavbarExtraStyles: navbar--transparent-background navbar--top-of-page\ntitle: Contact\ndescription: Contact details van Kati Baroni\nautoMargin: false\nfeaturedImage: /images/contact/contact.jpg\nfooterImage: /images/footer.jpg\n---\n\n<Section autoMargin={false}>\n  <ContentWithBackground src=\"/images/contact/contact.jpg\" height=\"50vh\">\n    <SectionFooter light>\n      ###Contact me###\n    </SectionFooter>\n  </ContentWithBackground>\n  <Content fullwidth autoMargin>\n    <h3> Contact details </h3>\n    <table>\n   \n    <tbody>\n    <tr>\n    <th><EmailIcon size=\"1x\"/></th>\n    <td>baroni.kati@gmail.com</td>\n        </tr> \n        <tr>\n          <th><PhoneIcon size=\"1x\"/></th>\n          <td>0483 123 997</td>\n        </tr>\n        <tr>\n          <th><CreditCardIcon size=\"1x\"/></th>\n          <td>BE05 0689 1011 7075</td>\n        </tr>       \n        <tr>\n          <th>BTW</th>\n          <td>BE 0697 794 442</td>\n        </tr>        \n      </tbody>\n    </table>\n\n  </Content>\n</Section>\n",
-      "code": "\n<Section autoMargin={false}>\n  <ContentWithBackground src=\"/images/contact/contact.jpg\" height=\"50vh\">\n    <SectionFooter light>\n      ###Contact me###\n    </SectionFooter>\n  </ContentWithBackground>\n  <Content fullwidth autoMargin>\n    <h3> Contact details </h3>\n    <table>\n   \n    <tbody>\n    <tr>\n    <th><EmailIcon size=\"1x\"/></th>\n    <td>baroni.kati@gmail.com</td>\n        </tr> \n        <tr>\n          <th><PhoneIcon size=\"1x\"/></th>\n          <td>0483 123 997</td>\n        </tr>\n        <tr>\n          <th><CreditCardIcon size=\"1x\"/></th>\n          <td>BE05 0689 1011 7075</td>\n        </tr>       \n        <tr>\n          <th>BTW</th>\n          <td>BE 0697 794 442</td>\n        </tr>        \n      </tbody>\n    </table>\n\n  </Content>\n</Section>\n"
+      "raw": "---\nnavbarExtraStyles: navbar--transparent-background navbar--top-of-page\ntitle: Contact\ndescription: Contact details van Kati Baroni\nautoMargin: false\nfeaturedImage: /images/contact/contact.jpg\nfooterImage: /images/footer.jpg\n---\n\n<Section autoMargin={false}>\n  <ContentWithBackground src=\"/images/contact/contact.jpg\" height=\"50vh\">\n    <SectionFooter light>\n      ###Contact me !!!\n    </SectionFooter>\n  </ContentWithBackground>\n  <Content fullwidth autoMargin>\n    <h3> Contact details </h3>\n    <table>\n   \n    <tbody>\n    <tr>\n    <th><EmailIcon size=\"1x\"/></th>\n    <td>baroni.kati@gmail.com</td>\n        </tr> \n        <tr>\n          <th><PhoneIcon size=\"1x\"/></th>\n          <td>0483 123 997</td>\n        </tr>\n        <tr>\n          <th><CreditCardIcon size=\"1x\"/></th>\n          <td>BE05 0689 1011 7075</td>\n        </tr>       \n        <tr>\n          <th>BTW</th>\n          <td>BE 0697 794 442</td>\n        </tr>        \n      </tbody>\n    </table>\n\n  </Content>\n</Section>\n",
+      "code": "\n<Section autoMargin={false}>\n  <ContentWithBackground src=\"/images/contact/contact.jpg\" height=\"50vh\">\n    <SectionFooter light>\n      ###Contact me !!!\n    </SectionFooter>\n  </ContentWithBackground>\n  <Content fullwidth autoMargin>\n    <h3> Contact details </h3>\n    <table>\n   \n    <tbody>\n    <tr>\n    <th><EmailIcon size=\"1x\"/></th>\n    <td>baroni.kati@gmail.com</td>\n        </tr> \n        <tr>\n          <th><PhoneIcon size=\"1x\"/></th>\n          <td>0483 123 997</td>\n        </tr>\n        <tr>\n          <th><CreditCardIcon size=\"1x\"/></th>\n          <td>BE05 0689 1011 7075</td>\n        </tr>       \n        <tr>\n          <th>BTW</th>\n          <td>BE 0697 794 442</td>\n        </tr>        \n      </tbody>\n    </table>\n\n  </Content>\n</Section>\n"
     },
     "date": null,
     "published": true,
@@ -1080,7 +1081,6 @@ const pages = [
     "category": "none"
   }
 ];
-
 const contents = [
   {
     "_raw": {
@@ -1294,3 +1294,5 @@ const contents = [
 
 export const getAllPages = () => pages;
 export const getAllContents = () => contents;
+
+export default { getAllPages, getAllContents, pages, contents };
