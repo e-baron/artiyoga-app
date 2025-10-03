@@ -328,7 +328,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         });
       } else {
         console.log("Local next not found, running npm run build...");
-        buildResult = spawnSync("npm", ["run", "build"], {
+        buildResult = spawnSync("npm", ["run", "build:next:export"], {
           cwd: projectDir,
           stdio: "pipe",
           env: cleanEnv,
