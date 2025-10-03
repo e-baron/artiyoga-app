@@ -315,14 +315,38 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
 
       // Build
       let buildResult;
-      const nextExecutablePath = path.join(
-        projectDir,
-        "node_modules",
-        ".bin",
-        "next"
-      );
-      if (fs.existsSync(nextExecutablePath)) {
-        console.log("Using local next executable...");
+      // When running from packaged app, cwd is inside the bundle
+      console.log("Current working directory:", projectDir);
+
+      // Try multiple possible locations for next executable
+      const possibleNextPaths = [
+        path.join(projectDir, "node_modules", ".bin", "next"),
+        path.join(
+          projectDir,
+          "..",
+          "..",
+          "..",
+          "..",
+          "..",
+          "node_modules",
+          ".bin",
+          "next"
+        ), // Go up from app bundle
+        path.join(process.cwd(), "node_modules", ".bin", "next"),
+        "next", // Global fallback
+      ];
+
+      let nextExecutablePath = null;
+      for (const nextPath of possibleNextPaths) {
+        console.log("Checking next at:", nextPath);
+        if (fs.existsSync(nextPath)) {
+          nextExecutablePath = nextPath;
+          console.log("Found next at:", nextPath);
+          break;
+        }
+      }
+      if (nextExecutablePath) {
+        console.log("Using next executable at:", nextExecutablePath);
         buildResult = spawnSync(nextExecutablePath, ["build"], {
           cwd: projectDir,
           stdio: "pipe",
