@@ -321,6 +321,10 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         console.warn("Generator script not found:", genScript);
       }
 
+      // Remove existing .next folder if it exists
+      console.log("Cleaning previous builds...");
+      await deleteDirectory(path.join(projectDir, ".next"));
+     
       // Build
       let buildResult;
       // When running from packaged app, cwd is inside the bundle

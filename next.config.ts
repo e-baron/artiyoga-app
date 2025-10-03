@@ -5,6 +5,7 @@ import { isDev } from "@/utils/env";
 const nextConfig: NextConfig = {
   // output: "standalone",
   // output: "export",
+  outputFileTracingRoot: path.resolve(__dirname),
   output:
     process.env.NEXT_PUBLIC_GITHUB_PAGES_BUILD === "true"
       ? "export"
