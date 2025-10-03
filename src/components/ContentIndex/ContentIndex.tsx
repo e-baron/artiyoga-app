@@ -13,7 +13,6 @@ import { format, parseISO, isValid } from "date-fns";
 import { MdxPage } from "@/types";
 import { useEffect, useState } from "react";
 import { isDev } from "@/utils/env";
-import { getAllContents } from "@/utils/generate-static-data";
 import { get } from "lodash";
 
 interface ContentIndexProps {
@@ -50,8 +49,13 @@ const ContentIndex = ({
       if (!isDev()) {
         // Production: fetch from static JSON file
         console.log("Fetching from static content...");
-        const data = await getAllContents();
-        setAllPages(data);
+        try {
+          const { getAllContents } = await import("@/data/static-data");
+          setAllPages(getAllContents());
+        } catch (error) {
+          console.error("Error loading static content:", error);
+          setError("Failed to load static content.");
+        }
       } else {
         // Development: fetch from API
         console.log("Fetching from API...");
