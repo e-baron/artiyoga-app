@@ -41,7 +41,7 @@ const UpdateNavbarPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
-  const { siteMetaData, refetchSiteMetaData } = useSiteMetadata(); // USE THE HOOK
+  const { refetchSiteMetaData } = useSiteMetadata(); // USE THE HOOK
   // Fetch the menu links on component mount
   useEffect(() => {
     const fetchMenuLinks = async () => {
