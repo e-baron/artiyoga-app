@@ -108,11 +108,12 @@ export default async function copyGitToPackage(
     packageJsonPath = path.join(appOutDir, "resources", "app", "package.json");
   }
 
-  if (fs.existsSync(packageJsonPath)) {
+  // Use fs.pathExists instead of fs.existsSync
+  if (await fs.pathExists(packageJsonPath)) {
     console.log("Updating package.json in packaged app...");
 
-    // Read the current package.json
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    // Read the current package.json using fs-extra
+    const packageJson = await fs.readJson(packageJsonPath);
 
     // Add the missing script
     if (!packageJson.scripts) {
@@ -122,8 +123,8 @@ export default async function copyGitToPackage(
     packageJson.scripts["build:next:export"] =
       "NEXT_PUBLIC_NODE_ENV=production npm run generate-static-data && next build";
 
-    // Write the updated package.json back
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    // Write the updated package.json back using fs-extra
+    await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
     console.log("Updated package.json with build:next:export script");
   } else {
