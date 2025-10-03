@@ -1,70 +1,28 @@
-"use client";
+// Remove "use client" from here - this needs to be a server component
 
 import "./code-block.css";
 import "prism-themes/themes/prism-vsc-dark-plus.css";
-import { Box } from "@mui/material";
 import "@fontsource/roboto";
-import Header from "@/components/Header/Header";
-import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
-import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import Footer from "@/components/Footer/Footer";
-import { useSiteMetadata } from "@/contexts/sitemetadata";
-import ClientProviders from "@/contexts/ClientProviders";
+import ClientLayout from "@/components/ClientLayout/ClientLayout";
 
-// This component consumes the context and renders the layout
-const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { siteMetaData } = useSiteMetadata();
-
-  if (!siteMetaData) {
-    // You can render a loading spinner here while the initial fetch happens
-    return null;
-  }
-
-  const basePath = siteMetaData.basePath || "";
-  const faviconUrl = `${basePath}/favicon.svg`;
-
+// Server component - no "use client"
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html>
+    <html lang="en">
       <head>
-        <title>{siteMetaData.title}</title>
-        <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+        <title>ArtiYoga</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
-      <Box
-        component="body"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-          margin: 0,
-          padding: 0,
-        }}
-      >
-        <Header siteMetaData={siteMetaData} />
-        <Box
-          sx={{ padding: 0, margin: 0, wordWrap: "break-word", flex: 1 }}
-          className="app-layout-box"
-        >
-          {children}
-        </Box>
-        <ScrollToTop />
-        <Footer siteMetaData={siteMetaData} />
-      </Box>
+      <body style={{ margin: 0, padding: 0 }}>
+        <AppRouterCacheProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
-};
-
-// The RootLayout now only sets up providers
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <AppRouterCacheProvider>
-      <ClientThemeProvider>
-        <ClientProviders>
-          <MainLayout>{children}</MainLayout>
-        </ClientProviders>
-      </ClientThemeProvider>
-    </AppRouterCacheProvider>
-  );
-};
-
-export default RootLayout;
+}
