@@ -22,7 +22,6 @@ const SiteMetadataContext = createContext<SiteMetadataContextType | undefined>(
 );
 
 export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize with the static import, but it will be quickly replaced by the fetch.
   const [siteMetaData, setSiteMetaData] = useState<SiteMetaData | null>(
     config as SiteMetaData
   );
@@ -30,7 +29,7 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   const refetchSiteMetaData = useCallback(async () => {
     console.log("CONTEXT: Refetching site metadata...");
     try {
-      if (!isDev()) return
+      if (!isDev()) return;
       const response = await fetch("/api/site-metadata", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -48,7 +47,6 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Fetch data on initial mount
   useEffect(() => {
     refetchSiteMetaData();
   }, [refetchSiteMetaData]);
@@ -62,10 +60,18 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
 
 export const useSiteMetadata = () => {
   const context = useContext(SiteMetadataContext);
+
+  // During SSR/static export, context might be undefined
+  // Return fallback data instead of throwing
   if (context === undefined) {
-    throw new Error(
-      "useSiteMetadata must be used within a SiteMetadataProvider"
-    );
+    console.warn("SiteMetadataProvider not found, using fallback config");
+    return {
+      siteMetaData: config as SiteMetaData,
+      refetchSiteMetaData: async () => {
+        console.warn("refetchSiteMetaData called outside provider context");
+      },
+    };
   }
+
   return context;
 };
