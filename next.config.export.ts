@@ -1,4 +1,3 @@
-import { withContentlayer } from "next-contentlayer2";
 import type { NextConfig } from "next";
 import siteConfig from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
@@ -22,4 +21,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withContentlayer(nextConfig);
+export default nextConfig;

@@ -1,4 +1,3 @@
-import { withContentlayer } from "next-contentlayer2";
 import type { NextConfig } from "next";
 import siteConfig from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
@@ -21,10 +20,6 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV, // available at build time and runtime in both server and client-side code
     NEXT_PUBLIC_GITHUB_PAGES_BUILD: process.env.NEXT_PUBLIC_GITHUB_PAGES_BUILD, // available at build time and runtime in both server and client-side code
   },
-  images: {
-    // Prior to use Sharp for image optimization, we disable the built-in Next.js image optimization
-    unoptimized: true,
-  },
 };
 
-export default withContentlayer(nextConfig);
+export default nextConfig;

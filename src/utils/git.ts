@@ -270,6 +270,14 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         NODE_ENV: "production",
         NEXT_PUBLIC_NODE_ENV: "production",
         NEXT_PUBLIC_GITHUB_PAGES_BUILD: "true",
+        PWD: projectDir, // Set PWD to the dist directory
+        INIT_CWD: projectDir, // Set INIT_CWD to the dist directory
+        npm_config_local_prefix: outDirPath, // Set npm's local prefix to the dist directory
+        npm_package_json: path.join(outDirPath, "package.json"), // Point to the correct package.json
+        TURBOPACK: undefined, // Remove Turbopack flag for production builds
+        npm_lifecycle_event: undefined, // Remove lifecycle event
+        npm_lifecycle_script: undefined, // Remove lifecycle script
+        _: undefined, // Remove referenc
       };
 
       // Add this before committing:
@@ -339,10 +347,21 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       let nextExecutablePath = null;
       for (const nextPath of possibleNextPaths) {
         console.log("Checking next at:", nextPath);
-        if (fs.existsSync(nextPath)) {
-          nextExecutablePath = nextPath;
-          console.log("Found next at:", nextPath);
-          break;
+        // Check for both regular files and symlinks
+        try {
+          const stats = fs.lstatSync(nextPath);
+          if (stats.isFile() || stats.isSymbolicLink()) {
+            nextExecutablePath = nextPath;
+            console.log(
+              "Found next at:",
+              nextPath,
+              stats.isSymbolicLink() ? "(symlink)" : "(file)"
+            );
+            break;
+          }
+        } catch (error) {
+          // File/symlink doesn't exist, continue to next path
+          console.log("Not found at:", nextPath);
         }
       }
       if (nextExecutablePath) {

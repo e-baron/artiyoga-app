@@ -1,9 +1,9 @@
 "use client";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";
-import { allPages } from "contentlayer/generated";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import staticData from "@/data/static-data";
 
 /**
  *
@@ -21,9 +21,10 @@ const Carousel = ({
   folderNameWithMdxFiles = "testimonial",
 }: CarouselProps) => {
   const theme = useTheme();
+  const allPages = staticData.getAllPages();
 
   const testimonials = allPages.filter((mdxPage) =>
-    mdxPage._raw?.sourceFilePath.includes(folderNameWithMdxFiles)
+    mdxPage._raw.flattenedPath.includes(folderNameWithMdxFiles)
   );
 
   if (!testimonials || testimonials.length === 0) return null;
