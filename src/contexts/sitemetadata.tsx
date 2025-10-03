@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { SiteMetaData } from "@/types";
 import config from "@/config/site-config.json";
+import { isDev } from "@/utils/env";
 
 interface SiteMetadataContextType {
   siteMetaData: SiteMetaData | null;
@@ -29,6 +30,7 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   const refetchSiteMetaData = useCallback(async () => {
     console.log("CONTEXT: Refetching site metadata...");
     try {
+      if (!isDev()) return
       const response = await fetch("/api/site-metadata", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

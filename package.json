@@ -37,7 +37,6 @@
       "eslint.config.mjs",
       "tsconfig.main.json",
       "tsconfig.scripts.json",
-      "package-lock.json",
       "contentlayer.config.ts",
       ".github/**",
       ".vscode/**",
