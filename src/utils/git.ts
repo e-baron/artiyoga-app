@@ -251,23 +251,25 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     const projectDir = path.resolve(".");
     console.log("Building project for export...");
 
-    const nextConfigPath = path.join(projectDir, "next.config.ts");
+    /*const nextConfigPath = path.join(projectDir, "next.config.ts");
     const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
-    const nextConfigExportPath = path.join(projectDir, "next.config.export.ts");
+    const nextConfigExportPath = path.join(projectDir, "next.config.export.ts");*/
 
+    /*
     if (fs.existsSync(nextConfigPath)) {
       fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
     }
     if (fs.existsSync(nextConfigExportPath)) {
       fs.copyFileSync(nextConfigExportPath, nextConfigPath);
       console.log("Switched to export configuration.");
-    }
+    }*/
 
     try {
       const cleanEnv: NodeJS.ProcessEnv = {
         ...process.env,
         NODE_ENV: "production",
         NEXT_PUBLIC_NODE_ENV: "production",
+        NEXT_PUBLIC_GITHUB_PAGES_BUILD: "true",
       };
 
       // Add this before committing:
@@ -347,11 +349,11 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       console.log("Project built successfully.");
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
     } finally {
-      if (fs.existsSync(nextConfigBackupPath)) {
+      /*if (fs.existsSync(nextConfigBackupPath)) {
         fs.copyFileSync(nextConfigBackupPath, nextConfigPath);
         fs.unlinkSync(nextConfigBackupPath);
         console.log("Restored original next.config.ts.");
-      }
+      }*/
     }
 
     console.log("Publishing to GitHub Pages...");
