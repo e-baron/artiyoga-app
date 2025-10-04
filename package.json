@@ -19,13 +19,8 @@
     "productName": "JamSite",
     "asar": false,
     "files": [
-      "dist-electron/main/**",
-      ".next/**",
-      ".contentlayer/**",
       "public/**",
       "src/**",
-      ".git/**",
-      ".gitignore",
       "tsconfig.json",
       "next.config.ts",
       "next.config.export.ts",
@@ -39,8 +34,14 @@
       "contentlayer.config.ts",
       ".github/**",
       ".vscode/**",
-      "main/**"
+      "main/**",
+      "package.json",
+      "package-lock.json",
+      "node_modules/**"
     ],
+    "npmSkipBuildFromSource": true,
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
     "afterPack": "./src/utils/packaging-git.ts",
     "mac": {
       "target": [
@@ -113,13 +114,12 @@
     "@types/react-dom": "^19",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
-   
     "eslint": "^9",
     "eslint-config-next": "^15.5.3",
     "wait-on": "^9.0.1"
   },
   "devDependencies": {
-     "electron": "^32.3.3",
+    "electron": "^32.3.3",
     "electron-builder": "^26.0.12"
   }
 }
