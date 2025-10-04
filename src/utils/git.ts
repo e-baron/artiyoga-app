@@ -339,6 +339,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       // Try multiple possible locations for next executable
       const possibleNextPaths = [
         path.join(projectDir, "node_modules", ".bin", "next"),
+        path.join(projectDir, "node_modules", "next"),
         path.join(
           projectDir,
           "..",
