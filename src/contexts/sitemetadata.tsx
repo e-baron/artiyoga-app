@@ -1,6 +1,4 @@
-/* "use client";
-
-
+"use client";
 
 import React, {
   createContext,
@@ -15,12 +13,12 @@ import config from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
 
 interface SiteMetadataContextType {
-  siteMetaData: SiteMetaData | null;
+  siteMetaData: SiteMetaData;
   refetchSiteMetaData: () => Promise<void>;
 }
 
 // Default values when context is not available
-const defaultSiteMetadata = {
+const defaultSiteMetadata: SiteMetadataContextType = {
   // Add your default values here
   siteMetaData: (config as SiteMetaData) ?? {},
   refetchSiteMetaData: async () => {},
@@ -30,7 +28,7 @@ const SiteMetadataContext = createContext(defaultSiteMetadata);
 
 export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   const [siteMetaData, setSiteMetaData] = useState<SiteMetaData>(
-    config as SiteMetaData ?? {}
+    (config as SiteMetaData) ?? {}
   );
 
   const refetchSiteMetaData = useCallback(async () => {
@@ -65,7 +63,7 @@ export const SiteMetadataProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export function useSiteMetadata() {
+export function useSiteMetadata(): SiteMetadataContextType {
   // Check if we're in a browser environment before using the context
   const context = useContext(SiteMetadataContext);
 
@@ -73,4 +71,3 @@ export function useSiteMetadata() {
 
   return context;
 }
-*/
