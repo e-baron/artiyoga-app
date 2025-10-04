@@ -36,8 +36,8 @@ export default async function copyGitToPackage(
   const gitIgnoreDest = path.join(appPath, ".gitignore");
   const githubSrc = path.join(projectRepoDir, ".github");
   const githubDest = path.join(appPath, ".github");
-  const packageLockSrc = path.join(projectRepoDir, "package-lock.json");
-  const packageLockDest = path.join(appPath, "package-lock.json");
+  // const packageLockSrc = path.join(projectRepoDir, "package-lock.json");
+  // const packageLockDest = path.join(appPath, "package-lock.json");
 
   console.log(
     "[packaging-git] Starting to copy git files...",
@@ -73,6 +73,7 @@ export default async function copyGitToPackage(
     console.error("[packaging-git] Error copying .github:", e);
   }
 
+  /*
   try {
     if (await fsExtra.pathExists(packageLockSrc)) {
       await fsExtra.copy(packageLockSrc, packageLockDest);
@@ -83,7 +84,7 @@ export default async function copyGitToPackage(
     }
   } catch (e) {
     console.error("[packaging-git] Error copying package-lock.json:", e);
-  }
+  }*/
 
   console.log("[packaging-git] Git files copy completed.");
 
@@ -111,6 +112,7 @@ export default async function copyGitToPackage(
   }
 
   // FIX FOR NEXT.JS BINARY
+  /*
   console.log("[packaging-git] Setting up Next.js binary...");
 
   try {
@@ -176,5 +178,5 @@ node "$NODE_PATH/next/dist/cli/next-cli.js" "$@"
     console.log("[packaging-git] Next.js binary setup completed");
   } catch (error) {
     console.error("[packaging-git] Error setting up Next.js binary:", error);
-  }
+  }*/
 }
