@@ -29,6 +29,9 @@ export default async function copyGitToPackage(
     appPath = path.join(appOutDir, "resources", "app");
   }
 
+  /*the working directory has to get all the files tracked by git */ 
+  
+
 const projectRepoDir = path.resolve(".");
 
   const gitSrc = path.join(projectRepoDir, ".git");
@@ -39,6 +42,7 @@ const projectRepoDir = path.resolve(".");
   const githubDest = path.join(appPath, ".github");
   // const packageLockSrc = path.join(process.cwd(), "package-lock.json");
   // const packageLockDest = path.join(appPath, "package-lock.json");
+  
 
   console.log("[packaging-git] Starting to copy git files... gitSrc:", gitSrc, "gitDest:", gitDest);
 
