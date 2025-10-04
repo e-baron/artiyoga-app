@@ -1,7 +1,10 @@
 "use client";
 
 import "./code-block.css";
-import "prism-themes/themes/prism-vsc-dark-plus.css"; // Import Prism CSS
+import "prism-themes/themes/prism-vsc-dark-plus.css"; 
+import "@fontsource/roboto";
+
+import "prism-themes/themes/prism-vsc-dark-plus.css";
 import { Box } from "@mui/material";
 import "@fontsource/roboto";
 import Header from "@/components/Header/Header";

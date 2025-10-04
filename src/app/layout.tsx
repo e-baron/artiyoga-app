@@ -1,8 +1,5 @@
 "use client";
 
-import "./code-block.css";
-import "prism-themes/themes/prism-vsc-dark-plus.css"; // Import Prism CSS
-import "@fontsource/roboto";
 import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import PageLayout from "@/components/PageLayout/PageLayout";
