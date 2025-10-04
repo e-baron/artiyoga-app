@@ -29,18 +29,20 @@ export default async function copyGitToPackage(
     appPath = path.join(appOutDir, "resources", "app");
   }
 
-  const gitSrc = path.join(process.cwd(), ".git");
+const projectRepoDir = path.resolve(".");
+
+  const gitSrc = path.join(projectRepoDir, ".git");
   const gitDest = path.join(appPath, ".git");
-  const gitignoreSrc = path.join(process.cwd(), ".gitignore");
+  const gitignoreSrc = path.join(projectRepoDir, ".gitignore");
   const gitignoreDest = path.join(appPath, ".gitignore");
-  const githubSrc = path.join(process.cwd(), ".github");
+  const githubSrc = path.join(projectRepoDir, ".github");
   const githubDest = path.join(appPath, ".github");
   // const packageLockSrc = path.join(process.cwd(), "package-lock.json");
   // const packageLockDest = path.join(appPath, "package-lock.json");
 
   try {
     if (await fsExtra.pathExists(gitSrc)) {
-      console.log("[packaging-git] Copying .git to", gitDest);
+      console.log("[packaging-git] Copying .git from", gitSrc, "to", gitDest);
       await fsExtra.copy(gitSrc, gitDest);
     }
     if (await fsExtra.pathExists(gitignoreSrc)) {
