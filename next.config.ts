@@ -4,6 +4,12 @@ import { isDev } from "@/utils/env";
 import path from 'path';
 
 
+console.log(  "NEXT_PUBLIC_GITHUB_PAGES_BUILD:",
+  process.env.NEXT_PUBLIC_GITHUB_PAGES_BUILD,
+  "output:",
+  process.env.NEXT_PUBLIC_GITHUB_PAGES_BUILD === "true" ? "export" : undefined
+);
+
 const nextConfig: NextConfig = {
   // output: "standalone",
   // output: "export",

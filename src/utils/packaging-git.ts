@@ -1,6 +1,7 @@
 // Updated packaging-git.ts
 import fsExtra from "fs-extra";
 import * as path from "path";
+import { spawnSync } from "child_process";
 
 interface PackagingContext {
   appOutDir: string;
@@ -112,10 +113,29 @@ export default async function copyGitToPackage(
   }
 
   // FIX FOR NEXT.JS BINARY
+
   /*
+
   console.log("[packaging-git] Setting up Next.js binary...");
 
-  try {
+  console.log("[packaging-git] Checking for Next.js in packaged app...");
+
+  console.log("[packaging-git] Installing Next.js in packaged app...");
+  const npmResult = spawnSync("npm", ["install", "next@latest", "--omit=dev"], {
+    cwd: appPath,
+    stdio: "inherit",
+    env: process.env,
+  });
+
+  if (npmResult.status !== 0) {
+    console.error("[packaging-git] npm install next failed:", npmResult);
+    throw new Error(
+      `[packaging-git] npm install next failed with code ${npmResult.status}`
+    );
+  }
+  console.log("[packaging-git] npm install next completed successfully."); */
+
+  /* try {
     // Ensure node_modules/.bin directory exists
     const binDir = path.join(appPath, "node_modules", ".bin");
     await fsExtra.ensureDir(binDir);

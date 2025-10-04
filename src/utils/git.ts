@@ -6,6 +6,7 @@ import path from "path";
 import fse from "fs-extra";
 import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
 
+
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
@@ -246,172 +247,156 @@ const mergeBranches = async (
  * Publishes the project to GitHub Pages using a simplified approach.
  */
 const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
+  const outDirPath = path.resolve(outDir);
+  const projectDir = path.resolve(".");
+  console.log("Building project for export...");
+  let nextExecutablePath = null;
+
+  const cleanEnv: NodeJS.ProcessEnv = {
+    ...process.env,
+    NODE_ENV: "production",
+    NEXT_PUBLIC_NODE_ENV: "production",
+    NEXT_PUBLIC_GITHUB_PAGES_BUILD: "true",
+    PWD: projectDir, // Set PWD to the dist directory
+    INIT_CWD: projectDir, // Set INIT_CWD to the dist directory
+    npm_config_local_prefix: outDirPath, // Set npm's local prefix to the dist directory
+    npm_package_json: path.join(outDirPath, "package.json"), // Point to the correct package.json
+    TURBOPACK: undefined, // Remove Turbopack flag for production builds
+    npm_lifecycle_event: undefined, // Remove lifecycle event
+    npm_lifecycle_script: undefined, // Remove lifecycle script
+    // Add this flag to help Next.js skip problematic pages
+    // NEXT_SKIP_PREFETCH: "true",
+    // Add this to disable static optimization that might trigger context usage
+    //__NEXT_DISABLE_OPTIMIZATION: "true",
+    _: undefined, // Remove referenc
+    // The important one: disable static optimization for error pages
+    // __NEXT_PRIVATE_OPTIMIZE_ERROR_PAGE: "0",
+  };
+
   try {
-    const outDirPath = path.resolve(outDir);
-    const projectDir = path.resolve(".");
-    console.log("Building project for export...");
-
-    /*const nextConfigPath = path.join(projectDir, "next.config.ts");
-    const nextConfigBackupPath = path.join(projectDir, "next.config.js.backup");
-    const nextConfigExportPath = path.join(projectDir, "next.config.export.ts");*/
-
-    /*
-    if (fs.existsSync(nextConfigPath)) {
-      fs.copyFileSync(nextConfigPath, nextConfigBackupPath);
-    }
-    if (fs.existsSync(nextConfigExportPath)) {
-      fs.copyFileSync(nextConfigExportPath, nextConfigPath);
-      console.log("Switched to export configuration.");
-    }*/
-
-    try {
-      const cleanEnv: NodeJS.ProcessEnv = {
-        ...process.env,
-        NODE_ENV: "production",
-        NEXT_PUBLIC_NODE_ENV: "production",
-        NEXT_PUBLIC_GITHUB_PAGES_BUILD: "true",
-        PWD: projectDir, // Set PWD to the dist directory
-        INIT_CWD: projectDir, // Set INIT_CWD to the dist directory
-        npm_config_local_prefix: outDirPath, // Set npm's local prefix to the dist directory
-        npm_package_json: path.join(outDirPath, "package.json"), // Point to the correct package.json
-        TURBOPACK: undefined, // Remove Turbopack flag for production builds
-        npm_lifecycle_event: undefined, // Remove lifecycle event
-        npm_lifecycle_script: undefined, // Remove lifecycle script
-        // Add this flag to help Next.js skip problematic pages
-        // NEXT_SKIP_PREFETCH: "true",
-        // Add this to disable static optimization that might trigger context usage
-        //__NEXT_DISABLE_OPTIMIZATION: "true",
-        _: undefined, // Remove referenc
-        // The important one: disable static optimization for error pages
-        // __NEXT_PRIVATE_OPTIMIZE_ERROR_PAGE: "0",
-      };
-
-      // Add this before committing:
-      console.log("Generating static data...");
-      const genScript = path.join(
-        projectDir,
-        "src",
-        "utils",
-        "generate-static-data.runtime.mjs"
+    // Add this before committing:
+    console.log("Generating static data...");
+    const genScript = path.join(
+      projectDir,
+      "src",
+      "utils",
+      "generate-static-data.runtime.mjs"
+    );
+    if (fs.existsSync(genScript)) {
+      const genResult = spawnSync(
+        "node",
+        ["--experimental-modules", genScript],
+        {
+          cwd: projectDir,
+          stdio: "pipe",
+          env: cleanEnv,
+        }
       );
-      if (fs.existsSync(genScript)) {
-        const genResult = spawnSync(
-          "node",
-          ["--experimental-modules", genScript],
-          {
-            cwd: projectDir,
-            stdio: "pipe",
-            env: cleanEnv,
-          }
-        );
-        if (genResult.stdout) console.log(genResult.stdout.toString());
-        if (genResult.stderr) console.error(genResult.stderr.toString());
-        if (genResult.status !== 0)
-          throw new Error("Static data generation failed");
+      if (genResult.stdout) console.log(genResult.stdout.toString());
+      if (genResult.stderr) console.error(genResult.stderr.toString());
+      if (genResult.status !== 0)
+        throw new Error("Static data generation failed");
 
-        // Stage the generated files
-        console.log("Staging generated files...");
+      // Stage the generated files
+      console.log("Staging generated files...");
 
-        try {
-          await handleGitFileCommit("src/data/static-data.ts", "update");
-        } catch (e) {
-          console.log("static-data.ts: no changes to stage");
-        }
-        try {
-          await handleGitFileCommit("public/static-contents.json", "update");
-        } catch (e) {
-          console.log("static-contents.json: no changes to stage");
-        }
-        console.log("Generated static files processed.");
-      } else {
-        console.warn("Generator script not found:", genScript);
+      try {
+        await handleGitFileCommit("src/data/static-data.ts", "update");
+      } catch (e) {
+        console.log("static-data.ts: no changes to stage");
       }
+      try {
+        await handleGitFileCommit("public/static-contents.json", "update");
+      } catch (e) {
+        console.log("static-contents.json: no changes to stage");
+      }
+      console.log("Generated static files processed.");
+    } else {
+      console.warn("Generator script not found:", genScript);
+    }
 
-      // Remove existing .next folder if it exists
-      console.log("Cleaning previous builds...");
-      await deleteDirectory(path.join(projectDir, ".next"));
+    // Remove existing .next folder if it exists
+    console.log("Cleaning previous builds...");
+    await deleteDirectory(path.join(projectDir, ".next"));
 
-      // Build
-      let buildResult;
-      // When running from packaged app, cwd is inside the bundle
-      console.log("Current working directory:", projectDir);
+    // Build
+    let buildResult;
+    // When running from packaged app, cwd is inside the bundle
+    console.log("Current working directory:", projectDir);
 
-      // Try multiple possible locations for next executable
-      const possibleNextPaths = [
-        path.join(projectDir, "node_modules", ".bin", "next"),
-        path.join(projectDir, "node_modules", "next"),
-        path.join(
-          projectDir,
-          "..",
-          "..",
-          "..",
-          "..",
-          "..",
-          "node_modules",
-          ".bin",
-          "next"
-        ), // Go up from app bundle
-        path.join(process.cwd(), "node_modules", ".bin", "next"),
-        "next", // Global fallback
-      ];
+    // Try multiple possible locations for next executable
+    const possibleNextPaths = [
+      path.join(projectDir, "node_modules", ".bin", "next"),
+      path.join(projectDir, "node_modules", "next"),
+      path.join(
+        projectDir,
+        "..",
+        "..",
+        "..",
+        "..",
+        "..",
+        "node_modules",
+        ".bin",
+        "next"
+      ), // Go up from app bundle
+      path.join(process.cwd(), "node_modules", ".bin", "next"),
+      "next", // Global fallback
+    ];
 
-      let nextExecutablePath = null;
-      for (const nextPath of possibleNextPaths) {
-        console.log("Checking next at:", nextPath);
-        // Check for both regular files and symlinks
-        try {
-          const stats = fs.lstatSync(nextPath);
-          if (stats.isFile() || stats.isSymbolicLink()) {
-            nextExecutablePath = nextPath;
-            console.log(
-              "Found next at:",
-              nextPath,
-              stats.isSymbolicLink() ? "(symlink)" : "(file)"
-            );
+    for (const nextPath of possibleNextPaths) {
+      console.log("Checking next at:", nextPath);
+      try {
+        const stats = fs.lstatSync(nextPath);
+        if (stats.isFile() || stats.isSymbolicLink()) {
+          nextExecutablePath = nextPath;
+          console.log(
+            "Found next at:",
+            nextPath,
+            stats.isSymbolicLink() ? "(symlink)" : "(file)"
+          );
+          break;
+        }
+        // If it's a directory, check for the CLI inside
+        if (stats.isDirectory()) {
+          const cliPath = path.join(nextPath, "dist", "bin", "next");
+          if (fs.existsSync(cliPath)) {
+            nextExecutablePath = cliPath;
+            console.log("Found next CLI at:", cliPath, "(inside directory)");
             break;
           }
-        } catch (error) {
-          // File/symlink doesn't exist, continue to next path
-          console.log("Not found at:", nextPath);
         }
+      } catch (error) {
+        // File/symlink/dir doesn't exist, continue to next path
+        console.log("Not found at:", nextPath);
       }
-      if (nextExecutablePath) {
-        console.log("Using next executable at:", nextExecutablePath);
-        buildResult = spawnSync(nextExecutablePath, ["build"], {
-          cwd: projectDir,
-          stdio: "pipe",
-          env: cleanEnv,
-        });
-      } else {
-        console.log("Local next not found, running npm run build...");
-        buildResult = spawnSync("npm", ["run", "build:next:export"], {
-          cwd: projectDir,
-          stdio: "pipe",
-          env: cleanEnv,
-        });
-      }
-
-      if (buildResult.stdout)
-        console.log("Build stdout:", buildResult.stdout.toString());
-      if (buildResult.stderr)
-        console.log("Build stderr:", buildResult.stderr.toString());
-
-      if (buildResult.status !== 0) {
-        throw new Error(`Build failed (status ${buildResult.status})`);
-      }
-
-      console.log("Project built successfully.");
-      copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
-    } catch (innerError) {
-      console.error("BUILD ERROR:", innerError);
-      throw innerError;
-    } finally {
-      /*if (fs.existsSync(nextConfigBackupPath)) {
-        fs.copyFileSync(nextConfigBackupPath, nextConfigPath);
-        fs.unlinkSync(nextConfigBackupPath);
-        console.log("Restored original next.config.ts.");
-      }*/
     }
+    if (nextExecutablePath) {
+      console.log("Using next executable at:", nextExecutablePath);
+      buildResult = spawnSync(nextExecutablePath, ["build"], {
+        cwd: projectDir,
+        stdio: "pipe",
+        env: cleanEnv,
+      });
+    } else {
+      console.log("Local next not found, running npm run build...");
+      buildResult = spawnSync("npm", ["run", "build:next:export"], {
+        cwd: projectDir,
+        stdio: "pipe",
+        env: cleanEnv,
+      });
+    }
+
+    if (buildResult.stdout)
+      console.log("Build stdout:", buildResult.stdout.toString());
+    if (buildResult.stderr)
+      console.log("Build stderr:", buildResult.stderr.toString());
+
+    if (buildResult.status !== 0) {
+      throw new Error(`Build failed (status ${buildResult.status})`);
+    }
+
+    console.log("Project built successfully.");
+    copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
 
     console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) =>
@@ -429,8 +414,55 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
+  } finally {
+    // Rebuild the app to restore .next and other files (only if running from a packaged app)
+    console.log("Rebuilding project to restore .next and other files...");
+    // Check if we are running from a packaged app
+    if (isPackagedApp()) {
+      console.log("Using next executable at:", nextExecutablePath);
+      if (!nextExecutablePath) {
+        console.error("Next.js executable not found. Cannot rebuild.");
+        return;
+      }
+
+      const cleanEnv2: NodeJS.ProcessEnv = {
+        ...cleanEnv,
+        NEXT_PUBLIC_GITHUB_PAGES_BUILD: "false",
+      };
+
+      const buildResult = spawnSync(nextExecutablePath, ["build"], {
+        cwd: projectDir,
+        stdio: "pipe",
+        env: cleanEnv2,
+      });
+
+      console.log("env:", cleanEnv2);
+
+      if (buildResult.stdout)
+        console.log("Build stdout:", buildResult.stdout.toString());
+      if (buildResult.stderr)
+        console.log("Build stderr:", buildResult.stderr.toString());
+
+      if (buildResult.status !== 0) {
+        throw new Error(`Build failed (status ${buildResult.status})`);
+      }
+      console.log("Project rebuilt successfully.");
+    }
   }
 };
+
+function isPackagedApp() {
+  const execPath = process.execPath || "";
+  return (
+    execPath.includes(".app/Contents/") || // macOS .app bundle
+    execPath.endsWith(".exe") ||           // Windows EXE
+    execPath.includes(".asar") ||          // Electron asar archive
+    execPath.includes("/dist/") ||         // Linux dist folder
+    execPath.includes("\\dist\\") ||       // Windows dist folder
+    process.env.APPIMAGE !== undefined ||  // Linux AppImage
+    process.env.PORTABLE_EXECUTABLE_DIR !== undefined // Windows portable
+  );
+}
 
 /**
  * Mimics: git checkout-index -a --prefix=<targetDir>
