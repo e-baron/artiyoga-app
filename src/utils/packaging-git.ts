@@ -35,8 +35,8 @@ export default async function copyGitToPackage(
   const gitignoreDest = path.join(appPath, ".gitignore");
   const githubSrc = path.join(process.cwd(), ".github");
   const githubDest = path.join(appPath, ".github");
-  const packageLockSrc = path.join(process.cwd(), "package-lock.json");
-  const packageLockDest = path.join(appPath, "package-lock.json");
+  // const packageLockSrc = path.join(process.cwd(), "package-lock.json");
+  // const packageLockDest = path.join(appPath, "package-lock.json");
 
   try {
     if (await fsExtra.pathExists(gitSrc)) {
@@ -51,19 +51,21 @@ export default async function copyGitToPackage(
       console.log("[packaging-git] Copying .github to", githubDest);
       await fsExtra.copy(githubSrc, githubDest);
     }
+    /*
     if (await fsExtra.pathExists(packageLockSrc)) {
       console.log(
         "[packaging-git] Copying package-lock.json to",
         packageLockDest
       );
       await fsExtra.copy(packageLockSrc, packageLockDest);
-    }
+    }*/
     console.log("[packaging-git] Git files copy completed.");
   } catch (e) {
     console.error("[packaging-git] Error copying git files:", e);
     throw e;
   }
 
+  
   // Determine packaged app package.json path
   let packageJsonPath: string;
   if (platform === "mac") {

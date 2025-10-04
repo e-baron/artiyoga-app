@@ -277,7 +277,13 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         TURBOPACK: undefined, // Remove Turbopack flag for production builds
         npm_lifecycle_event: undefined, // Remove lifecycle event
         npm_lifecycle_script: undefined, // Remove lifecycle script
+        // Add this flag to help Next.js skip problematic pages
+        NEXT_SKIP_PREFETCH: "true",
+        // Add this to disable static optimization that might trigger context usage
+        __NEXT_DISABLE_OPTIMIZATION: "true",
         _: undefined, // Remove referenc
+        // The important one: disable static optimization for error pages
+        __NEXT_PRIVATE_OPTIMIZE_ERROR_PAGE: "0",
       };
 
       // Add this before committing:
@@ -324,7 +330,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       // Remove existing .next folder if it exists
       console.log("Cleaning previous builds...");
       await deleteDirectory(path.join(projectDir, ".next"));
-     
+
       // Build
       let buildResult;
       // When running from packaged app, cwd is inside the bundle
@@ -395,6 +401,9 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
 
       console.log("Project built successfully.");
       copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
+    } catch (innerError) {
+      console.error("BUILD ERROR:", innerError);
+      throw innerError;
     } finally {
       /*if (fs.existsSync(nextConfigBackupPath)) {
         fs.copyFileSync(nextConfigBackupPath, nextConfigPath);

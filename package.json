@@ -23,8 +23,6 @@
       ".next/**",
       ".contentlayer/**",
       "public/**",
-      "node_modules/**",
-      "package.json",
       "src/**",
       ".git/**",
       ".gitignore",

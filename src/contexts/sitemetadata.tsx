@@ -1,4 +1,6 @@
-"use client";
+/* "use client";
+
+
 
 import React, {
   createContext,
@@ -71,3 +73,4 @@ export function useSiteMetadata() {
 
   return context;
 }
+*/
