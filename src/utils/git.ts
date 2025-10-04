@@ -278,12 +278,12 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         npm_lifecycle_event: undefined, // Remove lifecycle event
         npm_lifecycle_script: undefined, // Remove lifecycle script
         // Add this flag to help Next.js skip problematic pages
-        NEXT_SKIP_PREFETCH: "true",
+        // NEXT_SKIP_PREFETCH: "true",
         // Add this to disable static optimization that might trigger context usage
-        __NEXT_DISABLE_OPTIMIZATION: "true",
+        //__NEXT_DISABLE_OPTIMIZATION: "true",
         _: undefined, // Remove referenc
         // The important one: disable static optimization for error pages
-        __NEXT_PRIVATE_OPTIMIZE_ERROR_PAGE: "0",
+        // __NEXT_PRIVATE_OPTIMIZE_ERROR_PAGE: "0",
       };
 
       // Add this before committing:
