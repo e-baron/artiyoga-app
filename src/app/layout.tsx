@@ -10,9 +10,9 @@ import { ClientThemeProvider } from "@/components/ClientThemeProvider/ClientThem
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import Footer from "@/components/Footer/Footer";
 import { SiteMetaData } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import siteConfig from "@/config/site-config.json";
-import { SiteMetadataProvider } from "@/contexts/sitemetadata";
+// import { SiteMetadataProvider } from "@/contexts/sitemetadata";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -52,7 +52,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
   return (
     <AppRouterCacheProvider>
-      <SiteMetadataProvider>
+      {/* <SiteMetadataProvider> */}
         <ClientThemeProvider>
           <html>
             <head>
@@ -82,7 +82,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             </Box>
           </html>
         </ClientThemeProvider>
-      </SiteMetadataProvider>
+      {/* <SiteMetadataProvider> */}
     </AppRouterCacheProvider>
   );
 };
