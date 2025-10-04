@@ -6,7 +6,6 @@ import path from "path";
 import fse from "fs-extra";
 import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
 
-
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
  * Then, it switches to the "dev" branch (creating it if it doesn't exist), adds the specified file, and commits it with a message.
@@ -428,6 +427,9 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       const cleanEnv2: NodeJS.ProcessEnv = {
         ...cleanEnv,
         NEXT_PUBLIC_GITHUB_PAGES_BUILD: "false",
+        NEXT_PUBLIC_NODE_ENV: "local-production", // So that basePath is not applied (local production is treated like development)
+        npm_config_local_prefix: projectDir, 
+        npm_package_json: path.join(projectDir, "package.json"), 
       };
 
       const buildResult = spawnSync(nextExecutablePath, ["build"], {
@@ -455,11 +457,11 @@ function isPackagedApp() {
   const execPath = process.execPath || "";
   return (
     execPath.includes(".app/Contents/") || // macOS .app bundle
-    execPath.endsWith(".exe") ||           // Windows EXE
-    execPath.includes(".asar") ||          // Electron asar archive
-    execPath.includes("/dist/") ||         // Linux dist folder
-    execPath.includes("\\dist\\") ||       // Windows dist folder
-    process.env.APPIMAGE !== undefined ||  // Linux AppImage
+    execPath.endsWith(".exe") || // Windows EXE
+    execPath.includes(".asar") || // Electron asar archive
+    execPath.includes("/dist/") || // Linux dist folder
+    execPath.includes("\\dist\\") || // Windows dist folder
+    process.env.APPIMAGE !== undefined || // Linux AppImage
     process.env.PORTABLE_EXECUTABLE_DIR !== undefined // Windows portable
   );
 }
