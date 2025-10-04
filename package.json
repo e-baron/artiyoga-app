@@ -34,14 +34,10 @@
       "contentlayer.config.ts",
       ".github/**",
       ".vscode/**",
+      "dist-electron/main/**",
       "main/**",
-      "package.json",
-      "package-lock.json",
-      "node_modules/**"
+      ".next/**"
     ],
-    "npmSkipBuildFromSource": true,
-    "npmRebuild": false,
-    "buildDependenciesFromSource": false,
     "afterPack": "./src/utils/packaging-git.ts",
     "mac": {
       "target": [
