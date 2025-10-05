@@ -5,7 +5,7 @@ import fse from "fs-extra";
 import siteConfig from "@/config/site-config.json";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
-
+import { log } from "console";
 
 // Function to generate frontmatter string
 const generateFrontmatter = (frontmatter: Frontmatter): string => {
@@ -264,16 +264,18 @@ const logMessage = (message: string, mode: "console" | "file" | "both") => {
   const timestamp = new Date().toISOString();
   message = `[${timestamp}] ${message}`;
 
+  const logPath = path.join(getProjectRoot(), "log.txt");
+
   switch (mode) {
     case "console":
       console.log(message);
       break;
     case "file":
-      fs.appendFileSync("log.txt", message + "\n");
+      fs.appendFileSync(logPath, message + "\n");
       break;
     case "both":
       console.log(message);
-      fs.appendFileSync("log.txt", message + "\n");
+      fs.appendFileSync(logPath, message + "\n");
       break;
   }
 };
@@ -284,12 +286,13 @@ const getProjectRoot = (): string => {
       ? __dirname
       : path.dirname(fileURLToPath(import.meta.url));
 
-  const repoDir = (typeof process !== "undefined" && process.resourcesPath)
-    ? path.join(process.resourcesPath, "app")
-    : path.resolve(currentDir, "..");
+  const repoDir =
+    typeof process !== "undefined" && process.resourcesPath
+      ? path.join(process.resourcesPath, "app")
+      : path.resolve(currentDir, "..");
 
   return repoDir;
-}
+};
 
 export {
   createFile,
