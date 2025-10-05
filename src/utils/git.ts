@@ -4,7 +4,9 @@ import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
 import fse from "fs-extra";
-import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
+import { copyAdditionalProjectFiles, deleteDirectory, getProjectRoot, logMessage } from "@/utils/files";
+import { log } from "console";
+import { get } from "lodash";
 
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
@@ -29,6 +31,16 @@ const handleGitFileCommit = async (
       throw new Error("Invalid file path provided.");
     }
 
+    logMessage(
+      `COMMIT: ${absoluteFilePath}`,
+      "both"
+    );
+
+    const possiblePath = getProjectRoot
+    logMessage(
+      `ROOT: ${possiblePath()}`,
+      "both"
+    );
     // Add the file to the index if not already added
     await git.add({
       fs,
@@ -250,6 +262,26 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
   const projectDir = path.resolve(".");
   console.log("Building project for export...");
   let nextExecutablePath = null;
+ 
+  const wouldProjectDir = path.join(projectDir, outDir);
+  logMessage(
+    `PUBLISH PROJECT DIR: ${projectDir}`,
+    "both"
+  );
+
+
+
+
+  logMessage(
+    `PUBLISH TO: ${outDirPath}`,
+    "both"
+  );
+
+  const wouldOutDirPath = path.join(wouldProjectDir, outDir);
+  logMessage(
+    `WOULD PUBLISH TO: ${wouldOutDirPath}`,
+    "both"
+  );
 
   const cleanEnv: NodeJS.ProcessEnv = {
     ...process.env,

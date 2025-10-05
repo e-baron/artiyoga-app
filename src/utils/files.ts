@@ -4,6 +4,8 @@ import path from "path";
 import fse from "fs-extra";
 import siteConfig from "@/config/site-config.json";
 import { execSync } from "child_process";
+import { fileURLToPath } from "url";
+
 
 // Function to generate frontmatter string
 const generateFrontmatter = (frontmatter: Frontmatter): string => {
@@ -256,6 +258,39 @@ const updateFileName = (oldPath: string, newPath: string) => {
   return false;
 };
 
+/* Function to log messages in all modes... */
+const logMessage = (message: string, mode: "console" | "file" | "both") => {
+  // Add a timestamp to the message
+  const timestamp = new Date().toISOString();
+  message = `[${timestamp}] ${message}`;
+
+  switch (mode) {
+    case "console":
+      console.log(message);
+      break;
+    case "file":
+      fs.appendFileSync("log.txt", message + "\n");
+      break;
+    case "both":
+      console.log(message);
+      fs.appendFileSync("log.txt", message + "\n");
+      break;
+  }
+};
+
+const getProjectRoot = (): string => {
+  const currentDir =
+    typeof __dirname !== "undefined"
+      ? __dirname
+      : path.dirname(fileURLToPath(import.meta.url));
+
+  const repoDir = (typeof process !== "undefined" && process.resourcesPath)
+    ? path.join(process.resourcesPath, "app")
+    : path.resolve(currentDir, "..");
+
+  return repoDir;
+}
+
 export {
   createFile,
   createFileFromBlob,
@@ -271,4 +306,6 @@ export {
   copyAdditionalProjectFiles,
   copyDir,
   updateFileName,
+  logMessage,
+  getProjectRoot,
 };
