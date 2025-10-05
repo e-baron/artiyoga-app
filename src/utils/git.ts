@@ -257,12 +257,13 @@ const mergeBranches = async (
  * Publishes the project to GitHub Pages using a simplified approach.
  */
 const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
+  let errorDuringProcess = false;
   const outDirPath = path.resolve(outDir);
   const projectDir = path.resolve(".");
   console.log("Building project for export...");
   let nextExecutablePath = null;
 
-  const wouldProjectDir = path.join(projectDir, outDir);
+  const wouldProjectDir = getProjectRoot();
   logMessage(`PUBLISH PROJECT DIR: ${projectDir}`, "both");
 
   logMessage(`PUBLISH TO: ${outDirPath}`, "both");
@@ -303,11 +304,10 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
 
     logMessage(`GENERATE DATA: ${genScript}`, "both");
 
-
-
     if (fs.existsSync(genScript)) {
+      logMessage(`Running generator script: ${genScript}`, "both");
       const genResult = spawnSync(
-        "node",
+        process.execPath,
         ["--experimental-modules", genScript],
         {
           cwd: projectDir,
@@ -315,13 +315,24 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
           env: cleanEnv,
         }
       );
-      if (genResult.stdout) console.log(genResult.stdout.toString());
-      if (genResult.stderr) console.error(genResult.stderr.toString());
-      if (genResult.status !== 0)
+      if (genResult.stdout) {
+        logMessage(
+          `GENERATE DATA STDOUT: ${genResult.stdout.toString()}`,
+          "both"
+        );
+      }
+      if (genResult.stderr) {
+        logMessage(
+          `GENERATE DATA STDERR: ${genResult.stderr.toString()}`,
+          "both"
+        );
+      }
+      if (genResult.status !== 0) {
+        // Stage the generated files
+        errorDuringProcess = true;
+        logMessage("GENERATE DATA FAILED", "both");
         throw new Error("Static data generation failed");
-
-      // Stage the generated files
-      console.log("Staging generated files...");
+      }
 
       try {
         await handleGitFileCommit("src/data/static-data.ts", "update");
@@ -345,7 +356,6 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     // Build
     let buildResult;
     // When running from packaged app, cwd is inside the bundle
-   
 
     // Try multiple possible locations for next executable
     const possibleNextPaths = [
@@ -416,12 +426,16 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       logMessage(`Build stderr: ${buildResult.stderr.toString()}`, "both");
 
     if (buildResult.status !== 0) {
+      errorDuringProcess = true;
       throw new Error(`Build failed (status ${buildResult.status})`);
     }
 
     console.log("Project built successfully.");
     copyAdditionalProjectFiles(outDirPath, [".nojekyll", "CNAME"]);
 
+    if (errorDuringProcess) {
+      return;
+    }
     console.log("Publishing to GitHub Pages...");
     await new Promise<void>((resolve, reject) =>
       ghpages.publish(
@@ -440,7 +454,17 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     );
   } finally {
     // Rebuild the app to restore .next and other files (only if running from a packaged app)
-    logMessage("Rebuilding project to restore .next and other files...", "both");
+    if (errorDuringProcess) {
+      logMessage(
+        "Errors occurred during the process. Skipping rebuild.",
+        "both"
+      );
+      return;
+    }
+    logMessage(
+      "Rebuilding project to restore .next and other files...",
+      "both"
+    );
     // Check if we are running from a packaged app
     if (isPackagedApp()) {
       logMessage(`Using next executable at: ${nextExecutablePath}`, "both");
@@ -466,9 +490,9 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       console.log("env:", cleanEnv2);
 
       if (buildResult.stdout)
-        console.log("Build stdout:", buildResult.stdout.toString());
+        logMessage(`Build stdout: ${buildResult.stdout.toString()}`, "both");
       if (buildResult.stderr)
-        console.log("Build stderr:", buildResult.stderr.toString());
+        logMessage(`Build stderr: ${buildResult.stderr.toString()}`, "both");
 
       if (buildResult.status !== 0) {
         throw new Error(`Build failed (status ${buildResult.status})`);
