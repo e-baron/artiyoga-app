@@ -359,8 +359,8 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
 
     // Try multiple possible locations for next executable
     const possibleNextPaths = [
-      path.join(projectDir, "node_modules", ".bin", "next"),
       path.join(projectDir, "node_modules", "next"),
+      path.join(projectDir, "node_modules", ".bin", "next"),
       path.join(
         projectDir,
         "..",
@@ -406,7 +406,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     }
     if (nextExecutablePath) {
       logMessage(`Using next executable at: ${nextExecutablePath}`, "both");
-      buildResult = spawnSync(nextExecutablePath, ["build"], {
+      buildResult = spawnSync(process.execPath, [nextExecutablePath, "build"], {
         cwd: projectDir,
         stdio: "pipe",
         env: cleanEnv,
@@ -481,11 +481,15 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         npm_package_json: path.join(projectDir, "package.json"),
       };
 
-      const buildResult = spawnSync(nextExecutablePath, ["build"], {
-        cwd: projectDir,
-        stdio: "pipe",
-        env: cleanEnv2,
-      });
+      const buildResult = spawnSync(
+        process.execPath,
+        [nextExecutablePath, "build"],
+        {
+          cwd: projectDir,
+          stdio: "pipe",
+          env: cleanEnv2,
+        }
+      );
 
       console.log("env:", cleanEnv2);
 

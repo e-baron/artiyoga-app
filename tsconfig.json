@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.ts"
-, "src/utils/generate-static-data.runtime.mjs"  ],
+, "src/utils/generate-static-data.runtime.mjs", "src/utils/runtime-pages.mjs"  ],
   "exclude": ["node_modules"]
 }
