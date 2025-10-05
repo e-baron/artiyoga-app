@@ -261,7 +261,8 @@ const updateFileName = (oldPath: string, newPath: string) => {
 /* Function to log messages in all modes... */
 const logMessage = (message: string, mode: "console" | "file" | "both") => {
   // Add a timestamp to the message
-  const timestamp = new Date().toISOString();
+  const now = new Date();
+  const timestamp = now.toLocaleString(); 
   message = `[${timestamp}] ${message}`;
 
   const logPath = path.join(getProjectRoot(), "log.txt");

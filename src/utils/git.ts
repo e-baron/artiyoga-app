@@ -4,7 +4,12 @@ import { spawnSync } from "child_process";
 import * as git from "isomorphic-git";
 import path from "path";
 import fse from "fs-extra";
-import { copyAdditionalProjectFiles, deleteDirectory, getProjectRoot, logMessage } from "@/utils/files";
+import {
+  copyAdditionalProjectFiles,
+  deleteDirectory,
+  getProjectRoot,
+  logMessage,
+} from "@/utils/files";
 import { log } from "console";
 import { get } from "lodash";
 
@@ -31,16 +36,10 @@ const handleGitFileCommit = async (
       throw new Error("Invalid file path provided.");
     }
 
-    logMessage(
-      `COMMIT: ${absoluteFilePath}`,
-      "both"
-    );
+    logMessage(`COMMIT: ${absoluteFilePath}`, "both");
 
-    const possiblePath = getProjectRoot
-    logMessage(
-      `ROOT: ${possiblePath()}`,
-      "both"
-    );
+    const possiblePath = getProjectRoot;
+    logMessage(`ROOT: ${possiblePath()}`, "both");
     // Add the file to the index if not already added
     await git.add({
       fs,
@@ -262,26 +261,14 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
   const projectDir = path.resolve(".");
   console.log("Building project for export...");
   let nextExecutablePath = null;
- 
+
   const wouldProjectDir = path.join(projectDir, outDir);
-  logMessage(
-    `PUBLISH PROJECT DIR: ${projectDir}`,
-    "both"
-  );
+  logMessage(`PUBLISH PROJECT DIR: ${projectDir}`, "both");
 
-
-
-
-  logMessage(
-    `PUBLISH TO: ${outDirPath}`,
-    "both"
-  );
+  logMessage(`PUBLISH TO: ${outDirPath}`, "both");
 
   const wouldOutDirPath = path.join(wouldProjectDir, outDir);
-  logMessage(
-    `WOULD PUBLISH TO: ${wouldOutDirPath}`,
-    "both"
-  );
+  logMessage(`WOULD PUBLISH TO: ${wouldOutDirPath}`, "both");
 
   const cleanEnv: NodeJS.ProcessEnv = {
     ...process.env,
@@ -313,6 +300,11 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       "utils",
       "generate-static-data.runtime.mjs"
     );
+
+    logMessage(`GENERATE DATA: ${genScript}`, "both");
+
+
+
     if (fs.existsSync(genScript)) {
       const genResult = spawnSync(
         "node",
@@ -334,16 +326,16 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       try {
         await handleGitFileCommit("src/data/static-data.ts", "update");
       } catch (e) {
-        console.log("static-data.ts: no changes to stage");
+        logMessage("static-data.ts: no changes to stage", "both");
       }
       try {
         await handleGitFileCommit("public/static-contents.json", "update");
       } catch (e) {
-        console.log("static-contents.json: no changes to stage");
+        logMessage("static-contents.json: no changes to stage", "both");
       }
-      console.log("Generated static files processed.");
+      logMessage("Generated static files processed.", "both");
     } else {
-      console.warn("Generator script not found:", genScript);
+      logMessage(`Generator script not found: ${genScript}`, "both");
     }
 
     // Remove existing .next folder if it exists
@@ -353,7 +345,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     // Build
     let buildResult;
     // When running from packaged app, cwd is inside the bundle
-    console.log("Current working directory:", projectDir);
+   
 
     // Try multiple possible locations for next executable
     const possibleNextPaths = [
@@ -380,10 +372,11 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         const stats = fs.lstatSync(nextPath);
         if (stats.isFile() || stats.isSymbolicLink()) {
           nextExecutablePath = nextPath;
-          console.log(
-            "Found next at:",
-            nextPath,
-            stats.isSymbolicLink() ? "(symlink)" : "(file)"
+          logMessage(
+            `Found next at: ${nextPath} ${
+              stats.isSymbolicLink() ? "(symlink)" : "(file)"
+            }`,
+            "both"
           );
           break;
         }
@@ -402,14 +395,14 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       }
     }
     if (nextExecutablePath) {
-      console.log("Using next executable at:", nextExecutablePath);
+      logMessage(`Using next executable at: ${nextExecutablePath}`, "both");
       buildResult = spawnSync(nextExecutablePath, ["build"], {
         cwd: projectDir,
         stdio: "pipe",
         env: cleanEnv,
       });
     } else {
-      console.log("Local next not found, running npm run build...");
+      logMessage("Local next not found, running npm run build...", "both");
       buildResult = spawnSync("npm", ["run", "build:next:export"], {
         cwd: projectDir,
         stdio: "pipe",
@@ -418,9 +411,9 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     }
 
     if (buildResult.stdout)
-      console.log("Build stdout:", buildResult.stdout.toString());
+      logMessage(`Build stdout: ${buildResult.stdout.toString()}`, "both");
     if (buildResult.stderr)
-      console.log("Build stderr:", buildResult.stderr.toString());
+      logMessage(`Build stderr: ${buildResult.stderr.toString()}`, "both");
 
     if (buildResult.status !== 0) {
       throw new Error(`Build failed (status ${buildResult.status})`);
@@ -437,9 +430,9 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         (err) => (err ? reject(err) : resolve())
       )
     );
-    console.log("Successfully published to GitHub Pages!");
+    logMessage("Successfully published to GitHub Pages!", "both");
   } catch (error) {
-    console.error("Error publishing to GitHub Pages:", error);
+    logMessage(`Error publishing to GitHub Pages: ${error}`, "both");
     throw new Error(
       `Publishing failed: ${
         error instanceof Error ? error.message : "Unknown error"
@@ -447,12 +440,12 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
     );
   } finally {
     // Rebuild the app to restore .next and other files (only if running from a packaged app)
-    console.log("Rebuilding project to restore .next and other files...");
+    logMessage("Rebuilding project to restore .next and other files...", "both");
     // Check if we are running from a packaged app
     if (isPackagedApp()) {
-      console.log("Using next executable at:", nextExecutablePath);
+      logMessage(`Using next executable at: ${nextExecutablePath}`, "both");
       if (!nextExecutablePath) {
-        console.error("Next.js executable not found. Cannot rebuild.");
+        logMessage("Next.js executable not found. Cannot rebuild.", "both");
         return;
       }
 
@@ -460,8 +453,8 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         ...cleanEnv,
         NEXT_PUBLIC_GITHUB_PAGES_BUILD: "false",
         NEXT_PUBLIC_NODE_ENV: "local-production", // So that basePath is not applied (local production is treated like development)
-        npm_config_local_prefix: projectDir, 
-        npm_package_json: path.join(projectDir, "package.json"), 
+        npm_config_local_prefix: projectDir,
+        npm_package_json: path.join(projectDir, "package.json"),
       };
 
       const buildResult = spawnSync(nextExecutablePath, ["build"], {
