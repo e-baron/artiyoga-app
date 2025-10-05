@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import siteConfig from "@/config/site-config.json";
 import { isDev } from "@/utils/env";
+import path from 'path';
 
 
 console.log(  "NEXT_PUBLIC_GITHUB_PAGES_BUILD:",
@@ -22,6 +23,7 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
+  // outputFileTracingRoot: process.cwd(),
 
   env: {
     FORCE_DEV: process.env.FORCE_DEV, // available at build time (and runtime in server-side code)

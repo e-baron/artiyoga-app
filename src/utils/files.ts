@@ -28,7 +28,7 @@ const createFile = (
   content: string = "This is your new file. Please edit it.",
   frontmatter?: Frontmatter // Optional frontmatter
 ): string => {
-  const filePath = path.join(getAbsoluteProjectDirPath(), filepath); // Resolve the absolute path
+  const filePath = path.join(process.cwd(), filepath); // Resolve the absolute path
   const directory = path.dirname(filePath); // Get the directory path
 
   // Ensure the directory exists
@@ -54,7 +54,7 @@ const createFileFromBlob = async (
   filepath: string, // Relative path within the root folder, including the filename and extension
   blob: Blob
 ): Promise<string> => {
-  const filePath = path.join(getAbsoluteProjectDirPath(), filepath); // Resolve the absolute path
+  const filePath = path.join(process.cwd(), filepath); // Resolve the absolute path
   const directory = path.dirname(filePath); // Get the directory path
 
   // Ensure the directory exists
@@ -71,7 +71,7 @@ const createFileFromBlob = async (
 
 // Provide relative project path (e.g. "src/mdxPages/yourpage.mdx") and returns absolute path
 const getFilePath = (projectRelativePath: string) => {
-  return path.join(getAbsoluteProjectDirPath(), projectRelativePath);
+  return path.join(process.cwd(), projectRelativePath);
 };
 
 const updateFile = (filePath: string, content: string) => {
@@ -256,71 +256,6 @@ const updateFileName = (oldPath: string, newPath: string) => {
   return false;
 };
 
-// Get the absolute path of a file in the project
-// It shall work both in dev and in production (packaged app)
-// For Electron packaged apps:
-const getAbsoluteProjectFilePath = (relativePath: string): string => {
-  const projectDir = getAbsoluteProjectDirPath();
-
-  return path.join(projectDir, relativePath);
-};
-
-/* const getAbsoluteProjectDirPath = (relativePath: string = "."): string => {
-  const projectDir = path.dirname(require.main?.filename || process.cwd());
-
-  return path.join(projectDir, relativePath);
-}; */
-const findUp = (
-  startDir: string,
-  predicate: (dir: string) => boolean
-): string | null => {
-  let dir = path.resolve(startDir);
-  while (true) {
-    if (predicate(dir)) return dir;
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return null;
-};
-
-/**
- * Returns the absolute path to the project root (parent of "src").
- * Works in dev and in packaged Electron apps.
- * If you pass a relativePath, it is resolved from the project root.
- */
-const getAbsoluteProjectDirPath = (relativePath: string = "."): string => {
-  // Candidates to start searching from
-  const candidates: string[] = [];
-
-  // Electron packaged app: resourcesPath/app
-  const nodeProcess = process as NodeJS.Process & { resourcesPath?: string };
-  if (nodeProcess.resourcesPath) {
-    candidates.push(path.join(nodeProcess.resourcesPath, "app"));
-  }
-  // Main script directory
-  if (require.main && require.main.filename) {
-    candidates.push(path.dirname(require.main.filename));
-  }
-  // __dirname (useful in dev)
-  candidates.push(__dirname);
-  // cwd as last resort
-  candidates.push(process.cwd());
-
-  // Predicate: directory containing "src"
-  const hasSrcFolder = (dir: string) => fs.existsSync(path.join(dir, "src"));
-
-  for (const start of candidates) {
-    const found = findUp(start, hasSrcFolder);
-    if (found) {
-      return path.resolve(found, relativePath);
-    }
-  }
-
-  // Fallback: just use cwd
-  return path.resolve(process.cwd(), relativePath);
-};
-
 export {
   createFile,
   createFileFromBlob,
@@ -336,6 +271,4 @@ export {
   copyAdditionalProjectFiles,
   copyDir,
   updateFileName,
-  getAbsoluteProjectFilePath,
-  getAbsoluteProjectDirPath,
 };
