@@ -5,6 +5,11 @@ import * as git from "isomorphic-git";
 import path from "path";
 import fse from "fs-extra";
 import { copyAdditionalProjectFiles, deleteDirectory } from "@/utils/files";
+import {
+  getAbsoluteProjectFilePath,
+  getAbsoluteProjectDirPath,
+} from "@/utils/files";
+import { get } from "lodash";
 
 /**
  * Handles Git commit operations for a specific file. First, if there are uncommitted changes on the current branch, it commits them.
@@ -20,10 +25,10 @@ const handleGitFileCommit = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
-    const repoDir = path.resolve(".");
+    const repoDir = getAbsoluteProjectDirPath();
     const absoluteFilePath = path.isAbsolute(filePath)
       ? filePath
-      : path.resolve(repoDir, filePath); // Ensure the file path is absolute
+      : getAbsoluteProjectFilePath(filePath); // Ensure the file path is absolute
     const filename = absoluteFilePath.split("/").pop();
     if (!filename) {
       throw new Error("Invalid file path provided.");
@@ -80,7 +85,7 @@ const handleGitFileDelete = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
-    const repoDir = path.resolve(".");
+    const repoDir = getAbsoluteProjectDirPath();
     const relativeFilePath = path.relative(repoDir, filePath);
     const filename = path.basename(relativeFilePath);
 
@@ -123,7 +128,7 @@ const handleUncommittedChangesAndSwitchToDev = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
-    const repoDir = path.resolve(".");
+    const repoDir = getAbsoluteProjectDirPath();
 
     // Check the current branch
     console.log("Checking current branch...");
@@ -206,7 +211,7 @@ const mergeBranches = async (
   author = "web-app <web-app@example.com>"
 ) => {
   try {
-    const repoDir = path.resolve(".");
+    const repoDir = getAbsoluteProjectDirPath();
 
     // Ensure we are on the target branch
     await git.checkout({ fs, dir: repoDir, ref: targetBranch });
@@ -246,8 +251,8 @@ const mergeBranches = async (
  * Publishes the project to GitHub Pages using a simplified approach.
  */
 const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
-  const outDirPath = path.resolve(outDir);
-  const projectDir = path.resolve(".");
+  const outDirPath = getAbsoluteProjectDirPath(outDir);
+  const projectDir = getAbsoluteProjectDirPath();
   console.log("Building project for export...");
   let nextExecutablePath = null;
 
@@ -281,6 +286,7 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
       "utils",
       "generate-static-data.runtime.mjs"
     );
+    console.log("GENERATOR:", genScript);
     if (fs.existsSync(genScript)) {
       const genResult = spawnSync(
         "node",
@@ -428,8 +434,8 @@ const publishToGitHubPages = async (branch = "dev", outDir = "out") => {
         ...cleanEnv,
         NEXT_PUBLIC_GITHUB_PAGES_BUILD: "false",
         NEXT_PUBLIC_NODE_ENV: "local-production", // So that basePath is not applied (local production is treated like development)
-        npm_config_local_prefix: projectDir, 
-        npm_package_json: path.join(projectDir, "package.json"), 
+        npm_config_local_prefix: projectDir,
+        npm_package_json: path.join(projectDir, "package.json"),
       };
 
       const buildResult = spawnSync(nextExecutablePath, ["build"], {

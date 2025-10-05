@@ -1,8 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { getAbsoluteProjectDirPath } from "@/utils/files";
+
 
 const MDX_ROOT = path.join(process.cwd(), "src", "mdxPages");
+console.log("MDX_ROOT:", MDX_ROOT);
+
+const other = getAbsoluteProjectDirPath("src/mdxPages");
+console.log("other:", other);
 
 const resolveRuntimeMdxPath = (slug: string) => {
   const normalized = !slug || slug === "index" ? "index" : slug;
@@ -86,7 +92,7 @@ const getAllRuntimePages = () => {
 };
 
 const getAllRuntimeAssets = () => {
-  const assetsDir = path.join(process.cwd(), "public");
+  const assetsDir = getAbsoluteProjectDirPath("public");
   if (!fs.existsSync(assetsDir)) return [];
   const walkAssets = (dir: string, prefix = ""): string[] => {
     let files: string[] = [];

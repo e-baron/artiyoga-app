@@ -1,7 +1,7 @@
-// Updated packaging-git.ts
 import fsExtra from "fs-extra";
 import * as path from "path";
-import { spawnSync } from "child_process";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
 interface PackagingContext {
   appOutDir: string;
@@ -30,7 +30,7 @@ export default async function copyGitToPackage(
     appPath = path.join(appOutDir, "resources", "app");
   }
 
-  const projectRepoDir = path.resolve(".");
+  const projectRepoDir = getAbsoluteProjectDirPath();
   const gitSrc = path.join(projectRepoDir, ".git");
   const gitDest = path.join(appPath, ".git");
   const gitIgnoreSrc = path.join(projectRepoDir, ".gitignore");
@@ -200,3 +200,54 @@ node "$NODE_PATH/next/dist/cli/next-cli.js" "$@"
     console.error("[packaging-git] Error setting up Next.js binary:", error);
   }*/
 }
+
+// TODO : currently because this script is called from package.json as the afterPack script of electron-builder,
+// it does not have access to the utils files, TS... We should refactor so that it can use them directly.
+
+
+// Get the directory of the current module (ESM-safe)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const getAbsoluteProjectDirPath = (relativePath: string = "."): string => {
+  const candidates: string[] = [];
+
+  // Electron packaged app: resourcesPath/app
+  const nodeProcess = process as NodeJS.Process & { resourcesPath?: string };
+  if (nodeProcess.resourcesPath) {
+    candidates.push(path.join(nodeProcess.resourcesPath, "app"));
+  }
+
+  // __dirname (ESM-safe)
+  candidates.push(__dirname);
+
+  // cwd as last resort
+  candidates.push(process.cwd());
+
+  // Predicate: directory containing "src"
+  const hasSrcFolder = (dir: string) => fs.existsSync(path.join(dir, "src"));
+
+  const findUp = (
+    startDir: string,
+    predicate: (dir: string) => boolean
+  ): string | null => {
+    let dir = path.resolve(startDir);
+    while (true) {
+      if (predicate(dir)) return dir;
+      const parent = path.dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+    return null;
+  };
+
+  for (const start of candidates) {
+    const found = findUp(start, hasSrcFolder);
+    if (found) {
+      return path.resolve(found, relativePath);
+    }
+  }
+
+  // Fallback: just use cwd
+  return path.resolve(process.cwd(), relativePath);
+};

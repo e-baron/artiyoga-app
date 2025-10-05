@@ -1,5 +1,7 @@
 import path from "path";
 import fs from "fs";
+import { get } from "lodash";
+import { getAbsoluteProjectDirPath } from "./files";
 
 function copyDir(src: string, dst: string) {
   if (!fs.existsSync(src)) return;
@@ -13,7 +15,7 @@ function copyDir(src: string, dst: string) {
   }
 }
 
-const root = process.cwd();
+const root = getAbsoluteProjectDirPath();
 const standalone = path.join(root, ".next", "standalone");
 
 if (!fs.existsSync(path.join(standalone, "server.js"))) {

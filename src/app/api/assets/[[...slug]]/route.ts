@@ -3,6 +3,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import mime from "mime-types";
 import { getAllRuntimeAssets } from "@/utils/runtime-pages";
+import { get } from "lodash";
+import { getAbsoluteProjectDirPath } from "@/utils/files";
 
 export async function generateStaticParams() {
   const allAssets = getAllRuntimeAssets();
@@ -27,7 +29,11 @@ export async function GET(
       .normalize(filePathFromParams)
       .replace(/^(\.\.(\/|\\|$))+/, "");
 
-    const absolutePath = path.join(process.cwd(), "public", safeSuffix);
+    const absolutePath = path.join(
+      getAbsoluteProjectDirPath(),
+      "public",
+      safeSuffix
+    );
 
     // Check if the file exists
     await fs.access(absolutePath);

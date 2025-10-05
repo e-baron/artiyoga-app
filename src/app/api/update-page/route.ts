@@ -4,6 +4,7 @@ import {
   readFile,
   updateFile,
   resolveMdxFilePath,
+  getAbsoluteProjectFilePath,
 } from "@/utils/files";
 import {
   handleGitFileCommit,
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
       if (!isDev()) {
         // Runtime mode: just bump a version file if a watcher/poller is used
         fs.writeFileSync(
-          path.join(process.cwd(), ".content-version.json"),
+          getAbsoluteProjectFilePath(".content-version.json"),
           JSON.stringify({ version: Date.now() }, null, 2),
           "utf8"
         );

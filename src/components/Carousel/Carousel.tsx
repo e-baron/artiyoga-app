@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import staticData from "@/data/static-data";
+import { MdxPage } from "@/types";
 
 /**
  *
@@ -21,7 +22,7 @@ const Carousel = ({
   folderNameWithMdxFiles = "testimonial",
 }: CarouselProps) => {
   const theme = useTheme();
-  const allPages = staticData.getAllPages();
+  const allPages = staticData.getAllPages() as MdxPage[];
 
   const testimonials = allPages.filter((mdxPage) => {
     // Check if _raw exists before accessing

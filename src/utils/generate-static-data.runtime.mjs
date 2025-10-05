@@ -55,9 +55,10 @@ async function run() {
     : [];
 
   const dataDir = path.join(process.cwd(), "src", "data");
+  console.log("[static-data] Writing to", dataDir);
   if (!exists(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
-  const moduleContent = `// Auto-generated - do not edit
+  const moduleContent = `// Auto-generated - do not edit - please
 /* eslint-disable */
 const pages = ${JSON.stringify(pages, null, 2)};
 const contents = ${JSON.stringify(contents, null, 2)};
